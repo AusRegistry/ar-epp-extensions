@@ -1,0 +1,60 @@
+<?xml version='1.0'?>
+<reference anchor='RBP-APP-1.0'>
+	<front>
+		<!-- The abbreviated title is used in the page header - it is only necessary 
+			if the full title is longer than 39 characters -->
+
+		<title abbrev="EPP Domain Application Mapping">
+			Domain Name Application Extension Mapping for the
+			Extensible Provisioning
+			Protocol (EPP)
+		</title>
+
+		<author fullname="James Mitchell" initials="J." surname="Mitchell">
+			<organization>AusRegistry</organization>
+			<address>
+				<postal>
+					<street>8/10 Queens Road</street>
+					<city>Melbourne</city>
+					<region>Victoria</region>
+					<code>3004</code>
+					<country>AU</country>
+				</postal>
+				<phone>+61 3 9866 3710</phone>
+				<email>james.mitchell@ausregistry.com</email>
+				<uri>www.ausregistry.com</uri>
+			</address>
+		</author>
+		<author fullname="Chris Wright" initials="C." surname="Wright">
+			<organization>AusRegistry</organization>
+			<address>
+				<postal>
+					<street>8/10 Queens Road</street>
+					<city>Melbourne</city>
+					<region>Victoria</region>
+					<code>3004</code>
+					<country>AU</country>
+				</postal>
+				<phone>+61 3 9866 3710</phone>
+				<email>chris@ausregistry.com</email>
+				<uri>www.ausregistry.com</uri>
+			</address>
+		</author>
+
+		<date month="December" year="2012" />
+
+		<!-- Meta-data Declarations -->
+		<area>General</area>
+		<workgroup>Internet Engineering Task Force</workgroup>
+		<keyword>EPP</keyword>
+		<abstract>
+			<t>
+				This document describes an Extensible Provisioning Protocol (EPP)
+				extension mapping for the provisioning and management of
+				applications for domain names, suitable for periods such as a
+				sunrise or landrush during which servers do not offer first-come
+				first-served registrations.
+			</t>
+		</abstract>
+	</front>
+</reference>

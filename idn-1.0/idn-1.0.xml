@@ -1,0 +1,464 @@
+<?xml version="1.0" standalone="no"?>
+<!-- This template is for creating an Internet Draft using xml2rfc, which 
+	is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY RFC5646 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5646.xml">
+<!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC4648 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4648.xml">
+<!ENTITY RFC5730 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5730.xml">
+<!ENTITY RFC5731 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5731.xml">
+<!ENTITY RFC5732 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5732.xml">
+<!ENTITY RFC5890 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5890.xml">
+<!ENTITY RFC5891 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5891.xml">
+<!ENTITY RFC5892 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5892.xml">
+<!ENTITY RFC5893 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5893.xml">
+<!ENTITY RFC5894 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5894.xml">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space (using these PIs as follows is recommended 
+	by the RFC Editor) -->
+<?rfc compact="yes" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<rfc category="info" docName="draft-ar-idn-epp-mapping-01" ipr="trust200902">
+	<front>
+		<title abbrev="EPP IDN Mapping">
+			Internationalized Domain Name Extension Mapping
+			for the Extensible Provisioning Protocol (EPP)
+		</title>
+
+		<author fullname="James Mitchell" initials="J." surname="Mitchell">
+			<organization>AusRegistry</organization>
+			<address>
+				<postal>
+					<street>8/10 Queens Road</street>
+					<city>Melbourne</city>
+					<region>Victoria</region>
+					<code>3004</code>
+					<country>AU</country>
+				</postal>
+				<email>james.mitchell@ausregistry.com</email>
+				<uri>www.ausregistry.com</uri>
+			</address>
+		</author>
+		<author fullname="Chris Wright" initials="C." surname="Wright">
+			<organization>AusRegistry</organization>
+			<address>
+				<postal>
+					<street>8/10 Queens Road</street>
+					<city>Melbourne</city>
+					<region>Victoria</region>
+					<code>3004</code>
+					<country>AU</country>
+				</postal>
+				<email>chris@ausregistry.com</email>
+				<uri>www.ausregistry.com</uri>
+			</address>
+		</author>
+
+		<date month="December" year="2012" />
+		<area>General</area>
+		<workgroup>Internet Engineering Task Force</workgroup>
+		<keyword>EPP</keyword>
+
+		<abstract>
+			<t>
+				This document describes an Extensible Provisioning Protocol (EPP)
+				extension mapping for the provisioning and management of
+				Internationalized Domain Names.
+			</t>
+		</abstract>
+	</front>
+	<middle>
+		<section title="Introduction">
+			<t>
+				Internationalized Domain Names in Applications provides a
+				mechanism to convert a domain name expressed in Unicode to an
+				ASCII-compatible encoding (ACE) form, to be compatible with existing
+				applications and infrastructure.
+			</t>
+			<t>
+				Described in
+				<xref target="IDN-GUIDELINES">Guidelines for Implementation of IDNs</xref><![CDATA[,]]>
+				servers are encouraged to restrict registrations of
+				Internationalized Domain Names to those from a single script or
+				language. Lists of code points available for registration are
+				published as an IDN table, each identified by a Language Tag.
+				Servers using this extension collect the Language Tag from clients
+				at the time of domain name registration, matching the domain name to
+				the relevant IDN Table and rules for registration.
+			</t>
+			<t>
+				Readers are expected to be familiar with the IDNA
+				protocol series as
+				described in
+				<xref target="RFC5890">RFC5890</xref><![CDATA[.]]>
+				Implementers should be familiar with RFCs:
+				<xref target="RFC5890">RFC5890</xref><![CDATA[,]]>
+				<xref target="RFC5891">RFC5891</xref><![CDATA[,]]>
+				<xref target="RFC5892">RFC5892</xref><![CDATA[,]]>
+				<xref target="RFC5893">RFC5893</xref><![CDATA[,]]>
+				and
+				<xref target="RFC5894">RFC5894</xref><![CDATA[.]]>
+			</t>
+			<section title="Conventions Used in This Document">
+				<t>
+					The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+					"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in
+					this document are to be interpreted as described in
+					<xref target="RFC2119">RFC 2119</xref><![CDATA[.]]>
+				</t>
+				<t>
+					"idn-1.0" is used as an abbreviation for
+					"urn:ar:params:xml:ns:idn-1.0". The XML namespace prefix "idn" is
+					used, but implementations MUST NOT depend on it and instead must
+					employ
+					a proper namespace-aware XML parser and serializer to
+					interpret and
+					output the XML documents.
+				</t>
+			</section>
+		</section>
+		<section title="Object Attributes">
+			<t>
+				This extension adds additional elements to the
+				<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+				Those new elements are described here, as well as restrictions
+				placed on domain and host names used in
+				<xref target="RFC5731">EPP Domain Name Mapping</xref>
+				and
+				<xref target="RFC5732">EPP Host Name Mapping</xref><![CDATA[.]]>
+			</t>
+			<section title="Language Tag">
+				<t>
+					The Language Tag is a identifier linking a domain object to a
+					specific IDN table. Servers should allocate Language Tags that
+					conform to the syntax expressed in
+					<xref target="RFC5646">Tags for Identifying Languages</xref><![CDATA[.]]>
+					.
+				</t>
+			</section>
+			<section title="Domain and Host Names">
+				<t>
+					To promote interoperability, domain and host names exchanged
+					between client and server MUST be expressed using A-labels and
+					non-internationalized labels, unless negotiated using a mechanism
+					outside the scope of this document. This restriction applies to all
+					commands described in the
+					<xref target="RFC5731">EPP Domain Name Mapping</xref>
+					and
+					<xref target="RFC5732">EPP Host Name Mapping</xref>
+					and not only those commands extended by this document.
+				</t>
+			</section>
+		</section>
+
+		<section title="EPP Command Mapping">
+			<t>
+				A detailed description of the EPP syntax and semantics can be
+				found
+				in the
+				<xref target="RFC5731">EPP core protocol specification</xref><![CDATA[.]]>
+				The command mappings described here are specifically for use in
+				provisioning internationalized domain names.
+			</t>
+			<section title="EPP Query Commands">
+				<t>
+					EPP provides three commands to retrieve object information:
+					&lt;check&gt; to determine if an object is known to the server,
+					&lt;info&gt; to retrieve detailed information associated with an
+					object, and &lt;transfer&gt; to retrieve object transfer status
+					information.
+				</t>
+				<section title="EPP &lt;check&gt; Command">
+					<t>
+						This extension does not define any extension to the EPP
+						&lt;check&gt; command or response described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+				</section>
+
+				<section title="EPP &lt;info&gt; Command">
+					<t>
+						This extension does not add any elements to the EPP &lt;info&gt;
+						command described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+						However, additional elements are defined for the &lt;info&gt;
+						response.
+					</t>
+					<t>
+						To enable clients to determine the IDN table identifier associated
+						with a doamin nane, the &lt;domain:infData&gt; response is
+						extended with an &lt;idn:infData&gt; element that contains the
+						following child elements:
+						<list style="symbols">
+							<t>
+								A &lt;languageTag&gt; element containing the IDN table
+								identifier for this domain name.
+							</t>
+						</list>
+					</t>
+					<figure align="left">
+						<preamble>
+							Example &lt;info&gt; response for an internationalized
+							domain name.
+						</preamble>
+						<artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <response>
+    <result code="1000">
+      <msg>Command completed successfully</msg>
+    </result>
+    <resData>
+      <infData xmlns="urn:ietf:params:xml:ns:domain-1.0">
+        <name>xn--ls8h.example</name>
+        <roid>EXAMPLE1-REP</roid>
+        <status s="ok" />
+        <registrant>jd1234</registrant>
+        <contact type="admin">sh8013</contact>
+        <contact type="tech">sh8013</contact>
+        <ns>
+          <hostObj>ns1.example.com</hostObj>
+          <hostObj>ns1.example.net</hostObj>
+        </ns>
+        <host>ns1.example.com</host>
+        <host>ns2.example.com</host>
+        <clID>ClientX</clID>
+        <crID>ClientY</crID>
+        <crDate>1999-04-03T22:00:00.0Z</crDate>
+        <upID>ClientX</upID>
+        <upDate>1999-12-03T09:00:00.0Z</upDate>
+        <exDate>2005-04-03T22:00:00.0Z</exDate>
+        <trDate>2000-04-08T09:00:00.0Z</trDate>
+        <authInfo>
+          <pw>2fooBAR</pw>
+        </authInfo>
+      </infData>
+    </resData>
+    <extension>
+      <infData xmlns="urn:ar:params:xml:ns:idn-1.0">
+        <languageTag>und-Zyyy</languageTag>
+      </infData>
+    </extension>
+    <trID>
+      <clTRID>ABC-12345</clTRID>
+      <svTRID>54322-XYZ</svTRID>
+    </trID>
+  </response>
+</epp>]]>
+						</artwork>
+					</figure>
+					<t>
+						Servers, whose business rules are not altered by the use of
+						particular IDN tables, MAY not support this extension to the
+						&lt;info&gt; response. Additionally, servers MAY restrict the
+						information returned to clients that have not provided correct
+						authorization information.
+					</t>
+				</section>
+
+				<section title="EPP &lt;transfer&gt; Command">
+					<t>
+						This extension does not define any extension to the EPP
+						&lt;transfer&gt; command or response described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+				</section>
+			</section>
+			<section title="EPP Transform Commands">
+				<t>
+					EPP provides five commands to transform objects: &lt;create&gt;
+					to create an instance of an object, &lt;delete&gt; to delete an
+					instance of an object, &lt;renew&gt; to extend the validity period
+					of an object, &lt;transfer&gt; to manage object sponsorship
+					changes, and &lt;update&gt; to change information associated with
+					an object.
+				</t>
+
+				<section title="EPP &lt;create&gt; Command">
+					<t>
+						This extension defines additional elements for the EPP
+						&lt;create&gt; command described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+						No additional elements are defined for the EPP &lt;create&gt;
+						response.
+					</t>
+					<t>
+						To enable clients to create internationalized domain names, the
+						&lt;domain:create&gt; command is extended with an
+						&lt;idn:create&gt; element that contains the following child
+						elements:
+						<list style="symbols">
+							<t>
+								A &lt;languageTag&gt; element containing the IDN table
+								identifier relevant for the registration of the domain name.
+							</t>
+						</list>
+					</t>
+					<figure align="left">
+						<preamble>
+							Example &lt;create&gt; Command for an Internationalized
+							Domain Name
+						</preamble>
+						<artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <create>
+      <create xmlns="urn:ietf:params:xml:ns:domain-1.0">
+        <name>xn--ls8h.example</name>
+        <period unit="y">2</period>
+        <ns>
+          <hostObj>ns1.example.net</hostObj>
+          <hostObj>ns2.example.net</hostObj>
+        </ns>
+        <registrant>jd1234</registrant>
+        <contact type="admin">sh8013</contact>
+        <contact type="tech">sh8013</contact>
+        <authInfo>
+          <pw>2fooBAR</pw>
+        </authInfo>
+      </create>
+    </create>
+    <extension>
+      <create xmlns="urn:ar:params:xml:ns:idn-1.0">
+        <languageTag>und-Zyyy</languageTag>
+      </create>
+    </extension>
+    <clTRID>ABC-12345</clTRID>
+  </command>
+</epp>]]>
+						</artwork>
+					</figure>
+				</section>
+
+				<section title="EPP &lt;delete&gt; Command">
+					<t>
+						This extension does not define any extension to the EPP
+						&lt;delete&gt; command or response described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+				</section>
+
+				<section title="EPP &lt;renew&gt; Command">
+					<t>
+						This extension does not define any extension to the EPP
+						&lt;renew&gt; command or response described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+				</section>
+				<section title="EPP &lt;transfer&gt; Command">
+					<t>
+						This extension does not define any extension to the EPP
+						&lt;transfer&gt; command or response described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+				</section>
+
+				<section title="EPP &lt;update&gt; Command">
+					<t>
+						This extension does not define any extension to the EPP
+						&lt;update&gt; command or response described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+				</section>
+			</section>
+		</section>
+
+		<section title="Formal Syntax">
+			<figure align="left">
+				<artwork><![CDATA[
+<?xml version="1.0" standalone="no" ?>
+<schema targetNamespace="urn:ar:params:xml:ns:idn-1.0"
+  xmlns:idn="urn:ar:params:xml:ns:idn-1.0"
+  xmlns:eppcom="urn:ietf:params:xml:ns:eppcom-1.0"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified">
+
+  <!-- Import common element types. -->
+  <import namespace="urn:ietf:params:xml:ns:eppcom-1.0" />
+
+  <annotation>
+    <documentation>
+      Internationalized Domain Name Extensions to the
+      Extensible Provisioning Protocol.
+    </documentation>
+  </annotation>
+
+  <element name="create" type="idn:languageTagType" />
+
+  <complexType name="languageTagType">
+    <sequence>
+      <element name="languageTag" type="language" />
+    </sequence>
+  </complexType>
+
+  <element name="infData" type="idn:languageTagType" />
+
+</schema>]]>
+				</artwork>
+			</figure>
+		</section>
+
+
+		<section title="IANA Considerations">
+			<t>This memo includes no request to IANA.</t>
+		</section>
+
+		<section title="Security Considerations">
+			<t>
+				The mapping extensions described in this document do not provide any
+				security services beyond those described by
+				<xref target="RFC5730">EPP</xref><![CDATA[,]]>
+				the
+				<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[,]]>
+				and protocol layers used by EPP. The security considerations
+				described in these other specifications apply to this specification
+				as well.
+			</t>
+		</section>
+	</middle>
+
+	<back>
+		<references title="Normative References">
+			&RFC5646;
+			&RFC2119;
+			&RFC5730;
+			&RFC5731;
+			&RFC5732;
+		</references>
+		<references title="Informative References">
+			&RFC5890;
+			&RFC5891;
+			&RFC5892;
+			&RFC5893;
+			&RFC5894;
+			<reference anchor="IDN-GUIDELINES"
+				target="http://www.icann.org/en/resources/idn/idn-guidelines-02sep11-en.htm">
+				<front>
+					<title>Guidelines for the Implementation of Internationalized
+						Domain Names</title>
+					<author>
+						<organization>Internet Corporation for Assigned Names and Numbers</organization>
+					</author>
+					<date day="02" month="09" year="2011" />
+				</front>
+			</reference>
+		</references>
+	</back>
+</rfc>

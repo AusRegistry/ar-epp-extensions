@@ -1,0 +1,21 @@
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+	<command>
+		<transfer op="request">
+			<transfer xmlns="urn:ietf:params:xml:ns:domain-1.0">
+				<name>premium.example</name>
+				<authInfo>
+					<pw>2fooBAR</pw>
+				</authInfo>
+			</transfer>
+		</transfer>
+		<extension>
+			<transfer xmlns="urn:ar:params:xml:ns:premium-1.0">
+				<ack>
+					<renewalPrice>100.00</renewalPrice>
+				</ack>
+			</transfer>
+		</extension>
+		<clTRID>ABC-12345</clTRID>
+	</command>
+</epp>

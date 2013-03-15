@@ -1,0 +1,31 @@
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+	<command>
+		<create>
+			<create xmlns="urn:ietf:params:xml:ns:domain-1.0">
+				<name>example.tld</name>
+				<ns>
+					<hostObj>ns1.example.net</hostObj>
+					<hostObj>ns2.example.net</hostObj>
+				</ns>
+				<registrant>jd1234</registrant>
+				<contact type="admin">sh8013</contact>
+				<contact type="tech">sh8013</contact>
+				<authInfo>
+					<pw>2fooBAR</pw>
+				</authInfo>
+			</create>
+		</create>
+		<extension>
+			<create xmlns="urn:ar:params:xml:ns:application-1.0">
+				<phase>tmch-sunrise</phase>
+			</create>
+			<create xmlns="urn:ar:params:xml:ns:tmch-1.0">
+				<smd>VGhpcyBpcyBhIHBsYWNlaG9sZGVyIGZvciBkYXRhIHByb3Z
+				  pZGVkIGJ5IHRoZSBUcmFkZW1hcmsgQ2xlYXJpbmdob3VzZQo=
+				</smd>
+			</create>
+		</extension>
+		<clTRID>ABC-12345</clTRID>
+	</command>
+</epp>

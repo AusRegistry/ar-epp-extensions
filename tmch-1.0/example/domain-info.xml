@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+	<command>
+		<info>
+			<info xmlns="urn:ietf:params:xml:ns:domain-1.0">
+				<name>example.tld</name>
+			</info>
+		</info>
+		<extension>
+			<info xmlns="urn:ar:params:xml:ns:tmch-1.0" />
+		</extension>
+		<clTRID>ABC-12345</clTRID>
+	</command>
+</epp>

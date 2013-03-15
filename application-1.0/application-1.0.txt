@@ -1,0 +1,1120 @@
+
+
+
+Internet Engineering Task Force                              J. Mitchell
+Internet-Draft                                                 C. Wright
+Intended status: Informational                               AusRegistry
+Expires: June 4, 2013                                      December 2012
+
+
+      Domain Name Application Extension Mapping for the Extensible
+                      Provisioning Protocol (EPP)
+                  draft-ar-application-epp-mapping-02
+
+Abstract
+
+   This document describes an Extensible Provisioning Protocol (EPP)
+   extension mapping for the provisioning and management of applications
+   for domain names, suitable for periods such as a sunrise or landrush
+   during which servers do not offer first-come first-served
+   registrations.
+
+Status of this Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on June 4, 2013.
+
+Copyright Notice
+
+   Copyright (c) 2012 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 1]
+
+Internet-Draft       EPP Domain Application Mapping        December 2012
+
+
+   described in the Simplified BSD License.
+
+
+Table of Contents
+
+   1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  3
+     1.1.  Conventions Used in This Document  . . . . . . . . . . . .  3
+   2.  Object Attributes  . . . . . . . . . . . . . . . . . . . . . .  3
+     2.1.  Application Identifier . . . . . . . . . . . . . . . . . .  3
+     2.2.  Phase Identifier . . . . . . . . . . . . . . . . . . . . .  4
+     2.3.  Status . . . . . . . . . . . . . . . . . . . . . . . . . .  5
+     2.4.  Domain Attributes  . . . . . . . . . . . . . . . . . . . .  6
+   3.  EPP Command Mapping  . . . . . . . . . . . . . . . . . . . . .  7
+     3.1.  EPP Query Commands . . . . . . . . . . . . . . . . . . . .  7
+       3.1.1.  EPP <check> Command  . . . . . . . . . . . . . . . . .  7
+       3.1.2.  EPP <info> Command . . . . . . . . . . . . . . . . . .  8
+       3.1.3.  EPP <transfer> Command . . . . . . . . . . . . . . . . 10
+     3.2.  EPP Transform Commands . . . . . . . . . . . . . . . . . . 11
+       3.2.1.  EPP <create> Command . . . . . . . . . . . . . . . . . 11
+       3.2.2.  EPP <delete> Command . . . . . . . . . . . . . . . . . 13
+       3.2.3.  EPP <renew> Command  . . . . . . . . . . . . . . . . . 14
+       3.2.4.  EPP <transfer> Command . . . . . . . . . . . . . . . . 14
+       3.2.5.  EPP <update> Command . . . . . . . . . . . . . . . . . 14
+   4.  Formal Syntax  . . . . . . . . . . . . . . . . . . . . . . . . 15
+   5.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 17
+   6.  Security Considerations  . . . . . . . . . . . . . . . . . . . 17
+   7.  Change History . . . . . . . . . . . . . . . . . . . . . . . . 17
+     7.1.  Changes from -01 to -02  . . . . . . . . . . . . . . . . . 17
+   8.  Normative References . . . . . . . . . . . . . . . . . . . . . 18
+   Appendix A.  Example Application Lifecycle . . . . . . . . . . . . 18
+     A.1.  Simple Lifecycle . . . . . . . . . . . . . . . . . . . . . 18
+     A.2.  Complex Lifecycle  . . . . . . . . . . . . . . . . . . . . 18
+   Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 19
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 2]
+
+Internet-Draft       EPP Domain Application Mapping        December 2012
+
+
+1.  Introduction
+
+   The EPP Domain Name Mapping [RFC5731] describes mechanisms for the
+   provisioning and management of domain names.  This works well for
+   domain name registries that use a first-come first-served allocation
+   method, however registries may define periods during which multiple
+   applications for a domain name are accepted.
+
+   This extension describes the commands and responses used for the
+   manipulation of domain name application objects.  The authors
+   recognise that additional information is often required to support
+   applications for domain names, including but not limited to trademark
+   information or proof of eligibility.  This extension does not provide
+   mechanisms for the collection of this information, instead other
+   documents should be published that describe the mechanisms for
+   transport and validation of supporting information.
+
+   Extension to the domain name mapping was preferred over re-defining
+   the domain object fields in a domain name application object mapping.
+   Implementers should be aware that this document places restrictions
+   on the use of certain domain object attributes for the period during
+   which the application is relevant.
+
+1.1.  Conventions Used in This Document
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [RFC2119].
+
+   "application-1.0" is used as an abbreviation for
+   "urn:ar:params:xml:ns:application-1.0".  The XML namespace prefix
+   "app" is used, but implementations MUST NOT depend on it and instead
+   employ a proper namespace-aware XML parser and serializer to
+   interpret and output the XML documents.
+
+
+2.  Object Attributes
+
+   An application for a domain name results in an object that is similar
+   to the domain object as described in the EPP Domain Name Mapping
+   [RFC5731].  Those new elements, belonging exclusively to the
+   application, are described here, as well as the restrictions placed
+   on the information available in the domain object.
+
+2.1.  Application Identifier
+
+   Servers may allow multiple applications of a given domain name during
+   relevant registry-specific phases.  On receiving a request to create
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 3]
+
+Internet-Draft       EPP Domain Application Mapping        December 2012
+
+
+   a domain name, the server creates an application object corresponding
+   to the request, and assigns a unique application identifier.  In
+   order to facilitate correlation, all subsequent operations on the
+   application object MUST be qualified by the previously assigned
+   application identifier.
+
+   Servers MAY use both the application identifier and domain name to
+   uniquely identify an application.  Clients MUST ensure that commands
+   to query or transform an application, include the domain name and
+   application identifier associated with the original <create> command
+   and response.
+
+   Application identifiers SHOULD NOT be composed of characters that
+   cannot be represented in US-ASCII, and SHOULD NOT exceed the length
+   of a ROID.  Servers SHOULD NOT allocate application identifiers that
+   differ only in the casing of the letters.
+
+   Clients MUST NOT assume any particular identifier syntax, and should
+   be able to handle identifiers consisting of numbers, letters and
+   punctuation.
+
+2.2.  Phase Identifier
+
+   The server may support multiple rounds of applications, either
+   sequentially or simultaneously, each with their own participation
+   requirements.
+
+   Clients are expected to know the relevant phase identifier in use for
+   a particular server.  Out of band mechanisms should be used to
+   determine the available phases and the requirements for submission of
+   an application during those phases.
+
+   This document reserves the following two names for their specific
+   uses.  Registries SHOULD accept these values during the relevant
+   phase to promote interoperability.
+
+   o  sunrise - the phase where sunrise codes authorized by the
+      trademark clearinghouse are used to prove eligibility.  This
+      refers to the least restrictive phase should two or more phases
+      use sunrise codes from the trademark clearinghouse.
+
+   o  landrush - the phase immediately prior to first-come first-served
+      having no restrictions in addition to normal registration
+      policies.
+
+   Phase identifiers SHOULD NOT be composed of characters that cannot be
+   represented in US-ASCII, and SHOULD NOT exceed the length of a ROID.
+   Servers SHOULD NOT allocate phase identifiers that differ only in the
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 4]
+
+Internet-Draft       EPP Domain Application Mapping        December 2012
+
+
+   casing of the letters.
+
+   Clients MUST NOT assume any particular identifier syntax, and should
+   be able to handle identifiers consisting of numbers, letters and
+   punctuation.
+
+2.3.  Status
+
+   All applications follow a predefined lifecycle as defined by the
+   server.  This extension does not attempt to define or restrict the
+   application lifecycle, however servers are expected to use the status
+   values described below when appropriate.  In addtion to application
+   status descriptors, servers should use the server prohibition
+   statuses in the domain object mapping to describe operations
+   unavailable to the client, for example combining
+   "serverUpdateProhibited" with "valid" to indicate that updates to the
+   application will be rejected.  Example server lifecycles are defined
+   in Appendix A (Appendix A), however these are provided for
+   illustration only.
+
+   o  pending - The default initial state of the application.
+
+   o  pendingValidation - The application is pending non-mechanical
+      validation.  Requests to update or delete the application should
+      be rejected.
+
+   o  pendingContentionResolution - The application is pending
+      contention resloution.  Requests to update or delete the
+      application should be rejected.
+
+   o  pendingAllocation - The application has been awarded to an
+      applicant as is now pending allocation of the corresponding domain
+      object.  Requests to update or delete the application should be
+      rejected.
+
+   o  valid - The application meets validation requirements for the
+      relevant phase.  Updates to the application may be allowed by the
+      server, however may attract further validation.
+
+   o  invalid - The application does not met validation requirements for
+      the relevant phase.  Updates to the application may be allowed to
+      provide clients the opportunity to correct invalid information.
+
+   o  allocated - A terminal state indicating allocation of the
+      application to the applicant.
+
+   o  rejected - A terminal state indicating the application did not
+      result in the registration of a domain object.
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 5]
+
+Internet-Draft       EPP Domain Application Mapping        December 2012
+
+
+2.4.  Domain Attributes
+
+   This document describes an extension to the EPP Domain Name Mapping
+   [RFC5731], however overloads the domain attributes in commands and
+   responses to represent information applicable to application objects.
+   The list of attributes available in the core domain mapping is
+   described below, with descriptions relevant to their role in
+   applications.
+
+   o  The <domain:name> element contains the fully qualified name of the
+      domain applied for by this application object.
+
+   o  The <domain:roid> element contains the Repository Object
+      IDentifier assigned to the application object when the object was
+      created.
+
+   o  The <domain:status> element contains the current status
+      descriptors associated with the application, to be used in
+      conjunction with the <app:status> elements defined in this
+      extension.  Servers MAY additionally limit the statuses that can
+      be set by the client, for example to prevent updates that would
+      add the clientHold or clientTransferProhibited statuses.
+
+   o  The <domain:registrant> element and <domain:contact> elements
+      contain identifiers for the human or organizational social
+      information objects associated with the application object.
+
+   o  The <domain:ns> element contains the fully qualified names of the
+      delegated host objects or host attributes (name servers) that
+      should be associated with the domain object allocated from this
+      application.
+
+   o  The <domain:host> does not map to application objects and SHOULD
+      NOT be used.  Servers SHOULD deny the creation of host objects
+      whose names are subordinate to application objects.
+
+   o  The <domain:clID> element contains the identifier of the
+      sponsoring client for the application.
+
+   o  The <domain:crID> element contains the identifier of the client
+      that created the application object.
+
+   o  The <domain:crDate> element contains the date and time of
+      application object creation.
+
+   o  The <domain:exDate> element does not map to application objects
+      and SHOULD NOT be used.
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 6]
+
+Internet-Draft       EPP Domain Application Mapping        December 2012
+
+
+   o  The <domain:upID> element contains the identifier of the client
+      that last updated the domain object.
+
+   o  The <domain:upDate> element contains the date and time of the most
+      recent domain-object modification.
+
+   o  The <domain:trDate> element does not map to application objects
+      and SHOULD NOT be used.
+
+   Servers may place restrictions on the domain attributes that can be
+   used with applications.  Clients should consult the server operator
+   regarding the list of domain attributes available on the server.
+
+
+3.  EPP Command Mapping
+
+   A detailed description of the EPP syntax and semantics can be found
+   in the EPP core protocol specification [RFC5731].  The command
+   mappings described here are specifically for use in the Domain Name
+   Application Extension.
+
+3.1.  EPP Query Commands
+
+   EPP provides three commands to retrieve object information: <check>
+   to determine if an object is known to the server, <info> to retrieve
+   detailed information associated with an object, and <transfer> to
+   retrieve object transfer status information.
+
+3.1.1.  EPP <check> Command
+
+   This extension defines additional elements to extend the EPP <check>
+   command to be used in conjunction with the EPP Domain Name Mapping
+   [RFC5731].  No additional elements are defined for the EPP <check>
+   response.
+
+   The EPP <check> command is used to determine if an object can be
+   provisioned within a repository.  Domain names may be made available
+   only in unique application phases, whilst remaining unavailable for
+   registration in concurrent application or registration phases.  In
+   addition to the elements expressed in the <domain:check>, the command
+   is extended with an <app:check> element that contains the following
+   child elements:
+
+   o  phase: the identifier of the phase to which domain name
+      availability should be determined.
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 7]
+
+Internet-Draft       EPP Domain Application Mapping        December 2012
+
+
+   Example <check> command to determine availability of names in a
+   particular phase.
+
+   <?xml version="1.0" standalone="no"?>
+   <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+     <command>
+       <check>
+         <check xmlns="urn:ietf:params:xml:ns:domain-1.0">
+           <name>xn--somename.tld</name>
+           <name>xn--anothername.tld</name>
+           <name>abc.tld</name>
+         </check>
+       </check>
+       <extension>
+         <check xmlns="urn:ar:params:xml:ns:application-1.0">
+           <phase>new-IDN-table-release</phase>
+         </check>
+       </extension>
+       <clTRID>ABC-12345</clTRID>
+     </command>
+   </epp>
+
+3.1.2.  EPP <info> Command
+
+   This extension defines additional elements to extend the EPP <info>
+   command and response to be used in conjunction with the EPP Domain
+   Name Mapping [RFC5731].
+
+   The EPP <info> command is used to retrieve information on an
+   application for a domain name.  The application identifier returned
+   in the create response (Section 3.2.1) is used for retrieving
+   information for a launch application.  In addition to the elements
+   expressed in the <domain:info>, the command is extended with an <app:
+   info> element that contains the following child elements:
+
+   o  id - the identifier of the application
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 8]
+
+Internet-Draft       EPP Domain Application Mapping        December 2012
+
+
+   Example <info> command for an application object Application
+
+   <?xml version="1.0" standalone="no"?>
+   <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+     <command>
+       <info>
+         <info xmlns="urn:ietf:params:xml:ns:domain-1.0">
+           <name>example.tld</name>
+         </info>
+       </info>
+       <extension>
+         <info xmlns="urn:ar:params:xml:ns:application-1.0">
+           <id>3F2504E0-4F89-11D3-9A0C-0305E82C3301</id>
+         </info>
+       </extension>
+       <clTRID>ABC-12345</clTRID>
+     </command>
+   </epp>
+
+   When an <info> command has been successfully processed, the <resData>
+   element contains a <domain:infData> element, however with attribute
+   values described in the Domain Attributes (Section 2.4) section.  In
+   addition, the response is extended with an <app:infData> element
+   containing the following child elements:
+
+   o  One <id> element containing the application identifier.
+
+   o  One <phase> element containing the phase in which the application
+      is submitted.
+
+   o  One or more <status> elements describing the status of the
+      application.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 9]
+
+Internet-Draft       EPP Domain Application Mapping        December 2012
+
+
+   Example <info> Response for an Application.
+
+   <?xml version="1.0" standalone="no"?>
+   <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+     <response>
+       <result code="1000">
+         <msg>Command completed successfully</msg>
+       </result>
+       <resData>
+         <infData xmlns="urn:ietf:params:xml:ns:domain-1.0">
+           <name>example.tld</name>
+           <roid>EXAMPLE1-REP</roid>
+           <registrant>jd1234</registrant>
+           <contact type="admin">sh8013</contact>
+           <contact type="tech">sh8013</contact>
+           <ns>
+             <hostObj>ns1.example.com</hostObj>
+             <hostObj>ns1.example.net</hostObj>
+           </ns>
+           <clID>ClientX</clID>
+           <authInfo>
+             <pw>2fooBAR</pw>
+           </authInfo>
+         </infData>
+       </resData>
+       <extension>
+         <infData xmlns="urn:ar:params:xml:ns:application-1.0">
+           <id>3F2504E0-4F89-11D3-9A0C-0305E82C3301</id>
+           <phase>landrush</phase>
+           <status s="valid" />
+           <status s="pendingAllocation" />
+         </infData>
+       </extension>
+       <trID>
+         <clTRID>ABC-12345</clTRID>
+         <svTRID>54322-XYZ</svTRID>
+       </trID>
+     </response>
+   </epp>
+
+   Servers MAY include the <app:infData> in response to a standard
+   <domain:info> command on a domain object allocated from an
+   application.
+
+3.1.3.  EPP <transfer> Command
+
+   This extension does not define any extension to the EPP <transfer>
+   command or response described in the EPP Domain Name Mapping
+
+
+
+Mitchell & Wright         Expires June 4, 2013                 [Page 10]
+
+Internet-Draft       EPP Domain Application Mapping        December 2012
+
+
+   [RFC5731].
+
+3.2.  EPP Transform Commands
+
+   EPP provides five commands to transform objects: <create> to create
+   an instance of an object, <delete> to delete an instance of an
+   object, <renew> to extend the validity period of an object,
+   <transfer> to manage object sponsorship changes, and <update> to
+   change information associated with an object.
+
+3.2.1.  EPP <create> Command
+
+   This extension defines additional elements to extend the EPP <create>
+   command and response to be used in conjunction with the EPP Domain
+   Name Mapping [RFC5731].
+
+   The EPP <create> command is used to provision an object within a
+   repository.  A domain name application may be provisioned by
+   specifying the phase in which the application is to be processed.
+
+   In addition to the elements expressed in the <domain:create>, the
+   command is extended with an <app:create> element containing the
+   following child elements:
+
+   o  phase: the identifier of the phase to which the domain name
+      application is being submitted.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                 [Page 11]
+
+Internet-Draft       EPP Domain Application Mapping        December 2012
+
+
+   Example <create> command for an application for a domain name
+
+   <?xml version="1.0" standalone="no"?>
+   <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+     <command>
+       <create>
+         <create xmlns="urn:ietf:params:xml:ns:domain-1.0">
+           <name>example.tld</name>
+           <ns>
+             <hostObj>ns1.example.net</hostObj>
+             <hostObj>ns2.example.net</hostObj>
+           </ns>
+           <registrant>jd1234</registrant>
+           <contact type="admin">sh8013</contact>
+           <contact type="tech">sh8013</contact>
+           <authInfo>
+             <pw>2fooBAR</pw>
+           </authInfo>
+         </create>
+       </create>
+       <extension>
+         <create xmlns="urn:ar:params:xml:ns:application-1.0">
+           <phase>landrush</phase>
+         </create>
+       </extension>
+       <clTRID>ABC-12345</clTRID>
+     </command>
+   </epp>
+
+   When an application create command has been processed successfully,
+   the EPP <resData> element MUST NOT include the <domain:creData>
+   response described in the EPP Domain Name Mapping [RFC5731].  Instead
+   the EPP <resData> element MUST contain an <app:creData> element that
+   contains the following child elements:
+
+   o  An <id> element that contains the server-assigned identifier for
+      this application.
+
+   o  A <name> element that contains the fully qualified name of the
+      application object.
+
+   o  A <crDate> element that contains the date and time of application
+      object creation.
+
+
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                 [Page 12]
+
+Internet-Draft       EPP Domain Application Mapping        December 2012
+
+
+   Example <create> response
+
+   <?xml version="1.0" standalone="no"?>
+   <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+     <response>
+       <result code="1000">
+         <msg>Command completed successfully</msg>
+       </result>
+       <resData>
+         <creData xmlns="urn:ar:params:xml:ns:application-1.0">
+           <id>3F2504E0-4F89-11D3-9A0C-0305E82C3301</id>
+           <name>example.tld</name>
+           <crDate>1999-04-03T22:00:00.0Z</crDate>
+         </creData>
+       </resData>
+       <trID>
+         <clTRID>ABC-12345</clTRID>
+         <svTRID>54321-XYZ</svTRID>
+       </trID>
+     </response>
+   </epp>
+
+3.2.2.  EPP <delete> Command
+
+   This extension defines additional elements for the EPP <delete>
+   command described in the EPP Domain Name Mapping [RFC5731].  No
+   additional elements are defined for the EPP <delete> response.
+
+   The delete command is extended to allow for the deletion of an
+   application.  In addition to the elements expressed in the <domain:
+   delete>, the command is extended with a <app:delete> element that
+   contains the following child elements:
+
+   o  id: the identifier of application to be deleted.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                 [Page 13]
+
+Internet-Draft       EPP Domain Application Mapping        December 2012
+
+
+   Example <delete> Command to Delete an Application
+
+   <?xml version="1.0" standalone="no"?>
+   <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+     <command>
+       <delete>
+         <delete xmlns="urn:ietf:params:xml:ns:domain-1.0">
+           <name>example.tld</name>
+         </delete>
+       </delete>
+       <extension>
+         <delete xmlns="urn:ar:params:xml:ns:application-1.0">
+           <id>3F2504E0-4F89-11D3-9A0C-0305E82C3301</id>
+         </delete>
+       </extension>
+       <clTRID>ABC-12345</clTRID>
+     </command>
+   </epp>
+
+3.2.3.  EPP <renew> Command
+
+   This extension does not define any extension to the EPP <renew>
+   command or response described in the EPP Domain Name Mapping
+   [RFC5731].
+
+3.2.4.  EPP <transfer> Command
+
+   This extension does not define any extension to the EPP <transfer>
+   command or response described in the EPP Domain Name Mapping
+   [RFC5731].
+
+3.2.5.  EPP <update> Command
+
+   This extension defines additional elements for the EPP <update>
+   command described in the EPP Domain Name Mapping [RFC5731].  No
+   additional elements are defined for the EPP <update> response.
+
+   The update command is extended to allow for the modification of an
+   application.  In addition to the elements expressed in the <domain:
+   update>, the command is extended with an <app:update> element that
+   contains the following child elements:
+
+   o  id: the identifier of application to be updated.
+
+
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                 [Page 14]
+
+Internet-Draft       EPP Domain Application Mapping        December 2012
+
+
+   Example <update> command to change the registrant of the applied for
+   domain object
+
+   <?xml version="1.0" standalone="no"?>
+   <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+     <command>
+       <update>
+         <update xmlns="urn:ietf:params:xml:ns:domain-1.0">
+           <name>example.tld</name>
+           <chg>
+             <registrant>jd1234</registrant>
+           </chg>
+         </update>
+       </update>
+       <extension>
+         <update xmlns="urn:ar:params:xml:ns:application-1.0">
+           <id>3F2504E0-4F89-11D3-9A0C-0305E82C3301</id>
+         </update>
+       </extension>
+       <clTRID>ABC-12345</clTRID>
+     </command>
+   </epp>
+
+
+4.  Formal Syntax
+
+   An EPP object mapping is specified in XML Schema notation.  The
+   formal syntax presented here is a complete schema representation of
+   the object mapping, suitable for automated validation of EPP XML
+   instances.
+
+   <?xml version="1.0"?>
+   <schema targetNamespace="urn:ar:params:xml:ns:application-1.0"
+     xmlns:app="urn:ar:params:xml:ns:application-1.0"
+     xmlns:eppcom="urn:ietf:params:xml:ns:eppcom-1.0"
+     xmlns="http://www.w3.org/2001/XMLSchema"
+     elementFormDefault="qualified">
+
+     <import namespace="urn:ietf:params:xml:ns:eppcom-1.0" />
+
+     <!-- Child elements found in EPP commands. -->
+     <element name="check" type="app:phaseType" />
+     <element name="create" type="app:phaseType" />
+     <element name="delete" type="app:idType" />
+     <element name="info" type="app:idType" />
+     <element name="update" type="app:idType" />
+
+     <complexType name="phaseType">
+
+
+
+Mitchell & Wright         Expires June 4, 2013                 [Page 15]
+
+Internet-Draft       EPP Domain Application Mapping        December 2012
+
+
+       <sequence>
+         <element name="phase" type="app:phaseValueType" />
+       </sequence>
+     </complexType>
+
+     <simpleType name="phaseValueType">
+       <restriction base="token">
+         <minLength value="1" />
+       </restriction>
+     </simpleType>
+
+     <complexType name="idType">
+       <sequence>
+         <element name="id" type="app:idValueType" />
+       </sequence>
+     </complexType>
+
+     <simpleType name="idValueType">
+       <restriction base="token">
+         <minLength value="1" />
+       </restriction>
+     </simpleType>
+
+     <!-- Child elements found in EPP responses. -->
+     <element name="creData" type="app:creDataType" />
+     <element name="infData" type="app:infDataType" />
+
+     <complexType name="creDataType">
+       <sequence>
+         <element name="id" type="app:idValueType" />
+         <element name="name" type="eppcom:labelType" />
+         <element name="crDate" type="dateTime" minOccurs="0" />
+       </sequence>
+     </complexType>
+
+     <complexType name="infDataType">
+       <sequence>
+         <element name="id" type="app:idValueType" />
+         <element name="phase" type="app:phaseValueType" />
+         <element name="status" type="app:statusType"
+           maxOccurs="unbounded" />
+       </sequence>
+     </complexType>
+
+     <complexType name="statusType">
+       <simpleContent>
+         <extension base="normalizedString">
+           <attribute name="s" type="token" use="required" />
+
+
+
+Mitchell & Wright         Expires June 4, 2013                 [Page 16]
+
+Internet-Draft       EPP Domain Application Mapping        December 2012
+
+
+         </extension>
+       </simpleContent>
+     </complexType>
+
+   </schema>
+
+
+5.  IANA Considerations
+
+   This memo includes no request to IANA.
+
+
+6.  Security Considerations
+
+   The mapping extensions described in this document do not provide any
+   security services beyond those described by EPP [RFC5730], the EPP
+   Domain Name Mapping [RFC5731], and protocol layers used by EPP.  The
+   security considerations described in these other specifications also
+   apply to this specification.
+
+   Updates to and deletion of an application object, must be restricted
+   to clients authorized to perform the said operation on the object.
+
+   Because information contained within an application, or even the mere
+   fact that an application exists may be confidential; any attempt to
+   operate on an application object by an unauthorized client MUST be
+   rejected with an EPP 2303 (object does not exist) or an appropriate
+   auhorization error.  Server policy may allow <info> operation with
+   filtered output by clients other than the sponsoring client, in which
+   case the <domain:infData> and <application:infData> response SHOULD
+   be filtered to include only fields that are publicly accessible.
+
+
+7.  Change History
+
+7.1.  Changes from -01 to -02
+
+   1.  Clarified the use of domain attributes for applications.
+
+   2.  Removed status values from the XML schema to facilitate
+       customization by servers as required.
+
+   3.  Updated the list of status descriptors.
+
+   4.  Added two example application lifecycles in an appendix.
+
+   5.  Miscellaneous text and editorial changes.
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                 [Page 17]
+
+Internet-Draft       EPP Domain Application Mapping        December 2012
+
+
+8.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+   [RFC5730]  Hollenbeck, S., "Extensible Provisioning Protocol (EPP)",
+              STD 69, RFC 5730, August 2009.
+
+   [RFC5731]  Hollenbeck, S., "Extensible Provisioning Protocol (EPP)
+              Domain Name Mapping", STD 69, RFC 5731, August 2009.
+
+
+Appendix A.  Example Application Lifecycle
+
+   Two example application lifecycles are illustrated below.  Servers
+   are free to determine the lifecycle that best suits their
+   requirements, however may derive inspiration from the following
+   examples.
+
+A.1.  Simple Lifecycle
+
+   The following diagram illustrates a simple application phase where
+   multiple applications are accepted and allocation is performed by the
+   server.
+
+                   +---------+
+                   | pending |
+                   +---------+
+                        |
+         +--------------+---------------+
+         |                              |
+         |                              V
+         |                +-----------------------------+
+         +----------------| pendingContentionResolution |
+         |                +-----------------------------+
+         |                              |
+         V                              V
+   +-----------+                   +----------+
+   | allocated |                   | rejected |
+   +-----------+                   +----------+
+
+
+A.2.  Complex Lifecycle
+
+   The following diagram illustrates all status elements defined in this
+   document.  In this example, the server periodically validates all
+   applications during the application phase, allowing modification of
+   invalid applications to enable clients to correct mistakes.  At the
+
+
+
+Mitchell & Wright         Expires June 4, 2013                 [Page 18]
+
+Internet-Draft       EPP Domain Application Mapping        December 2012
+
+
+   end of the phase the server resolves contention for domain names with
+   more than one valid application.  Applications that are successful in
+   contention resolution are ready for allocation, as well as those
+   applications for which there was only one valid application.
+   Applications pending allocation are released for allocation either by
+   the client or by the server, with applications rejected if
+   unallocated within a server-defined time period.
+
+                                 +---------+
+                   +------------>| pending |
+                   |             +---------+
+                   |                  |
+                   |                  V
+                   |        +-------------------+
+                   |        | pendingValidation |
+                   |        +-------------------+
+                   |                  |
+                   |        +---------+---------+
+                   |        |                   |
+                   |        V                   V
+                   |   +---------+          +-------+
+                   +---| invalid |          | valid |
+                       +---------+          +-------+
+                            |                   |
+              +-------------)-------------------+
+              |             |                   |
+              V             |                   V
+   +-------------------+    |    +-----------------------------+
+   | pendingAllocation |<---)----| pendingContentionResolution |---+
+   +-------------------+    |    +-----------------------------+   |
+              |             |                                      |
+              +-------------)-------------------+                  |
+              |             |                   |                  |
+              V             |                   V                  |
+        +-----------+       |              +----------+            |
+        | allocated |       +------------->| rejected |<-----------+
+        +-----------+                      +----------+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                 [Page 19]
+
+Internet-Draft       EPP Domain Application Mapping        December 2012
+
+
+Authors' Addresses
+
+   James Mitchell
+   AusRegistry
+   8/10 Queens Road
+   Melbourne, Victoria  3004
+   AU
+
+   Email: james.mitchell@ausregistry.com
+   URI:   www.ausregistry.com
+
+
+   Chris Wright
+   AusRegistry
+   8/10 Queens Road
+   Melbourne, Victoria  3004
+   AU
+
+   Email: chris@ausregistry.com
+   URI:   www.ausregistry.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                 [Page 20]
+

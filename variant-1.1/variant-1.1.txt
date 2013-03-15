@@ -1,0 +1,616 @@
+
+
+
+Network Working Group                                        J. Mitchell
+Internet-Draft                                               AusRegistry
+Intended status: Standards Track                               C. Wright
+Expires: June 4, 2013                              ARI Registry Services
+                                                           December 2012
+
+
+ Domain Name Variant Extension Mapping for the Extensible Provisioning
+                             Protocol (EPP)
+                    draft-ar-variant-epp-mapping-01
+
+Abstract
+
+   This document describes an Extensible Provisioning Protocol (EPP)
+   extension mapping for the provisioning and management of variant
+   domain names as attributes of domain objects.
+
+Status of this Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on June 4, 2013.
+
+Copyright Notice
+
+   Copyright (c) 2012 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 1]
+
+Internet-Draft           EPP IDN Variant Mapping           December 2012
+
+
+Table of Contents
+
+   1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  3
+     1.1.  Conventions Used in This Document  . . . . . . . . . . . .  3
+   2.  Object Attributes  . . . . . . . . . . . . . . . . . . . . . .  3
+     2.1.  Variant Domain Names . . . . . . . . . . . . . . . . . . .  3
+   3.  EPP Command Mapping  . . . . . . . . . . . . . . . . . . . . .  4
+     3.1.  EPP Query Commands . . . . . . . . . . . . . . . . . . . .  4
+       3.1.1.  EPP <check> Command  . . . . . . . . . . . . . . . . .  4
+       3.1.2.  EPP <info> Command . . . . . . . . . . . . . . . . . .  4
+       3.1.3.  EPP <transfer> Command . . . . . . . . . . . . . . . .  6
+     3.2.  EPP Transform Commands . . . . . . . . . . . . . . . . . .  6
+       3.2.1.  EPP <create> Command . . . . . . . . . . . . . . . . .  6
+       3.2.2.  EPP <delete> Command . . . . . . . . . . . . . . . . .  7
+       3.2.3.  EPP <renew> Command  . . . . . . . . . . . . . . . . .  7
+       3.2.4.  EPP <transfer> Command . . . . . . . . . . . . . . . .  7
+       3.2.5.  EPP <update> Command . . . . . . . . . . . . . . . . .  8
+   4.  Formal Syntax  . . . . . . . . . . . . . . . . . . . . . . . .  9
+   5.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 10
+   6.  Security Considerations  . . . . . . . . . . . . . . . . . . . 10
+   7.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+     7.1.  Normative References . . . . . . . . . . . . . . . . . . . 10
+     7.2.  Informative References . . . . . . . . . . . . . . . . . . 10
+   Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 10
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 2]
+
+Internet-Draft           EPP IDN Variant Mapping           December 2012
+
+
+1.  Introduction
+
+   Internationalized Domain Names have introduced the ability to specify
+   domain names in scripts beyond basic latin, allowing many languages
+   and scripts to be coded as domain names.  This however has led to
+   forms of abuse, where malicious users exploit imperfections in the
+   coding of languages in computers to register domain names with the
+   intention of deceiving legitimate users.
+
+   Registries, language experts and linguists have collaborated to
+   define variant domain names as names that should be blocked from
+   registration independent of the original name.  However, due to
+   technological and contextual issues, some variant domain names should
+   be activated and published in the DNS to provide satisfactory end
+   user experience.  This document considers only activated variants;
+   the listing of possible variants and blocked variants of a domain
+   name is out of scope of this extension mapping.
+
+1.1.  Conventions Used in This Document
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [RFC2119].
+
+   "variant-1.1" is used as an abbreviation for
+   "urn:ar:params:xml:ns:variant-1.1".  The XML namespace prefix
+   "variant" is used, but implementations MUST NOT depend on it and
+   instead employ a proper namespace-aware XML parser and serializer to
+   interpret and output the XML documents.
+
+
+2.  Object Attributes
+
+   This extension adds additional elements to the EPP Domain Name
+   Mapping [RFC5731].  Only those new elements are described here.
+
+2.1.  Variant Domain Names
+
+   The syntax for variant domain names MUST conform to the syntax for
+   domain and host names described in the EPP Domain Name Mapping
+   [RFC5731].  Servers MUST accept Internationalized Domain Names
+   expressed as A-labels, and MAY accept variants expressed as U-labels.
+   Servers MUST return A-labels in responses unless negotiated with the
+   client using a mechanism outside this document.
+
+   Servers SHOULD process query commands matching both the primary
+   registered domain name and any activated variants, and MAY match
+   withheld and blocked variants.  Servers SHOULD restrict the use of
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 3]
+
+Internet-Draft           EPP IDN Variant Mapping           December 2012
+
+
+   variants in transform commands, removing perception that variants may
+   be treated as separate objects.
+
+   Variants as simple attributes of domain names places some
+   restrictions on servers, clients and end users.  In the absence of
+   other extensions, it is not possible to associate a set of name
+   servers to a variant independent of those name servers associated
+   with the primary domain name.  Additionally, servers providing
+   mechanisms for clients to have secure delegations will have to
+   support the Key Data Interface of the EPP DNS Security Extensions
+   Mapping [RFC5910] in the absense of other extensions that allow
+   associating DS data with variant domain names.
+
+
+3.  EPP Command Mapping
+
+   A detailed description of the EPP syntax and semantics can be found
+   in the EPP core protocol specification [RFC5730].  The command
+   mappings described here are specifically for use in provisioning
+   internationalized domain names.
+
+3.1.  EPP Query Commands
+
+   EPP provides three commands to retrieve object information: <check>
+   to determine if an object is known to the server, <info> to retrieve
+   detailed information associated with an object, and <transfer> to
+   retrieve object transfer status information.
+
+3.1.1.  EPP <check> Command
+
+   This extension does not define any extension to the EPP <check>
+   command or response described in the EPP Domain Name Mapping
+   [RFC5731].
+
+3.1.2.  EPP <info> Command
+
+   This extension does not add any elements to the EPP <info> command
+   described in the EPP Domain Name Mapping [RFC5731].  However,
+   additional elements are defined for the <info> response.
+
+   To enable clients to determine the active variant domain names, the
+   <domain:infData> response is extended with a <variant:infData>
+   element that contains the following child elements:
+
+   o  One or more <variant> elements containing the active variant
+      domain names for this domain object.
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 4]
+
+Internet-Draft           EPP IDN Variant Mapping           December 2012
+
+
+   Example <info> response with active variant domain names
+
+   <?xml version="1.0" standalone="no"?>
+   <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+     <response>
+       <result code="1000">
+         <msg>Command completed successfully</msg>
+       </result>
+       <resData>
+         <infData xmlns="urn:ietf:params:xml:ns:domain-1.0">
+           <name>xn--eqrt2g948bija.example</name>
+           <roid>EXAMPLE1-REP</roid>
+           <status s="ok" />
+           <registrant>jd1234</registrant>
+           <contact type="admin">sh8013</contact>
+           <contact type="tech">sh8013</contact>
+           <ns>
+             <hostObj>ns1.example.com</hostObj>
+             <hostObj>ns1.example.net</hostObj>
+           </ns>
+           <host>ns1.example.com</host>
+           <host>ns2.example2.com</host>
+           <clID>ClientX</clID>
+           <crID>ClientY</crID>
+           <crDate>1999-04-03T22:00:00.0Z</crDate>
+           <upID>ClientX</upID>
+           <upDate>1999-12-03T09:00:00.0Z</upDate>
+           <exDate>2005-04-03T22:00:00.0Z</exDate>
+           <trDate>2000-04-08T09:00:00.0Z</trDate>
+           <authInfo>
+             <pw>2fooBAR</pw>
+           </authInfo>
+         </infData>
+       </resData>
+       <extension>
+         <infData xmlns="urn:ar:params:xml:ns:variant-1.1">
+           <variant>xn--eqrt2gr10cmna.example</variant>
+         </infData>
+       </extension>
+       <trID>
+         <clTRID>ABC-12345</clTRID>
+         <svTRID>54322-XYZ</svTRID>
+       </trID>
+     </response>
+   </epp>
+
+   To facilitate the transfer of domain names, the list of activated
+   variants should be available to authorized clients prior to transfer.
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 5]
+
+Internet-Draft           EPP IDN Variant Mapping           December 2012
+
+
+   Servers that require authorization information to begin the transfer
+   process MAY restrict the list of activated variants to those commands
+   where correct authorization information is provided.
+
+3.1.3.  EPP <transfer> Command
+
+   This extension does not define any extension to the EPP <transfer>
+   command or response described in the EPP Domain Name Mapping
+   [RFC5731].
+
+3.2.  EPP Transform Commands
+
+   EPP provides five commands to transform objects: <create> to create
+   an instance of an object, <delete> to delete an instance of an
+   object, <renew> to extend the validity period of an object,
+   <transfer> to manage object sponsorship changes, and <update> to
+   change information associated with an object.
+
+3.2.1.  EPP <create> Command
+
+   This extension does not add any elements to the EPP <create> command
+   described in the EPP Domain Name Mapping [RFC5731].  However,
+   additional elements are defined for the <create> response.
+
+   Servers may automatically generate and activate variant domain names
+   upon registration of specific domain names, based on rules determined
+   by the server operator, and usually described in an IDN table.  In
+   addition to the elements expressed in the <domain:creData>, the
+   response is extended with a <variant:creData> element that contains
+   the following child elements:
+
+   o  One or more <variant:variant> elements containing the variant
+      domain names automatically activated by the server.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 6]
+
+Internet-Draft           EPP IDN Variant Mapping           December 2012
+
+
+   Example <create> response containing automatically activated variant
+   domain names
+
+   <?xml version="1.0" standalone="no"?>
+   <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+     <response>
+       <result code="1000">
+         <msg>Command completed successfully</msg>
+       </result>
+       <resData>
+         <creData xmlns="urn:ietf:params:xml:ns:domain-1.0">
+           <name>xn--eqrt2g948bija.example</name>
+           <crDate>1999-04-03T22:00:00.0Z</crDate>
+           <exDate>2001-04-03T22:00:00.0Z</exDate>
+         </creData>
+       </resData>
+       <extension>
+         <creData xmlns="urn:ar:params:xml:ns:variant-1.1">
+           <variant>xn--eqrt2gr10cmna.example</variant>
+         </creData>
+       </extension>
+       <trID>
+         <clTRID>ABC-12345</clTRID>
+         <svTRID>54321-XYZ</svTRID>
+       </trID>
+     </response>
+   </epp>
+
+3.2.2.  EPP <delete> Command
+
+   This extension does not define any extension to the EPP <delete>
+   command or response described in the EPP Domain Name Mapping
+   [RFC5731].
+
+3.2.3.  EPP <renew> Command
+
+   This extension does not define any extension to the EPP <renew>
+   command or response described in the EPP Domain Name Mapping
+   [RFC5731].
+
+3.2.4.  EPP <transfer> Command
+
+   This extension does not define any extension to the EPP <transfer>
+   command or response described in the EPP Domain Name Mapping
+   [RFC5731].
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 7]
+
+Internet-Draft           EPP IDN Variant Mapping           December 2012
+
+
+3.2.5.  EPP <update> Command
+
+   This extension defines additional elements for the EPP <update>
+   command described in the EPP Domain Name Mapping [RFC5731].  No
+   additional elements are defined for the EPP <update> response.
+
+   The EPP <update> command provides a transform operation that allows a
+   client to modify the attributes of a domain object.  Servers may,
+   subject to local policy, allow the modification of the list of
+   activated variants for a domain name.  In addition to the elements
+   expressed in the <domain:update>, the command is extended with a
+   <variant:update> element that contains the following child elements:
+
+   o  An optional <variant:rem> element containing child <variant:
+      variant> elements describing the variant domain names that should
+      be withheld from delegation in the DNS.
+
+   o  An optional <variant:add> element containing child <variant:
+      variant> elements describing the variant domain names that should
+      be activated and delegated in the DNS.
+
+   Example <update> command to activate a variant domain name
+
+   <?xml version="1.0" standalone="no"?>
+   <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+     <command>
+       <update>
+         <update xmlns="urn:ietf:params:xml:ns:domain-1.0">
+           <name>xn--eqrt2g948bija.example</name>
+         </update>
+       </update>
+       <extension>
+         <update xmlns="urn:ar:params:xml:ns:variant-1.1">
+           <add>
+             <variant>xn--eqrt2g7t9bc8a.example</variant>
+           </add>
+         </update>
+       </extension>
+       <clTRID>ABC-12345</clTRID>
+     </command>
+   </epp>
+
+   In order to support local business rules, servers MAY reject commands
+   that to update both the list of active variants and modify other
+   domain attributes.
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 8]
+
+Internet-Draft           EPP IDN Variant Mapping           December 2012
+
+
+4.  Formal Syntax
+
+   An EPP object mapping is specified in XML Schema notation.  The
+   formal syntax presented here is a complete schema representation of
+   the object mapping, suitable for automated validation of EPP XML
+   instances.
+
+   <?xml version="1.0"?>
+   <schema targetNamespace="urn:ar:params:xml:ns:variant-1.1"
+     xmlns:variant="urn:ar:params:xml:ns:variant-1.1"
+     xmlns:eppcom="urn:ietf:params:xml:ns:eppcom-1.0"
+     xmlns="http://www.w3.org/2001/XMLSchema"
+     elementFormDefault="qualified">
+
+     <import namespace="urn:ietf:params:xml:ns:eppcom-1.0" />
+
+     <element name="update" type="variant:updateType" />
+
+     <complexType name="updateType">
+       <sequence>
+         <element name="rem" type="variant:addRemType" minOccurs="0" />
+         <element name="add" type="variant:addRemType" minOccurs="0" />
+       </sequence>
+     </complexType>
+
+     <complexType name="addRemType">
+       <sequence>
+         <element name="variant" type="eppcom:labelType"
+           maxOccurs="unbounded" />
+       </sequence>
+     </complexType>
+
+     <element name="infData" type="variant:resDataType" />
+     <element name="creData" type="variant:resDataType" />
+
+     <complexType name="resDataType">
+       <sequence>
+         <element name="variant" type="eppcom:labelType"
+           maxOccurs="unbounded" />
+       </sequence>
+     </complexType>
+
+   </schema>
+
+
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 9]
+
+Internet-Draft           EPP IDN Variant Mapping           December 2012
+
+
+5.  IANA Considerations
+
+   This memo includes no request to IANA.
+
+
+6.  Security Considerations
+
+   The mapping extensions described in this document do not provide any
+   security services beyond those described by EPP [RFC5730], the EPP
+   Domain Name Mapping [RFC5731], and protocol layers used by EPP.  The
+   security considerations described in these other specifications apply
+   to this specification as well.
+
+
+7.  References
+
+7.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+   [RFC5730]  Hollenbeck, S., "Extensible Provisioning Protocol (EPP)",
+              STD 69, RFC 5730, August 2009.
+
+   [RFC5731]  Hollenbeck, S., "Extensible Provisioning Protocol (EPP)
+              Domain Name Mapping", STD 69, RFC 5731, August 2009.
+
+7.2.  Informative References
+
+   [RFC5910]  Gould, J. and S. Hollenbeck, "Domain Name System (DNS)
+              Security Extensions Mapping for the Extensible
+              Provisioning Protocol (EPP)", RFC 5910, May 2010.
+
+
+Authors' Addresses
+
+   James Mitchell
+   AusRegistry
+   8/10 Queens Road
+   Melbourne, Victoria  3004
+   AU
+
+   Email: james.mitchell@ausregistry.com
+   URI:   www.ausregistry.com
+
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                 [Page 10]
+
+Internet-Draft           EPP IDN Variant Mapping           December 2012
+
+
+   Chris Wright
+   ARI Registry Services
+   8/10 Queens Road
+   Melbourne, Victoria  3004
+   AU
+
+   Email: chris@ausregistry.com
+   URI:   www.ausregistry.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                 [Page 11]
+

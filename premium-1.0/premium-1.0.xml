@@ -1,0 +1,560 @@
+<?xml version="1.0" standalone="no"?>
+<!-- This template is for creating an Internet Draft using xml2rfc, which 
+	is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC5730 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5730.xml">
+<!ENTITY RFC5731 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5731.xml">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space (using these PIs as follows is recommended 
+	by the RFC Editor) -->
+<?rfc compact="yes" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<rfc category="info" docName="draft-ar-premium-domain-epp-mapping-01"
+	ipr="trust200902">
+	<front>
+		<title abbrev="EPP Premium Name Mapping">
+			Premium Domain Name Extension Mapping for the
+			Extensible Provisioning Protocol (EPP)
+		</title>
+		<author fullname="James Mitchell" initials="J." surname="Mitchell">
+			<organization>AusRegistry</organization>
+			<address>
+				<postal>
+					<street>8/10 Queens Road</street>
+					<city>Melbourne</city>
+					<region>Victoria</region>
+					<code>3004</code>
+					<country>AU</country>
+				</postal>
+				<email>james.mitchell@ausregistry.com</email>
+				<uri>www.ausregistry.com</uri>
+			</address>
+		</author>
+		<author fullname="Chris Wright" initials="C." surname="Wright">
+			<organization>AusRegistry</organization>
+			<address>
+				<postal>
+					<street>8/10 Queens Road</street>
+					<city>Melbourne</city>
+					<region>Victoria</region>
+					<code>3004</code>
+					<country>AU</country>
+				</postal>
+				<email>chris@ausregistry.com</email>
+				<uri>www.ausregistry.com</uri>
+			</address>
+		</author>
+		<date month="December" year="2012" />
+		<area>General</area>
+		<workgroup>Internet Engineering Task Force</workgroup>
+		<keyword>EPP</keyword>
+		<abstract>
+			<t>
+				This document describes an Extensible Provisioning Protocol (EPP)
+				extension mapping for the provisioning and management of premium
+				domain names.
+			</t>
+		</abstract>
+	</front>
+	<middle>
+		<section title="Introduction">
+			<t>
+				Certain domain names may be considered 'premium' by server
+				operators, attracting a higher registration and renewal price
+				compared to normal domain names. Lack of controls in the
+				registration process introduces risk to clients of on-selling domain
+				names to registrants at a price below their cost.
+			</t>
+			<t>
+				This extension provides mechanism for clients to obtain and
+				acknowledge the price charged for the registration and renewal of
+				premium domain names. Acknowledgement takes place at the time of
+				attaining sponsorship, i.e. at time of registration and transfer.
+				Updates to pricing information that affects existing registrations
+				must be provided to clients using an out of band mechanism.
+			</t>
+			<t>
+				This specification does not preclude the publication of a premium
+				domain name list. Clients may prefer an externally accessible list
+				to performing a check before every registration.
+			</t>
+			<section title="Conventions Used in This Document">
+				<t>
+					The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+					"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in
+					this document are to be interpreted as described in
+					<xref target="RFC2119">RFC 2119</xref><![CDATA[.]]>
+				</t>
+				<t>
+					"premium-1.0" is used as an abbreviation for
+					"urn:ietf:params:xml:ns:premium-1.0". The XML namespace prefix
+					"premium" is used, but implementations MUST NOT depend on it and
+					instead employ a proper namespace-aware XML parser and serializer
+					to interpret and output the XML documents.
+				</t>
+			</section>
+		</section>
+		<section title="Object Attributes">
+			<t>
+				This extension adds additional elements to the
+				<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+				Only those new elements are described here.
+			</t>
+			<section title="Price">
+				<t>
+					This extension defines price elements for the registration of and
+					renewal of premium domain names. Prices are expressed assuming the
+					minimum registration period available for the premium domain name.
+					The minimum available period is defined by the server and may
+					change based on the specific registration phases available.
+				</t>
+				<t>
+					The fees returned by the server are indicative only and may not
+					take into consideration discounts or other factors that would
+					otherwise adjust the price. Clients should confirm with server
+					operators any terms that may adjust the fee before assuming the
+					actual fee charged for the transaction.
+				</t>
+				<t>
+					Fee elements expressed in the currency that the client normally
+					transacts in, or otherwise negotiated using an out of band
+					mechanism.
+				</t>
+			</section>
+		</section>
+
+		<section title="EPP Command Mapping">
+			<t>
+				A detailed description of the EPP syntax and semantics can be found
+				in the
+				<xref target="RFC5730">EPP core protocol specification</xref><![CDATA[.]]>
+				The command mappings described here are specifically for use in
+				provisioning premium domain names.
+			</t>
+			<section title="EPP Query Commands">
+				<t>
+					EPP provides three commands to retrieve object information:
+					&lt;check&gt; to determine if an object is known to the server,
+					&lt;info&gt; to retrieve detailed information associated with an
+					object, and &lt;transfer&gt; to retrieve object transfer status
+					information.
+				</t>
+				<section title="EPP &lt;check&gt; Command">
+					<t>
+						This extension defines additional elements to extend the EPP
+						&lt;check&gt; command and response to be used in conjunction with
+						the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+					<t>
+						To enable clients to identify domain names that attract a
+						premium registration or renewal fee, the &lt;domain:check&gt;
+						command is extended with a &lt;premium:check&gt; element, which
+						signals a client’s intention to retrieve premium name information.
+					</t>
+					<figure align="left">
+						<preamble>Example &lt;check&gt; command requesting premium name
+							information</preamble>
+						<artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <check>
+      <check xmlns="urn:ietf:params:xml:ns:domain-1.0">
+        <name>example1.tld</name>
+        <name>example2.tld</name>
+      </check>
+    </check>
+    <extension>
+      <check xmlns="urn:ar:params:xml:ns:premium-1.0" />
+    </extension>
+    <clTRID>ABC-12345</clTRID>
+  </command>
+</epp>]]>
+						</artwork>
+					</figure>
+					<t>
+						When a &lt;check&gt; command containing the &lt;premium:check&gt;
+						element has been processed successfully, the server MUST NOT
+						respond with the &lt;domain:chkData&gt; element described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+						Instead, servers MUST respond with a &lt;premium:chkData&gt;
+						element that contains one &lt;premium:cd&gt; element for each
+						domain name present in the command. The &lt;premium:cd&gt; element
+						contains the following child elements:
+						<list style="symbols">
+							<t>
+								A &lt;premium:name&gt; element containing a domain name from
+								the corresponding command. The order and composition of names in
+								the response MUST be the same as the order and composition
+								provided in the command, with exception to transformations
+								required of validating XML parsers. A MANDATORY "premium"
+								attribute indicates whether the name attracts a premium price.
+							</t>
+							<t>
+								A &lt;premium:price&gt; element containing the base price
+								charged for the registration of the domain name. This element
+								MAY be omitted if the registration of the domain name does not
+								attract premium fees.
+							</t>
+							<t>
+								A &lt;premium:renewalPrice&gt; element containing the base
+								price charged for the renewal of the domain name. This element
+								MAY be omitted if the renewal of the domain name does not
+								attract premium fees.
+							</t>
+						</list>
+					</t>
+					<figure align="left">
+						<preamble>Example &lt;check&gt; response providing premium name
+							information</preamble>
+						<artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <response>
+    <result code="1000">
+      <msg>Command completed successfully</msg>
+    </result>
+    <resData>
+      <chkData xmlns="urn:ar:params:xml:ns:premium-1.0">
+        <cd>
+          <name premium="1">premium.example</name>
+          <price>100.00</price>
+          <renewalPrice>100.00</renewalPrice>
+        </cd>
+        <cd>
+          <name premium="0">non-premium.example</name>
+        </cd>
+      </chkData>
+    </resData>
+    <trID>
+      <clTRID>ABC-12345</clTRID>
+      <svTRID>54321-XYZ</svTRID>
+    </trID>
+  </response>
+</epp>]]>
+						</artwork>
+					</figure>
+				</section>
+
+				<section title="EPP &lt;info&gt; Command">
+					<t>
+						This extension does not define any extension to the EPP
+						&lt;info&gt; command or response described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+				</section>
+
+				<section title="EPP &lt;transfer&gt; Command">
+					<t>
+						This extension does not define any extension to the EPP
+						&lt;transfer&gt; command or response described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+				</section>
+			</section>
+			<section title="EPP Transform Commands">
+				<t>
+					EPP provides five commands to transform objects: &lt;create&gt;
+					to create an instance of an object, &lt;delete&gt; to delete an
+					instance of an object, &lt;renew&gt; to extend the validity period
+					of an object, &lt;transfer&gt; to manage object sponsorship
+					changes, and &lt;update&gt; to change information associated with
+					an object.
+				</t>
+
+				<section title="EPP &lt;create&gt; Command">
+					<t>
+						This extension defines additional elements for the EPP
+						&lt;create&gt; command described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+						No additional elements are defined for the EPP &lt;create&gt;
+						response.
+					</t>
+					<t>
+						To facilitate the registration of domain names that attract a
+						premium registration fee, the &lt;domain:create&gt; command is
+						extended with a &lt;premium:create&gt; element, that signal a
+						client’s acknowledgment of the premium fees associated with the
+						transaction. The &lt;premium:create&gt; element contains the
+						following child elements:
+						<list style="symbols">
+							<t>
+								A &lt;premium:ack&gt; element that signals the client is aware
+								of a premium fee. Clients MAY include child
+								&lt;premium:price&gt; and &lt;premium:renewalPrice&gt; elements
+								that contain the current premium price. If provided, servers
+								SHOULD confirm the information matches the current pricing
+								information for the corresponding domain name.
+							</t>
+						</list>
+					</t>
+					<figure align="left">
+						<preamble>Example &lt;create&gt; command with simple
+							acknowledgment</preamble>
+						<artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <create>
+      <create xmlns="urn:ietf:params:xml:ns:domain-1.0">
+        <name>premium.example</name>
+        <ns>
+          <hostObj>ns1.example.net</hostObj>
+          <hostObj>ns2.example.net</hostObj>
+        </ns>
+        <registrant>jd1234</registrant>
+        <contact type="admin">sh8013</contact>
+        <contact type="tech">sh8013</contact>
+        <authInfo>
+          <pw>2fooBAR</pw>
+        </authInfo>
+      </create>
+    </create>
+    <extension>
+      <create xmlns="urn:ar:params:xml:ns:premium-1.0">
+        <ack />
+      </create>
+    </extension>
+    <clTRID>ABC-12345</clTRID>
+  </command>
+</epp>]]>
+						</artwork>
+					</figure>
+					<figure align="left">
+						<preamble>Example &lt;create&gt; command including pricing
+							information in the acknowledgement</preamble>
+						<artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <create>
+      <create xmlns="urn:ietf:params:xml:ns:domain-1.0">
+        <name>premium.example</name>
+        <ns>
+          <hostObj>ns1.example.net</hostObj>
+          <hostObj>ns2.example.net</hostObj>
+        </ns>
+        <registrant>jd1234</registrant>
+        <contact type="admin">sh8013</contact>
+        <contact type="tech">sh8013</contact>
+        <authInfo>
+          <pw>2fooBAR</pw>
+        </authInfo>
+      </create>
+    </create>
+    <extension>
+      <create xmlns="urn:ar:params:xml:ns:premium-1.0">
+        <ack>
+          <price>100.00</price>
+          <renewalPrice>100.00</renewalPrice>
+        </ack>
+      </create>
+    </extension>
+    <clTRID>ABC-12345</clTRID>
+  </command>
+</epp>]]>
+						</artwork>
+					</figure>
+					<t>
+						Servers that require the use of this extension for the
+						registration of premium names SHOULD return a 2003 "Required
+						parameter missing" error in response to requests for registration
+						of premium names that do not include this extension. In addition,
+						servers SHOULD reject requests that contain the
+						&lt;premium:create&gt; element for registration of domain names
+						that do not attract premium fees.
+					</t>
+				</section>
+
+				<section title="EPP &lt;delete&gt; Command">
+					<t>
+						This extension does not define any extension to the EPP
+						&lt;delete&gt; command or response described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+				</section>
+
+				<section title="EPP &lt;renew&gt; Command">
+					<t>
+						This extension does not define any extension to the EPP
+						&lt;renew&gt; command or response described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+				</section>
+				<section title="EPP &lt;transfer&gt; Command">
+					<t>
+						This extension defines additional elements for the EPP
+						&lt;transfer&gt; command described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+						No additional elements are defined for the EPP &lt;transfer&gt;
+						response.
+					</t>
+					<t>
+						To enable clients to transfer domain names that attract a premium
+						registration fee, the &lt;domain:transfer&gt; command is extended
+						with a &lt;premium:transfer&gt; element, that signal a client’s
+						acknowledgment of the premium fees associated with the
+						transaction. The &lt;premium:transfer&gt; element contains the
+						following child
+						elements:
+						<list style="symbols">
+							<t>
+								A &lt;premium:ack&gt; element that signals the client is aware
+								of a premium fee. Clients MAY include a child
+								&lt;premium:renewalPrice&gt; element that contains the current
+								renewal premium price. If provided, servers SHOULD confirm the
+								information matches the current pricing information for the
+								corresponding domain name.
+							</t>
+						</list>
+					</t>
+					<figure align="left">
+						<preamble>Example &lt;transfer&gt; command for a premium domain
+							name with price acknowledgement</preamble>
+						<artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <transfer op="request">
+      <transfer xmlns="urn:ietf:params:xml:ns:domain-1.0">
+        <name>premium.example</name>
+        <authInfo>
+          <pw>2fooBAR</pw>
+        </authInfo>
+      </transfer>
+    </transfer>
+    <extension>
+      <transfer xmlns="urn:ar:params:xml:ns:premium-1.0">
+        <ack>
+          <renewalPrice>100.00</renewalPrice>
+        </ack>
+      </transfer>
+    </extension>
+    <clTRID>ABC-12345</clTRID>
+  </command>
+</epp>]]>
+						</artwork>
+					</figure>
+				</section>
+
+				<section title="EPP &lt;update&gt; Command">
+					<t>
+						This extension does not define any extension to the EPP
+						&lt;update&gt; command or response described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+				</section>
+			</section>
+		</section>
+
+		<section title="Formal Syntax">
+			<figure align="left">
+				<artwork><![CDATA[
+<?xml version="1.0" standalone="no" ?>
+<schema targetNamespace="urn:ar:params:xml:ns:premium-1.0"
+  xmlns:premium="urn:ar:params:xml:ns:premium-1.0"
+  xmlns:eppcom="urn:ietf:params:xml:ns:eppcom-1.0"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified">
+
+  <import namespace="urn:ietf:params:xml:ns:eppcom-1.0" />
+
+  <!-- command-response extension elements -->
+  <element name="check" />
+  <element name="create" type="premium:ackType" />
+  <element name="transfer" type="premium:ackType" />
+
+  <complexType name="ackType">
+    <sequence>
+      <element name="ack" type="premium:priceAckType" />
+    </sequence>
+  </complexType>
+
+  <complexType name="priceAckType">
+    <sequence>
+      <element name="price" type="decimal" minOccurs="0" />
+      <element name="renewalPrice" type="decimal" minOccurs="0" />
+    </sequence>
+  </complexType>
+
+  <!-- response elements -->
+  <element name="chkData" type="premium:chkDataType" />
+
+  <complexType name="chkDataType">
+    <sequence>
+      <element name="cd" type="premium:checkType"
+        maxOccurs="unbounded" />
+    </sequence>
+  </complexType>
+
+  <complexType name="checkType">
+    <sequence>
+      <element name="name" type="premium:checkNameType" />
+      <element name="price" type="decimal" minOccurs="0" />
+      <element name="renewalPrice" type="decimal" minOccurs="0" />
+    </sequence>
+  </complexType>
+
+  <complexType name="checkNameType">
+    <simpleContent>
+      <extension base="eppcom:labelType">
+        <attribute name="premium" type="boolean" use="required" />
+      </extension>
+    </simpleContent>
+  </complexType>
+
+</schema>]]>
+				</artwork>
+			</figure>
+		</section>
+		<section title="IANA Considerations">
+			<t>This memo includes no request to IANA.</t>
+		</section>
+		<section title="Acknowledgments">
+			<t>
+				This document was inspired by Verisign's Premium Domain extension
+				and draws many simlarities to increase familarity and reduce
+				development time.
+			</t>
+		</section>
+		<section title="Security Considerations">
+			<t>
+				The mapping extensions described in this document do not provide any
+				security services beyond those described by
+				<xref target="RFC5730">EPP</xref><![CDATA[,]]>
+				the
+				<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[,]]>
+				and protocol layers used by EPP. The security considerations
+				described in these other specifications apply to this specification
+				as well.
+			</t>
+		</section>
+	</middle>
+	<back>
+		<references title="Normative References">
+			&RFC2119;
+			&RFC5730;
+			&RFC5731;
+		</references>
+		<!-- <references title="Informative References"> -->
+		<!-- </references> -->
+	</back>
+</rfc>

@@ -1,0 +1,37 @@
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+	<response>
+		<result code="1000">
+			<msg>Command completed successfully</msg>
+		</result>
+		<resData>
+			<infData xmlns="urn:ietf:params:xml:ns:domain-1.0">
+				<name>example.tld</name>
+				<roid>EXAMPLE1-REP</roid>
+				<registrant>jd1234</registrant>
+				<contact type="admin">sh8013</contact>
+				<contact type="tech">sh8013</contact>
+				<ns>
+					<hostObj>ns1.example.com</hostObj>
+					<hostObj>ns1.example.net</hostObj>
+				</ns>
+				<clID>ClientX</clID>
+				<authInfo>
+					<pw>2fooBAR</pw>
+				</authInfo>
+			</infData>
+		</resData>
+		<extension>
+			<infData xmlns="urn:ar:params:xml:ns:application-1.0">
+				<id>3F2504E0-4F89-11D3-9A0C-0305E82C3301</id>
+				<phase>landrush</phase>
+				<status s="valid" />
+				<status s="pendingAllocation" />
+			</infData>
+		</extension>
+		<trID>
+			<clTRID>ABC-12345</clTRID>
+			<svTRID>54322-XYZ</svTRID>
+		</trID>
+	</response>
+</epp>

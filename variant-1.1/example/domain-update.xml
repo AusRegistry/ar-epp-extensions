@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+	<command>
+		<update>
+			<update xmlns="urn:ietf:params:xml:ns:domain-1.0">
+				<name>xn--eqrt2g948bija.example</name>
+			</update>
+		</update>
+		<extension>
+			<update xmlns="urn:ar:params:xml:ns:variant-1.1">
+				<add>
+					<variant>xn--eqrt2g7t9bc8a.example</variant>
+				</add>
+			</update>
+		</extension>
+		<clTRID>ABC-12345</clTRID>
+	</command>
+</epp>

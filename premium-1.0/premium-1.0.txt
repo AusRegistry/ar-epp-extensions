@@ -1,0 +1,672 @@
+
+
+
+Internet Engineering Task Force                              J. Mitchell
+Internet-Draft                                                 C. Wright
+Intended status: Informational                               AusRegistry
+Expires: June 4, 2013                                      December 2012
+
+
+ Premium Domain Name Extension Mapping for the Extensible Provisioning
+                             Protocol (EPP)
+                 draft-ar-premium-domain-epp-mapping-01
+
+Abstract
+
+   This document describes an Extensible Provisioning Protocol (EPP)
+   extension mapping for the provisioning and management of premium
+   domain names.
+
+Status of this Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on June 4, 2013.
+
+Copyright Notice
+
+   Copyright (c) 2012 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 1]
+
+Internet-Draft          EPP Premium Name Mapping           December 2012
+
+
+Table of Contents
+
+   1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  3
+     1.1.  Conventions Used in This Document  . . . . . . . . . . . .  3
+   2.  Object Attributes  . . . . . . . . . . . . . . . . . . . . . .  3
+     2.1.  Price  . . . . . . . . . . . . . . . . . . . . . . . . . .  3
+   3.  EPP Command Mapping  . . . . . . . . . . . . . . . . . . . . .  4
+     3.1.  EPP Query Commands . . . . . . . . . . . . . . . . . . . .  4
+       3.1.1.  EPP <check> Command  . . . . . . . . . . . . . . . . .  4
+       3.1.2.  EPP <info> Command . . . . . . . . . . . . . . . . . .  6
+       3.1.3.  EPP <transfer> Command . . . . . . . . . . . . . . . .  6
+     3.2.  EPP Transform Commands . . . . . . . . . . . . . . . . . .  6
+       3.2.1.  EPP <create> Command . . . . . . . . . . . . . . . . .  7
+       3.2.2.  EPP <delete> Command . . . . . . . . . . . . . . . . .  8
+       3.2.3.  EPP <renew> Command  . . . . . . . . . . . . . . . . .  9
+       3.2.4.  EPP <transfer> Command . . . . . . . . . . . . . . . .  9
+       3.2.5.  EPP <update> Command . . . . . . . . . . . . . . . . . 10
+   4.  Formal Syntax  . . . . . . . . . . . . . . . . . . . . . . . . 10
+   5.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 11
+   6.  Acknowledgments  . . . . . . . . . . . . . . . . . . . . . . . 11
+   7.  Security Considerations  . . . . . . . . . . . . . . . . . . . 11
+   8.  Normative References . . . . . . . . . . . . . . . . . . . . . 11
+   Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 12
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 2]
+
+Internet-Draft          EPP Premium Name Mapping           December 2012
+
+
+1.  Introduction
+
+   Certain domain names may be considered 'premium' by server operators,
+   attracting a higher registration and renewal price compared to normal
+   domain names.  Lack of controls in the registration process
+   introduces risk to clients of on-selling domain names to registrants
+   at a price below their cost.
+
+   This extension provides mechanism for clients to obtain and
+   acknowledge the price charged for the registration and renewal of
+   premium domain names.  Acknowledgement takes place at the time of
+   attaining sponsorship, i.e. at time of registration and transfer.
+   Updates to pricing information that affects existing registrations
+   must be provided to clients using an out of band mechanism.
+
+   This specification does not preclude the publication of a premium
+   domain name list.  Clients may prefer an externally accessible list
+   to performing a check before every registration.
+
+1.1.  Conventions Used in This Document
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [RFC2119].
+
+   "premium-1.0" is used as an abbreviation for
+   "urn:ietf:params:xml:ns:premium-1.0".  The XML namespace prefix
+   "premium" is used, but implementations MUST NOT depend on it and
+   instead employ a proper namespace-aware XML parser and serializer to
+   interpret and output the XML documents.
+
+
+2.  Object Attributes
+
+   This extension adds additional elements to the EPP Domain Name
+   Mapping [RFC5731].  Only those new elements are described here.
+
+2.1.  Price
+
+   This extension defines price elements for the registration of and
+   renewal of premium domain names.  Prices are expressed assuming the
+   minimum registration period available for the premium domain name.
+   The minimum available period is defined by the server and may change
+   based on the specific registration phases available.
+
+   The fees returned by the server are indicative only and may not take
+   into consideration discounts or other factors that would otherwise
+   adjust the price.  Clients should confirm with server operators any
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 3]
+
+Internet-Draft          EPP Premium Name Mapping           December 2012
+
+
+   terms that may adjust the fee before assuming the actual fee charged
+   for the transaction.
+
+   Fee elements expressed in the currency that the client normally
+   transacts in, or otherwise negotiated using an out of band mechanism.
+
+
+3.  EPP Command Mapping
+
+   A detailed description of the EPP syntax and semantics can be found
+   in the EPP core protocol specification [RFC5730].  The command
+   mappings described here are specifically for use in provisioning
+   premium domain names.
+
+3.1.  EPP Query Commands
+
+   EPP provides three commands to retrieve object information: <check>
+   to determine if an object is known to the server, <info> to retrieve
+   detailed information associated with an object, and <transfer> to
+   retrieve object transfer status information.
+
+3.1.1.  EPP <check> Command
+
+   This extension defines additional elements to extend the EPP <check>
+   command and response to be used in conjunction with the EPP Domain
+   Name Mapping [RFC5731].
+
+   To enable clients to identify domain names that attract a premium
+   registration or renewal fee, the <domain:check> command is extended
+   with a <premium:check> element, which signals a client's intention to
+   retrieve premium name information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 4]
+
+Internet-Draft          EPP Premium Name Mapping           December 2012
+
+
+   Example <check> command requesting premium name information
+
+   <?xml version="1.0" standalone="no"?>
+   <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+     <command>
+       <check>
+         <check xmlns="urn:ietf:params:xml:ns:domain-1.0">
+           <name>example1.tld</name>
+           <name>example2.tld</name>
+         </check>
+       </check>
+       <extension>
+         <check xmlns="urn:ar:params:xml:ns:premium-1.0" />
+       </extension>
+       <clTRID>ABC-12345</clTRID>
+     </command>
+   </epp>
+
+   When a <check> command containing the <premium:check> element has
+   been processed successfully, the server MUST NOT respond with the
+   <domain:chkData> element described in the EPP Domain Name Mapping
+   [RFC5731].  Instead, servers MUST respond with a <premium:chkData>
+   element that contains one <premium:cd> element for each domain name
+   present in the command.  The <premium:cd> element contains the
+   following child elements:
+
+   o  A <premium:name> element containing a domain name from the
+      corresponding command.  The order and composition of names in the
+      response MUST be the same as the order and composition provided in
+      the command, with exception to transformations required of
+      validating XML parsers.  A MANDATORY "premium" attribute indicates
+      whether the name attracts a premium price.
+
+   o  A <premium:price> element containing the base price charged for
+      the registration of the domain name.  This element MAY be omitted
+      if the registration of the domain name does not attract premium
+      fees.
+
+   o  A <premium:renewalPrice> element containing the base price charged
+      for the renewal of the domain name.  This element MAY be omitted
+      if the renewal of the domain name does not attract premium fees.
+
+
+
+
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 5]
+
+Internet-Draft          EPP Premium Name Mapping           December 2012
+
+
+   Example <check> response providing premium name information
+
+   <?xml version="1.0" standalone="no"?>
+   <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+     <response>
+       <result code="1000">
+         <msg>Command completed successfully</msg>
+       </result>
+       <resData>
+         <chkData xmlns="urn:ar:params:xml:ns:premium-1.0">
+           <cd>
+             <name premium="1">premium.example</name>
+             <price>100.00</price>
+             <renewalPrice>100.00</renewalPrice>
+           </cd>
+           <cd>
+             <name premium="0">non-premium.example</name>
+           </cd>
+         </chkData>
+       </resData>
+       <trID>
+         <clTRID>ABC-12345</clTRID>
+         <svTRID>54321-XYZ</svTRID>
+       </trID>
+     </response>
+   </epp>
+
+3.1.2.  EPP <info> Command
+
+   This extension does not define any extension to the EPP <info>
+   command or response described in the EPP Domain Name Mapping
+   [RFC5731].
+
+3.1.3.  EPP <transfer> Command
+
+   This extension does not define any extension to the EPP <transfer>
+   command or response described in the EPP Domain Name Mapping
+   [RFC5731].
+
+3.2.  EPP Transform Commands
+
+   EPP provides five commands to transform objects: <create> to create
+   an instance of an object, <delete> to delete an instance of an
+   object, <renew> to extend the validity period of an object,
+   <transfer> to manage object sponsorship changes, and <update> to
+   change information associated with an object.
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 6]
+
+Internet-Draft          EPP Premium Name Mapping           December 2012
+
+
+3.2.1.  EPP <create> Command
+
+   This extension defines additional elements for the EPP <create>
+   command described in the EPP Domain Name Mapping [RFC5731].  No
+   additional elements are defined for the EPP <create> response.
+
+   To facilitate the registration of domain names that attract a premium
+   registration fee, the <domain:create> command is extended with a
+   <premium:create> element, that signal a client's acknowledgment of
+   the premium fees associated with the transaction.  The <premium:
+   create> element contains the following child elements:
+
+   o  A <premium:ack> element that signals the client is aware of a
+      premium fee.  Clients MAY include child <premium:price> and
+      <premium:renewalPrice> elements that contain the current premium
+      price.  If provided, servers SHOULD confirm the information
+      matches the current pricing information for the corresponding
+      domain name.
+
+   Example <create> command with simple acknowledgment
+
+   <?xml version="1.0" standalone="no"?>
+   <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+     <command>
+       <create>
+         <create xmlns="urn:ietf:params:xml:ns:domain-1.0">
+           <name>premium.example</name>
+           <ns>
+             <hostObj>ns1.example.net</hostObj>
+             <hostObj>ns2.example.net</hostObj>
+           </ns>
+           <registrant>jd1234</registrant>
+           <contact type="admin">sh8013</contact>
+           <contact type="tech">sh8013</contact>
+           <authInfo>
+             <pw>2fooBAR</pw>
+           </authInfo>
+         </create>
+       </create>
+       <extension>
+         <create xmlns="urn:ar:params:xml:ns:premium-1.0">
+           <ack />
+         </create>
+       </extension>
+       <clTRID>ABC-12345</clTRID>
+     </command>
+   </epp>
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 7]
+
+Internet-Draft          EPP Premium Name Mapping           December 2012
+
+
+   Example <create> command including pricing information in the
+   acknowledgement
+
+   <?xml version="1.0" standalone="no"?>
+   <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+     <command>
+       <create>
+         <create xmlns="urn:ietf:params:xml:ns:domain-1.0">
+           <name>premium.example</name>
+           <ns>
+             <hostObj>ns1.example.net</hostObj>
+             <hostObj>ns2.example.net</hostObj>
+           </ns>
+           <registrant>jd1234</registrant>
+           <contact type="admin">sh8013</contact>
+           <contact type="tech">sh8013</contact>
+           <authInfo>
+             <pw>2fooBAR</pw>
+           </authInfo>
+         </create>
+       </create>
+       <extension>
+         <create xmlns="urn:ar:params:xml:ns:premium-1.0">
+           <ack>
+             <price>100.00</price>
+             <renewalPrice>100.00</renewalPrice>
+           </ack>
+         </create>
+       </extension>
+       <clTRID>ABC-12345</clTRID>
+     </command>
+   </epp>
+
+   Servers that require the use of this extension for the registration
+   of premium names SHOULD return a 2003 "Required parameter missing"
+   error in response to requests for registration of premium names that
+   do not include this extension.  In addition, servers SHOULD reject
+   requests that contain the <premium:create> element for registration
+   of domain names that do not attract premium fees.
+
+3.2.2.  EPP <delete> Command
+
+   This extension does not define any extension to the EPP <delete>
+   command or response described in the EPP Domain Name Mapping
+   [RFC5731].
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 8]
+
+Internet-Draft          EPP Premium Name Mapping           December 2012
+
+
+3.2.3.  EPP <renew> Command
+
+   This extension does not define any extension to the EPP <renew>
+   command or response described in the EPP Domain Name Mapping
+   [RFC5731].
+
+3.2.4.  EPP <transfer> Command
+
+   This extension defines additional elements for the EPP <transfer>
+   command described in the EPP Domain Name Mapping [RFC5731].  No
+   additional elements are defined for the EPP <transfer> response.
+
+   To enable clients to transfer domain names that attract a premium
+   registration fee, the <domain:transfer> command is extended with a
+   <premium:transfer> element, that signal a client's acknowledgment of
+   the premium fees associated with the transaction.  The <premium:
+   transfer> element contains the following child elements:
+
+   o  A <premium:ack> element that signals the client is aware of a
+      premium fee.  Clients MAY include a child <premium:renewalPrice>
+      element that contains the current renewal premium price.  If
+      provided, servers SHOULD confirm the information matches the
+      current pricing information for the corresponding domain name.
+
+   Example <transfer> command for a premium domain name with price
+   acknowledgement
+
+   <?xml version="1.0" standalone="no"?>
+   <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+     <command>
+       <transfer op="request">
+         <transfer xmlns="urn:ietf:params:xml:ns:domain-1.0">
+           <name>premium.example</name>
+           <authInfo>
+             <pw>2fooBAR</pw>
+           </authInfo>
+         </transfer>
+       </transfer>
+       <extension>
+         <transfer xmlns="urn:ar:params:xml:ns:premium-1.0">
+           <ack>
+             <renewalPrice>100.00</renewalPrice>
+           </ack>
+         </transfer>
+       </extension>
+       <clTRID>ABC-12345</clTRID>
+     </command>
+   </epp>
+
+
+
+Mitchell & Wright         Expires June 4, 2013                  [Page 9]
+
+Internet-Draft          EPP Premium Name Mapping           December 2012
+
+
+3.2.5.  EPP <update> Command
+
+   This extension does not define any extension to the EPP <update>
+   command or response described in the EPP Domain Name Mapping
+   [RFC5731].
+
+
+4.  Formal Syntax
+
+   <?xml version="1.0" standalone="no" ?>
+   <schema targetNamespace="urn:ar:params:xml:ns:premium-1.0"
+     xmlns:premium="urn:ar:params:xml:ns:premium-1.0"
+     xmlns:eppcom="urn:ietf:params:xml:ns:eppcom-1.0"
+     xmlns="http://www.w3.org/2001/XMLSchema"
+     elementFormDefault="qualified">
+
+     <import namespace="urn:ietf:params:xml:ns:eppcom-1.0" />
+
+     <!-- command-response extension elements -->
+     <element name="check" />
+     <element name="create" type="premium:ackType" />
+     <element name="transfer" type="premium:ackType" />
+
+     <complexType name="ackType">
+       <sequence>
+         <element name="ack" type="premium:priceAckType" />
+       </sequence>
+     </complexType>
+
+     <complexType name="priceAckType">
+       <sequence>
+         <element name="price" type="decimal" minOccurs="0" />
+         <element name="renewalPrice" type="decimal" minOccurs="0" />
+       </sequence>
+     </complexType>
+
+     <!-- response elements -->
+     <element name="chkData" type="premium:chkDataType" />
+
+     <complexType name="chkDataType">
+       <sequence>
+         <element name="cd" type="premium:checkType"
+           maxOccurs="unbounded" />
+       </sequence>
+     </complexType>
+
+     <complexType name="checkType">
+       <sequence>
+
+
+
+Mitchell & Wright         Expires June 4, 2013                 [Page 10]
+
+Internet-Draft          EPP Premium Name Mapping           December 2012
+
+
+         <element name="name" type="premium:checkNameType" />
+         <element name="price" type="decimal" minOccurs="0" />
+         <element name="renewalPrice" type="decimal" minOccurs="0" />
+       </sequence>
+     </complexType>
+
+     <complexType name="checkNameType">
+       <simpleContent>
+         <extension base="eppcom:labelType">
+           <attribute name="premium" type="boolean" use="required" />
+         </extension>
+       </simpleContent>
+     </complexType>
+
+   </schema>
+
+
+5.  IANA Considerations
+
+   This memo includes no request to IANA.
+
+
+6.  Acknowledgments
+
+   This document was inspired by Verisign's Premium Domain extension and
+   draws many simlarities to increase familarity and reduce development
+   time.
+
+
+7.  Security Considerations
+
+   The mapping extensions described in this document do not provide any
+   security services beyond those described by EPP [RFC5730], the EPP
+   Domain Name Mapping [RFC5731], and protocol layers used by EPP.  The
+   security considerations described in these other specifications apply
+   to this specification as well.
+
+
+8.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+   [RFC5730]  Hollenbeck, S., "Extensible Provisioning Protocol (EPP)",
+              STD 69, RFC 5730, August 2009.
+
+   [RFC5731]  Hollenbeck, S., "Extensible Provisioning Protocol (EPP)
+              Domain Name Mapping", STD 69, RFC 5731, August 2009.
+
+
+
+Mitchell & Wright         Expires June 4, 2013                 [Page 11]
+
+Internet-Draft          EPP Premium Name Mapping           December 2012
+
+
+Authors' Addresses
+
+   James Mitchell
+   AusRegistry
+   8/10 Queens Road
+   Melbourne, Victoria  3004
+   AU
+
+   Email: james.mitchell@ausregistry.com
+   URI:   www.ausregistry.com
+
+
+   Chris Wright
+   AusRegistry
+   8/10 Queens Road
+   Melbourne, Victoria  3004
+   AU
+
+   Email: chris@ausregistry.com
+   URI:   www.ausregistry.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mitchell & Wright         Expires June 4, 2013                 [Page 12]
+

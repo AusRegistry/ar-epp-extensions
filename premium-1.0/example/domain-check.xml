@@ -1,0 +1,15 @@
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+	<command>
+		<check>
+			<check xmlns="urn:ietf:params:xml:ns:domain-1.0">
+				<name>premium.example</name>
+				<name>non-premium.example</name>
+			</check>
+		</check>
+		<extension>
+			<check xmlns="urn:ar:params:xml:ns:premium-1.0" />
+		</extension>
+		<clTRID>ABC-12345</clTRID>
+	</command>
+</epp>

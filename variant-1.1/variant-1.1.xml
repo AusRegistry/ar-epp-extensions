@@ -1,0 +1,499 @@
+<?xml version="1.0" standalone="no"?>
+<!-- This template is for creating an Internet Draft using xml2rfc, which 
+	is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC4648 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4648.xml">
+<!ENTITY RFC5730 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5730.xml">
+<!ENTITY RFC5731 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5731.xml">
+<!ENTITY RFC5910 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5910.xml">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space (using these PIs as follows is recommended 
+	by the RFC Editor) -->
+<?rfc compact="yes" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<rfc category="std" docName="draft-ar-variant-epp-mapping-01" ipr="trust200902">
+	<front>
+		<title abbrev="EPP IDN Variant Mapping">
+			Domain Name Variant Extension Mapping for the
+			Extensible Provisioning
+			Protocol (EPP)
+		</title>
+
+		<author fullname="James Mitchell" initials="J." surname="Mitchell">
+			<organization>AusRegistry</organization>
+			<address>
+				<postal>
+					<street>8/10 Queens Road</street>
+					<city>Melbourne</city>
+					<region>Victoria</region>
+					<code>3004</code>
+					<country>AU</country>
+				</postal>
+				<email>james.mitchell@ausregistry.com</email>
+				<uri>www.ausregistry.com</uri>
+			</address>
+		</author>
+		<author fullname="Chris Wright" initials="C." surname="Wright">
+			<organization>ARI Registry Services</organization>
+			<address>
+				<postal>
+					<street>8/10 Queens Road</street>
+					<city>Melbourne</city>
+					<region>Victoria</region>
+					<code>3004</code>
+					<country>AU</country>
+				</postal>
+				<email>chris@ausregistry.com</email>
+				<uri>www.ausregistry.com</uri>
+			</address>
+		</author>
+
+		<date month="December" year="2012" />
+		<area>General</area>
+		<workgroup>Network Working Group</workgroup>
+		<keyword>EPP</keyword>
+
+		<abstract>
+			<t>
+				This document describes an Extensible Provisioning Protocol (EPP)
+				extension mapping for the provisioning and management of variant
+				domain names as attributes of domain objects.
+			</t>
+		</abstract>
+	</front>
+
+	<middle>
+		<section title="Introduction">
+			<t>
+				Internationalized Domain Names have introduced the ability to
+				specify domain names in scripts beyond basic latin, allowing many
+				languages and scripts to be coded as domain names. This however has
+				led to forms of abuse, where malicious users exploit imperfections
+				in the coding of languages in computers to register domain names
+				with the intention of deceiving legitimate users.
+			</t>
+			<t>
+				Registries, language experts and linguists have collaborated to
+				define variant domain names as names that should be blocked from
+				registration independent of the original name. However, due to
+				technological and contextual issues, some variant domain names
+				should be activated and published in the DNS to provide satisfactory
+				end user experience. This document considers only activated variants;
+				the listing of possible variants and blocked variants of a domain
+				name is out of scope of this extension mapping.
+			</t>
+			<section title="Conventions Used in This Document">
+				<t>
+					The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+					"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in
+					this document are to be interpreted as described in
+					<xref target="RFC2119">RFC 2119</xref><![CDATA[.]]>
+				</t>
+				<t>
+					"variant-1.1" is used as an abbreviation for
+					"urn:ar:params:xml:ns:variant-1.1". The XML namespace prefix
+					"variant" is used, but implementations MUST NOT depend on it and
+					instead employ a proper namespace-aware XML parser and serializer
+					to interpret and output the XML documents.
+				</t>
+			</section>
+		</section>
+		<section title="Object Attributes">
+			<t>
+				This extension adds additional elements to the
+				<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+				Only those new elements are described here.
+			</t>
+			<section title="Variant Domain Names">
+				<t>
+					The syntax for variant domain names MUST conform to the syntax for
+					domain and host names described in the
+					<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					Servers MUST accept Internationalized Domain Names expressed as
+					A-labels, and MAY accept variants expressed as U-labels. Servers
+					MUST return A-labels in
+					responses unless negotiated with the client
+					using a mechanism
+					outside this document.
+				</t>
+				<t>
+					Servers SHOULD process query commands matching both the primary
+					registered domain name and any activated variants, and MAY match
+					withheld and blocked variants. Servers SHOULD restrict the use of
+					variants in transform commands, removing perception that variants
+					may be treated as separate objects.
+				</t>
+				<t>
+					Variants as simple attributes of domain names places some
+					restrictions on servers, clients and end users. In the absence of
+					other extensions, it is not possible to associate a set of name
+					servers to a variant independent of those name servers associated
+					with the primary domain name. Additionally, servers providing
+					mechanisms for clients to have secure delegations will have to
+					support the Key Data Interface of the
+					<xref target="RFC5910">EPP DNS Security Extensions Mapping</xref>
+					in the absense of other extensions that allow associating DS data
+					with variant domain names.
+				</t>
+			</section>
+		</section>
+		<section title="EPP Command Mapping">
+			<t>
+				A detailed description of the EPP syntax and semantics can be found
+				in the
+				<xref target="RFC5730">EPP core protocol specification</xref><![CDATA[.]]>
+				The command mappings described here are specifically for use in
+				provisioning internationalized domain names.
+			</t>
+			<section title="EPP Query Commands">
+				<t>
+					EPP provides three commands to retrieve object information:
+					&lt;check&gt; to determine if an object is known to the server,
+					&lt;info&gt; to retrieve detailed information associated with an
+					object, and &lt;transfer&gt; to retrieve object transfer status
+					information.
+				</t>
+				<section title="EPP &lt;check&gt; Command">
+					<t>
+						This extension does not define any extension to the EPP
+						&lt;check&gt; command or response described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+				</section>
+				<section title="EPP &lt;info&gt; Command">
+					<t>
+						This extension does not add any elements to the EPP &lt;info&gt;
+						command described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+						However, additional elements are defined for the &lt;info&gt;
+						response.
+					</t>
+					<t>
+						To enable clients to determine the active variant domain names,
+						the &lt;domain:infData&gt; response is extended with a
+						&lt;variant:infData&gt; element that contains the following child
+						elements:
+						<list style="symbols">
+							<t>
+								One or more &lt;variant&gt; elements containing the active
+								variant domain names for this domain object.
+							</t>
+						</list>
+					</t>
+					<figure align="left">
+						<preamble>
+							Example &lt;info&gt; response with active variant domain
+							names
+						</preamble>
+						<artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <response>
+    <result code="1000">
+      <msg>Command completed successfully</msg>
+    </result>
+    <resData>
+      <infData xmlns="urn:ietf:params:xml:ns:domain-1.0">
+        <name>xn--eqrt2g948bija.example</name>
+        <roid>EXAMPLE1-REP</roid>
+        <status s="ok" />
+        <registrant>jd1234</registrant>
+        <contact type="admin">sh8013</contact>
+        <contact type="tech">sh8013</contact>
+        <ns>
+          <hostObj>ns1.example.com</hostObj>
+          <hostObj>ns1.example.net</hostObj>
+        </ns>
+        <host>ns1.example.com</host>
+        <host>ns2.example2.com</host>
+        <clID>ClientX</clID>
+        <crID>ClientY</crID>
+        <crDate>1999-04-03T22:00:00.0Z</crDate>
+        <upID>ClientX</upID>
+        <upDate>1999-12-03T09:00:00.0Z</upDate>
+        <exDate>2005-04-03T22:00:00.0Z</exDate>
+        <trDate>2000-04-08T09:00:00.0Z</trDate>
+        <authInfo>
+          <pw>2fooBAR</pw>
+        </authInfo>
+      </infData>
+    </resData>
+    <extension>
+      <infData xmlns="urn:ar:params:xml:ns:variant-1.1">
+        <variant>xn--eqrt2gr10cmna.example</variant>
+      </infData>
+    </extension>
+    <trID>
+      <clTRID>ABC-12345</clTRID>
+      <svTRID>54322-XYZ</svTRID>
+    </trID>
+  </response>
+</epp>]]>
+						</artwork>
+					</figure>
+					<t>
+						To facilitate the transfer of domain names, the list of
+						activated variants should be available to authorized clients prior
+						to transfer. Servers that require authorization information to
+						begin the transfer process MAY restrict the list of activated
+						variants to those commands where correct authorization information
+						is provided.
+					</t>
+				</section>
+				<section title="EPP &lt;transfer&gt; Command">
+					<t>
+						This extension does not define any extension to the EPP
+						&lt;transfer&gt; command or response described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+				</section>
+			</section>
+			<section title="EPP Transform Commands">
+				<t>
+					EPP provides five commands to transform objects: &lt;create&gt;
+					to create an instance of an object, &lt;delete&gt; to delete an
+					instance of an object, &lt;renew&gt; to extend the validity period
+					of an object, &lt;transfer&gt; to manage object sponsorship
+					changes, and &lt;update&gt; to change information associated with
+					an object.
+				</t>
+				<section title="EPP &lt;create&gt; Command">
+					<t>
+						This extension does not add any elements to the EPP &lt;create&gt;
+						command described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+						However, additional elements are defined for the &lt;create&gt;
+						response.
+					</t>
+					<t>
+						Servers may automatically generate and activate variant domain
+						names upon registration of specific domain names, based on rules
+						determined by the server operator, and usually described in an IDN
+						table. In addition to the elements expressed in the
+						&lt;domain:creData&gt;, the response is extended with a
+						&lt;variant:creData&gt; element that contains the following child
+						elements:
+						<list style="symbols">
+							<t>
+								One or more &lt;variant:variant&gt; elements containing the
+								variant domain names automatically activated by the server.
+							</t>
+						</list>
+					</t>
+					<figure align="left">
+						<preamble>
+							Example &lt;create&gt; response containing automatically
+							activated variant domain names
+						</preamble>
+						<artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <response>
+    <result code="1000">
+      <msg>Command completed successfully</msg>
+    </result>
+    <resData>
+      <creData xmlns="urn:ietf:params:xml:ns:domain-1.0">
+        <name>xn--eqrt2g948bija.example</name>
+        <crDate>1999-04-03T22:00:00.0Z</crDate>
+        <exDate>2001-04-03T22:00:00.0Z</exDate>
+      </creData>
+    </resData>
+    <extension>
+      <creData xmlns="urn:ar:params:xml:ns:variant-1.1">
+        <variant>xn--eqrt2gr10cmna.example</variant>
+      </creData>
+    </extension>
+    <trID>
+      <clTRID>ABC-12345</clTRID>
+      <svTRID>54321-XYZ</svTRID>
+    </trID>
+  </response>
+</epp>]]>
+						</artwork>
+					</figure>
+				</section>
+
+				<section title="EPP &lt;delete&gt; Command">
+					<t>
+						This extension does not define any extension to the EPP
+						&lt;delete&gt; command or response described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+				</section>
+
+				<section title="EPP &lt;renew&gt; Command">
+					<t>
+						This extension does not define any extension to the EPP
+						&lt;renew&gt; command or response described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+				</section>
+				<section title="EPP &lt;transfer&gt; Command">
+					<t>
+						This extension does not define any extension to the EPP
+						&lt;transfer&gt; command or response described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+				</section>
+
+				<section title="EPP &lt;update&gt; Command">
+					<t>
+						This extension defines additional elements for the EPP
+						&lt;update&gt; command described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+						No additional elements are defined for the EPP &lt;update&gt;
+						response.
+					</t>
+					<t>
+						The EPP &lt;update&gt; command provides a transform operation that
+						allows a client to modify the attributes of a domain object.
+						Servers may, subject to local policy, allow the modification of
+						the list of activated variants for a domain name. In addition to
+						the elements expressed in the &lt;domain:update&gt;, the command
+						is extended with a &lt;variant:update&gt; element that contains
+						the following child elements:
+						<list style="symbols">
+							<t>
+								An optional &lt;variant:rem&gt; element containing child
+								&lt;variant:variant&gt; elements describing the variant domain
+								names that should be withheld from delegation in the DNS.
+							</t>
+							<t>
+								An optional &lt;variant:add&gt; element containing child
+								&lt;variant:variant&gt; elements describing the variant domain
+								names that should be activated and delegated in the DNS.
+							</t>
+						</list>
+					</t>
+					<figure align="left">
+						<preamble>
+							Example &lt;update&gt; command to activate a variant
+							domain name
+						</preamble>
+						<artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <update>
+      <update xmlns="urn:ietf:params:xml:ns:domain-1.0">
+        <name>xn--eqrt2g948bija.example</name>
+      </update>
+    </update>
+    <extension>
+      <update xmlns="urn:ar:params:xml:ns:variant-1.1">
+        <add>
+          <variant>xn--eqrt2g7t9bc8a.example</variant>
+        </add>
+      </update>
+    </extension>
+    <clTRID>ABC-12345</clTRID>
+  </command>
+</epp>]]>
+						</artwork>
+					</figure>
+					<t>
+						In order to support local business rules, servers MAY reject
+						commands that to update both the list of active variants and
+						modify other domain attributes.
+					</t>
+				</section>
+			</section>
+		</section>
+
+		<section title="Formal Syntax">
+			<t>
+				An EPP object mapping is specified in XML Schema notation. The
+				formal
+				syntax presented here is a complete schema representation of
+				the
+				object mapping, suitable for automated validation of EPP XML
+				instances.
+			</t>
+			<figure align="left">
+				<artwork><![CDATA[
+<?xml version="1.0"?>
+<schema targetNamespace="urn:ar:params:xml:ns:variant-1.1"
+  xmlns:variant="urn:ar:params:xml:ns:variant-1.1"
+  xmlns:eppcom="urn:ietf:params:xml:ns:eppcom-1.0"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified">
+
+  <import namespace="urn:ietf:params:xml:ns:eppcom-1.0" />
+
+  <element name="update" type="variant:updateType" />
+
+  <complexType name="updateType">
+    <sequence>
+      <element name="rem" type="variant:addRemType" minOccurs="0" />
+      <element name="add" type="variant:addRemType" minOccurs="0" />
+    </sequence>
+  </complexType>
+
+  <complexType name="addRemType">
+    <sequence>
+      <element name="variant" type="eppcom:labelType"
+        maxOccurs="unbounded" />
+    </sequence>
+  </complexType>
+
+  <element name="infData" type="variant:resDataType" />
+  <element name="creData" type="variant:resDataType" />
+
+  <complexType name="resDataType">
+    <sequence>
+      <element name="variant" type="eppcom:labelType"
+        maxOccurs="unbounded" />
+    </sequence>
+  </complexType>
+
+</schema>]]>
+				</artwork>
+			</figure>
+		</section>
+		<section title="IANA Considerations">
+			<t>
+				This memo includes no request to IANA.
+			</t>
+		</section>
+		<section title="Security Considerations">
+			<t>
+				The mapping extensions described in this document do not provide any
+				security services beyond those described by
+				<xref target="RFC5730">EPP</xref><![CDATA[,]]>
+				the
+				<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[,]]>
+				and protocol layers used by EPP. The security considerations
+				described in these other specifications apply to this specification
+				as well.
+			</t>
+		</section>
+	</middle>
+	<back>
+		<references title="Normative References">
+			&RFC2119;
+			&RFC5730;
+			&RFC5731;
+		</references>
+		<references title="Informative References">
+			&RFC5910;
+		</references>
+	</back>
+</rfc>
