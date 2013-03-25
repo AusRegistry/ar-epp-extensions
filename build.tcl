@@ -6,10 +6,10 @@ foreach {document} $documents {
    cd $document
    puts "processing $document to txt"
    xml2txt $document.xml
-   file rename -force $document.txt ../../ausregistry.github.com/doc/$document/$document.txt
+   file rename -force $document.txt ../../ari-toolkit-gitpages/doc/$document/$document.txt
    puts "processing $document to html"
    xml2html $document.xml
-   file rename -force $document.html ../../ausregistry.github.com/doc/$document/$document.html
+   file rename -force $document.html ../../ari-toolkit-gitpages/doc/$document/$document.html
    cd ..
 }
 exit

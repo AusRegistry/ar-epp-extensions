@@ -34,7 +34,7 @@
 			Protocol (EPP)
 		</title>
 		<author fullname="James Mitchell" initials="J." surname="Mitchell">
-			<organization>ARI Registry Services</organization>
+			<organization>AusRegistry</organization>
 			<address>
 				<postal>
 					<street>8/10 Queens Road</street>
@@ -43,12 +43,12 @@
 					<code>3004</code>
 					<country>AU</country>
 				</postal>
-				<email>james.mitchell@ariservices.com</email>
-				<uri>www.ariservices.com</uri>
+				<email>james.mitchell@ausregistry.com</email>
+				<uri>www.ausregistry.com</uri>
 			</address>
 		</author>
 		<author fullname="Chris Wright" initials="C." surname="Wright">
-			<organization>ARI Registry Services</organization>
+			<organization>AusRegistry</organization>
 			<address>
 				<postal>
 					<street>8/10 Queens Road</street>
@@ -57,8 +57,8 @@
 					<code>3004</code>
 					<country>AU</country>
 				</postal>
-				<email>chris@ariservices.com</email>
-				<uri>www.ariservices.com</uri>
+				<email>chris@ausregistry.com</email>
+				<uri>www.ausregistry.com</uri>
 			</address>
 		</author>
 		<date month="December" year="2012" />
