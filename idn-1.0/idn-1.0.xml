@@ -202,7 +202,7 @@
 					</t>
 					<t>
 						To enable clients to determine the IDN table identifier associated
-						with a doamin nane, the &lt;domain:infData&gt; response is
+						with a doamin name, the &lt;domain:infData&gt; response is
 						extended with an &lt;idn:infData&gt; element that contains the
 						following child elements:
 						<list style="symbols">
