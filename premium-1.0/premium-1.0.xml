@@ -291,7 +291,7 @@
 					<t>
 						To facilitate the registration of domain names that attract a
 						premium registration fee, the &lt;domain:create&gt; command is
-						extended with a &lt;premium:create&gt; element, that signal a
+						extended with a &lt;premium:create&gt; element, which signals a
 						client’s acknowledgment of the premium fees associated with the
 						transaction. The &lt;premium:create&gt; element contains the
 						following child elements:
