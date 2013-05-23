@@ -550,35 +550,42 @@
 				</t>
 				<section anchor="create_command" title="EPP &lt;create&gt; Command">
 					<t>
-						This extension defines additional elements to extend the EPP
-						&lt;create&gt; command and response to be used in conjunction with
-						the
-						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+						There are two forms of the extension to the EPP &lt;create&gt;
+						command that are used to either create a domain application or
+						allocate an application (Register a domain based on domain 
+						applicaton information). Both forms are described below.
 					</t>
-					<t>
-						The EPP &lt;create&gt; command is used to provision an object
-						within a repository. A domain name application may be provisioned
-						by specifying the phase in which the application is to be
-						processed.
-					</t>
-					<t>
-						In addition to the elements expressed in the
-						&lt;domain:create&gt;, the command is extended with an
-						&lt;app:create&gt; element containing the following child
-						elements:
-						<list style="symbols">
-							<t>
-								phase: the identifier of the phase to which the domain name
-								application is being submitted.
-							</t>
-						</list>
-					</t>
-					<figure align="left">
-						<preamble>
-							Example &lt;create&gt; command for an application for a
-							domain name
-						</preamble>
-						<artwork><![CDATA[
+					<section title="Domain Application Create">
+						<t>
+							This extension defines additional elements to extend the EPP
+							&lt;create&gt; command and response to be used in conjunction with
+							the
+							<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+						</t>
+						<t>
+							The EPP &lt;create&gt; command is used to provision an object
+							within a repository. A domain name application may be provisioned
+							by specifying the phase in which the application is to be
+							processed.
+						</t>
+						<t>
+							In addition to the elements expressed in the
+							&lt;domain:create&gt;, the command is extended with an
+							&lt;app:create&gt; element containing the following child
+							elements:
+							<list style="symbols">
+								<t>
+									phase: the identifier of the phase to which the domain name
+									application is being submitted.
+								</t>
+							</list>
+						</t>
+						<figure align="left">
+							<preamble>
+								Example &lt;create&gt; command for an application for a
+								domain name
+							</preamble>
+							<artwork><![CDATA[
 <?xml version="1.0" standalone="no"?>
 <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
   <command>
@@ -605,36 +612,36 @@
     <clTRID>ABC-12345</clTRID>
   </command>
 </epp>]]>
-						</artwork>
-					</figure>
-					<t>
-						When an application create command has been processed
-						successfully, the EPP &lt;resData&gt; element MUST NOT include the
-						&lt;domain:creData&gt; response described in the
-						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
-						Instead the EPP &lt;resData&gt; element MUST contain an
-						&lt;app:creData&gt; element that contains the following child
-						elements:
-						<list style="symbols">
-							<t>
-								An &lt;id&gt; element that contains the server-assigned
-								identifier for this application.
-							</t>
-							<t>
-								A &lt;name&gt; element that contains the fully qualified name
-								of the application object.
-							</t>
-							<t>
-								A &lt;crDate&gt; element that contains the date and time of
-								application object creation.
-							</t>
-						</list>
-					</t>
-					<figure align="left">
-						<preamble>
-							Example &lt;create&gt; response
-						</preamble>
-						<artwork><![CDATA[
+							</artwork>
+						</figure>
+						<t>
+							When an application create command has been processed
+							successfully, the EPP &lt;resData&gt; element MUST NOT include the
+							&lt;domain:creData&gt; response described in the
+							<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+							Instead the EPP &lt;resData&gt; element MUST contain an
+							&lt;app:creData&gt; element that contains the following child
+							elements:
+							<list style="symbols">
+								<t>
+									An &lt;id&gt; element that contains the server-assigned
+									identifier for this application.
+								</t>
+								<t>
+									A &lt;name&gt; element that contains the fully qualified name
+									of the application object.
+								</t>
+								<t>
+									A &lt;crDate&gt; element that contains the date and time of
+									application object creation.
+								</t>
+							</list>
+						</t>
+						<figure align="left">
+							<preamble>
+								Example &lt;create&gt; response
+							</preamble>
+							<artwork><![CDATA[
 <?xml version="1.0" standalone="no"?>
 <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
   <response>
@@ -654,8 +661,64 @@
     </trID>
   </response>
 </epp>]]>
-						</artwork>
-					</figure>
+							</artwork>
+						</figure>
+					</section>
+					<section title="Domain Application Allocate">
+						<t>
+							This extension defines additional elements to extend the EPP
+							&lt;create&gt; command and response to be used in conjunction with
+							the
+							<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+						</t>
+						<t>
+							The EPP &lt;create&gt; command is used to registered based on an 
+							existing domain name application by specifying the application identifier.
+						</t>
+						<t>
+							In addition to domain name and authInfo expressed in the
+							&lt;domain:create&gt;, the command is extended with an
+							&lt;app:create&gt; element containing the following child
+							element:
+							<list style="symbols">
+								<t>
+									id: the identifier of the domain name application which is 
+										being allocated.
+								</t>
+							</list>
+						</t>
+						<figure align="left">
+							<preamble>
+								Example &lt;create&gt; command for allocation of a domain name 
+								application
+							</preamble>
+							<artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <create>
+      <create xmlns="urn:ietf:params:xml:ns:domain-1.0">
+        <name>example.tld</name>
+        <authInfo>
+          <pw>2fooBAR</pw>
+        </authInfo>
+      </create>
+    </create>
+    <extension>
+      <create xmlns="urn:ar:params:xml:ns:application-1.0">
+        <id>3F2504E0-4F89-11D3-9A0C-0305E82C3301</id>
+      </create>
+    </extension>
+    <clTRID>ABC-12345</clTRID>
+  </command>
+</epp>]]>
+							</artwork>
+						</figure>
+						<t>
+							When an application allocate command has been processed
+							successfully, a domain create response will be returned.
+						</t>
+					</section>
 				</section>
 
 				<section anchor="delete_command" title="EPP &lt;delete&gt; Command">
