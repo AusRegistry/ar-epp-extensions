@@ -28,7 +28,7 @@
 <!-- do not start each main section on a new page -->
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
-<rfc category="info" docName="draft-ar-tmch-epp-mapping-02" ipr="trust200902">
+<rfc category="info" docName="draft-ar-tmch-epp-mapping-02" ipr="none">
 	<front>
 		<title abbrev="EPP Trademark Clearinghouse Mapping">
 			Trademark Clearinghouse Extension Mapping for the
@@ -90,9 +90,9 @@
 				<xref target="RBP-APP-1.0">EPP Domain Application Mapping</xref>
 				should be considered by registries that require
 				a process allowing
-				multiple applications for one domain name. An example illustrating
-				its use is described in
-				<xref target="appendixA">Appendix A</xref><![CDATA[.]]>
+				multiple applications for one domain name.
+				<xref target="appendixA">Appendix A</xref> contains an example
+                illustrating the use of the two mappings together in one command<![CDATA[.]]>
 			</t>
 			<t>
 				Readers should be familiar with trademark clearinghouse processes
@@ -137,16 +137,7 @@
 					in Sunrise. The scope of qualification is defined in ICANN policy
 					and outside this specification. This specification simply details
 					the mechanism by which this qualification is communicated with the
-					TLD operator using the EPP protocol.
-				</t>
-				<t>
-					The TMCH is responsible for the generation of Signed Mark Data
-					(SMD) files for mark holders that meet the requirements to
-					participate in a sunrise as specified in the guidebook. This
-					extension makes no attempt to define the format of the SMD, instead
-					provides only a mechanism for its transport from registrars to
-					registries. It is expected that the trademark clearinghouse
-					provider will publish the format of the SMD.
+					registry using the EPP protocol.
 				</t>
 				<t>
 					This process requires extension to the &lt;create&gt; command as
@@ -177,7 +168,7 @@
 					<t>
 						This process requires extension to the &lt;create&gt; command as
 						described below. Registrations for domain names matching a claim
-						MUST be rejected unless the extension acknowledgement is provided.
+						MUST be rejected unless the claims acknowledgement is provided.
 					</t>
 				</section>
 			</section>
@@ -196,8 +187,9 @@
 					authenticity.
 				</t>
 				<t>
-					This specification uses the mark data as documented in
-					draft-lozano-smd. This extension requires the SMD be transmitted to
+                    The SMD is defined in [draft-lozano-smd], and is represented
+                    in a file as described in [draft-func-spec].
+                    This extension requires the SMD be transmitted to
 					the server encoded using Base64 for two reasons:
 					<list style="symbols">
 						<t>
@@ -214,13 +206,12 @@
 					</list>
 				</t>
 			</section>
-			<section title="Claims Key">
+			<section title="Claims Lookup Key">
 				<t>
-					The claims key is an identifier returned by the server in
+					The claims lookup key is an identifier returned by the server in
 					response to a &lt;tmch:check&gt; command and used for the lookup of
-					claims information in the trademark clearinghouse. Clients SHOULD
-					NOT place any restrictions on the form and syntax of the claims
-					key.
+					claims notice information in the trademark clearinghouse.
+                    The lookup key is defined in [draft-func-spec].
 				</t>
 			</section>
 			<section title="Notice Identifier">
@@ -228,18 +219,8 @@
 					The notice identifier is obtained by the client requesting the
 					claims notice from the trademark clearinghouse using the
 					aforementioned claims key. The notice identifier is a unique
-					identifier assigned by the TMCH to each Trademark Claims notice it
-					generates. Severs and clients SHOULD NOT place any restrictions on
-					the form and syntax of the claims key.
-				</t>
-			</section>
-			<section title="Source Address">
-				<t>
-					Clients are required to provide the source address of the entity
-					that accepted the trademark claims notice. This information SHOULD
-					take the form of an internet address. The syntax for IPv4 addresses
-					SHOULD conform to [RFC0791]. The syntax for IPv6 addresses SHOULD
-					conform to [RFC5952].
+					identifier assigned by the TMCH to each trademark claims notice.
+                    The notice identifier is described in [draft-func-spec].
 				</t>
 			</section>
 			<section title="Dates and Times">
@@ -318,14 +299,14 @@
 								in the response MUST be the same as the order and composition of
 								domain names provided in the command, with exception to
 								transformations required of validating XML parsers. A mandatory
-								"exists" attribute describes whether a claim exists for this
+								"claim" attribute describes whether a claim exists for this
 								name.
 							</t>
 							<t>
 								A &lt;tmch:key&gt; element containing the claims key used for
 								retrieval of the claims data. This element MUST be present
 								during the Trademark Claims period where the &lt;tmch:name&gt;
-								element's "exists" attribute evaluates to true.
+								element's "claim" attribute evaluates to true.
 							</t>
 						</list>
 					</t>
@@ -341,14 +322,14 @@
     <result code="1000">
       <msg>Command completed successfully</msg>
     </result>
-    <resData>
+    <extension>
       <chkData xmlns="urn:ar:params:xml:ns:tmch-1.0">
         <cd>
-          <name exists="1">example.tld</name>
+          <name claim="1">example.tld</name>
           <key>CLAIM_KEY</key>
         </cd>
       </chkData>
-    </resData>
+    </extension>
     <trID>
       <clTRID>ABC-12345</clTRID>
       <svTRID>54321-XYZ</svTRID>
@@ -724,22 +705,18 @@ Z25hdHVyZT4KPC9zbWQ6c2lnbmVkTWFyaz4K
 							elements:
 							<list style="symbols">
 								<t>
-									A &lt;tmch:noticeID&gt; element that contains the unique
+									A &lt;noticeID&gt; element that contains the unique
 									notice identifier generated by the Claims Notice Information
 									Service (CNIS).
 								</t>
 								<t>
-									A &lt;generated&gt; element that contains the date and time
-									that the claims notice was generated.
+									A &lt;notAfter&gt; element that contains the latest date
+                                    and time up to which the claims notice can be used to register
+                                    a domain name or domain application.
 								</t>
 								<t>
 									A &lt;accepted&gt; element that contains the date and time
 									that the claims notice was accepted.
-								</t>
-								<t>
-									A &lt;source&gt; element that contains the source information
-									of the consumer that was displayed or that accepted the claims
-									notice, for example the consumer's IP address.
 								</t>
 							</list>
 						</t>
@@ -765,9 +742,8 @@ Z25hdHVyZT4KPC9zbWQ6c2lnbmVkTWFyaz4K
     <extension>
       <create xmlns="urn:ar:params:xml:ns:tmch-1.0">
         <noticeID>49FD46E6C4B45C55D4AC</noticeID>
-        <generated>2012-06-19T09:00:00.0Z</generated>
+        <notAfter>2012-06-20T09:00:00.0Z</notAfter>
         <accepted>2012-06-19T09:00:10.0Z</accepted>
-        <source>192.0.2.29</source>
       </create>
     </extension>
     <clTRID>ABC-12345</clTRID>
@@ -834,9 +810,8 @@ Z25hdHVyZT4KPC9zbWQ6c2lnbmVkTWFyaz4K
       </element>
       <sequence>
         <element name="noticeID" type="token" />
-        <element name="generated" type="dateTime" />
+        <element name="notAfter" type="dateTime" />
         <element name="accepted" type="dateTime" />
-        <element name="source" type="token" />
       </sequence>
     </choice>
   </complexType>
@@ -868,7 +843,7 @@ Z25hdHVyZT4KPC9zbWQ6c2lnbmVkTWFyaz4K
   <complexType name="checkNameType">
     <simpleContent>
       <extension base="eppcom:labelType">
-        <attribute name="exists" type="boolean" use="required" />
+        <attribute name="claim" type="boolean" use="required" />
       </extension>
     </simpleContent>
   </complexType>
@@ -884,10 +859,6 @@ Z25hdHVyZT4KPC9zbWQ6c2lnbmVkTWFyaz4K
 			</figure>
 		</section>
 
-		<section title="IANA Considerations">
-			<t>This memo includes no request to IANA.</t>
-		</section>
-
 		<section title="Security Considerations">
 			<t>
 				The mapping extensions described in this document do not provide any
@@ -898,11 +869,6 @@ Z25hdHVyZT4KPC9zbWQ6c2lnbmVkTWFyaz4K
 				and protocol layers used by EPP. The security considerations
 				described in these other specifications apply to this specification
 				as well.
-			</t>
-		</section>
-		<section title="Revision Changes">
-			<t>
-				Changes from -01 to -02
 			</t>
 		</section>
 	</middle>
