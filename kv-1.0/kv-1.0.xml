@@ -27,7 +27,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <rfc category="info" docName="draft-ar-key-value-epp-mapping-01"
-	ipr="trust200902">
+	ipr="none">
 	<front>
 		<title abbrev="EPP Key-Value Mapping">
 			Key-Value Mapping for the Extensible Provisioning

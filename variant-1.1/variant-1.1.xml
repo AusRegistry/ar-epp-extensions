@@ -28,7 +28,7 @@
 <!-- do not start each main section on a new page -->
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
-<rfc category="std" docName="draft-ar-variant-epp-mapping-01" ipr="trust200902">
+<rfc category="std" docName="draft-ar-variant-epp-mapping-01" ipr="none">
 	<front>
 		<title abbrev="EPP IDN Variant Mapping">
 			Domain Name Variant Extension Mapping for the

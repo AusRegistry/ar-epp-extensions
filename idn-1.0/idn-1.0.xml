@@ -34,7 +34,7 @@
 <!-- do not start each main section on a new page -->
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
-<rfc category="info" docName="draft-ar-idn-epp-mapping-01" ipr="trust200902">
+<rfc category="info" docName="draft-ar-idn-epp-mapping-01" ipr="none">
 	<front>
 		<title abbrev="EPP IDN Mapping">
 			Internationalized Domain Name Extension Mapping

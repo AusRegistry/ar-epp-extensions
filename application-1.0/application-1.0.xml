@@ -25,7 +25,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <rfc category="info" docName="draft-ar-application-epp-mapping-02"
-	ipr="trust200902">
+	ipr="none">
 	<front>
 		<!-- The abbreviated title is used in the page header - it is only necessary 
 			if the full title is longer than 39 characters -->
