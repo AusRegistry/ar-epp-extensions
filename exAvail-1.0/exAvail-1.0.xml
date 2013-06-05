@@ -75,7 +75,7 @@
         <abstract>
             <t>
                 This document describes extensions to the Extensible Provisioning Protocol (EPP)
-                for obtaining Extended Availability details of domain names.
+                for obtaining detailed availability information of domain names.
             </t>
         </abstract>
     </front>
@@ -87,9 +87,10 @@
                 provides a hint to determine a domain object's availability.
                 This works well in providing basic information
                 for the client to anticipate the success or failure of registering
-                an object using the &lt;create&gt; command, however the client may
-                wish to obtain more comprehensive details regarding the availability
-                of a domain name.
+                a domain using the &lt;create&gt; command.
+                To provide a more rich user interface to potential registrants,
+                clients require more detailed information regarding object availability
+                than available through a binary yes/no response.
             </t>
             <t>
                 This document describes extensions to the Extensible Provisioning Protocol (EPP)
@@ -137,63 +138,68 @@
                     <list style="symbols">
                         <t>
                             available - The queried domain name is available to be
-                            registered as a domain object. If the registry is not
-                            currently accepting registrations, the date and time
-                            from which the domain name can be registered as a domain
-                            object MAY be provided as a child element of this state.
+                            registered as a domain object with immediate effect.
+                            If the registry is currently not accepting registrations,
+                            the date and time from which the domain name can be
+                            registered MAY be provided as a child element of this state.
                         </t>
                         <t>
                             application - The queried domain name is available to
                             be registered only as a domain application object.
                             The identifier of the phase in which a domain application
-                            can be submitted for this domain name will be provided
+                            can be submitted for this domain name is provided
                             in a child element.
                             If the registry is not currently accepting applications,
                             the date and time from which an application can be
                             submitted MAY be provided as a child element of this state.
                         </t>
                         <t>
-                            unavailable - The queried domain name is not available to
+                            unavailable - The queried domain name meets the composition
+                            requirements for domain names, however not available to
                             be registered as either a domain object or a domain
                             application object.
                             The reason of unavailability for this domain name MAY be
                             provided as a child element of this state.
                         </t>
                         <t>
-                            reserved - The queried domain name is not available to be
-                            registered as it is a reserved label as per server policy.
+                            reserved - The queried domain name is reserved by server policy
+                            and is not available for registration.
                             The server specific reason for the reservation of this label
                             MAY be provided as a child element of this state.
                         </t>
                         <t>
-                            invalid - The queried domain name is not available for
+                            invalid - The queried domain name does not meet the composition
+                            requirements for domain names and is not available for
                             registration as either a domain object or a domain
                             application object.
                         </t>
                         <t>
-                            activatedVariant - The queried domain name is not available
-                            for registration as it is an activated variant of a domain
-                            object in the repository.
-                            The domain registration that created this activated variant
-                            will be provided as a child primaryDomainName element of this
+                            activatedVariant - The queried domain name is an activated
+                            variant of another domain name in the repository.
+                            The domain name that resulted in the activation of this variant
+                            SHOULD be provided as a child 'primaryDomainName' element of this
                             state.
                         </t>
                         <t>
                             blockedVariant - The queried domain name is a blocked
-                            variant of an existing domain object in the repository.
-                            The domain registration that resulted in this variant
-                            getting blocked will be provided as a child primaryDomainName
-                            element.
+                            variant of another domain name in the repository.
+                            The domain name that resulted in this variant
+                            getting blocked SHOULD be provided as a child
+                            'primaryDomainName' element.
                         </t>
                         <t>
                             withheldVariant - The queried domain name is a withheld
-                            variant of an existing domain object in the repository.
-                            The domain registration that created this withheld variant
-                            will be provided as a child primaryDomainName element.
+                            variant of an existing domain name in the repository.
+                            The domain name that resulted in this name being witheld
+                            SHOULD be provided as a child 'primaryDomainName' element.
                         </t>
                         <t>
-                            pendingCreate - The queried domain name's application for
-                            registration requires offline process.
+                            pendingCreate - The queried domain name is available for
+                            registration, however its approval is subject to the outcome
+                            of an offline process. If the registry is not currently
+                            accepting registrations, the date and time from which the
+                            domain name can be registered MAY be provided as a child
+                            element of this state.
                         </t>
                     </list>
                 </t>
