@@ -1,0 +1,599 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+        <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+        <!ENTITY RFC5731 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5731.xml">
+        <!ENTITY RFC5730 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5730.xml">
+        <!ENTITY RBP-APP-1.0 SYSTEM "../application-1.0/application-1.0-ref.xml">
+        ]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space (using these PIs as follows is recommended
+   by the RFC Editor) -->
+<?rfc compact="yes" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<rfc category="exp" docName="draft-ar-exAvail-epp-mapping-01"
+     ipr="none" submissionType="independent">
+    <front>
+        <!-- The abbreviated title is used in the page header - it is only necessary
+         if the full title is longer than 39 characters -->
+
+        <title abbrev="EPP Domain Extended availability Mapping">
+            Domain Name Extended Availability Extension Mapping for the
+            Extensible Provisioning
+            Protocol (EPP)
+        </title>
+
+        <author fullname="James Mitchell" initials="J." surname="Mitchell">
+            <organization>AusRegistry</organization>
+            <address>
+                <postal>
+                    <street>8/10 Queens Road</street>
+                    <city>Melbourne</city>
+                    <region>Victoria</region>
+                    <code>3004</code>
+                    <country>AU</country>
+                </postal>
+                <email>james.mitchell@ausregistry.com</email>
+                <uri>www.ausregistry.com</uri>
+            </address>
+        </author>
+        <author fullname="Chris Wright" initials="C." surname="Wright">
+            <organization>AusRegistry</organization>
+            <address>
+                <postal>
+                    <street>8/10 Queens Road</street>
+                    <city>Melbourne</city>
+                    <region>Victoria</region>
+                    <code>3004</code>
+                    <country>AU</country>
+                </postal>
+                <email>chris@ausregistry.com</email>
+                <uri>www.ausregistry.com</uri>
+            </address>
+        </author>
+
+        <date month="May" year="2013"/>
+
+        <!-- Meta-data Declarations -->
+        <area>General</area>
+        <workgroup>Internet Engineering Task Force</workgroup>
+        <keyword>EPP</keyword>
+        <abstract>
+            <t>
+                This document describes extensions to the Extensible Provisioning Protocol (EPP)
+                for obtaining Extended Availability details of domain names.
+            </t>
+        </abstract>
+    </front>
+    <middle>
+        <section title="Introduction">
+            <t>
+                The check command described in
+                <xref target="RFC5731">EPP Domain Name Mapping</xref>
+                provides a hint to determine a domain object's availability.
+                This works well in providing basic information
+                for the client to anticipate the success or failure of registering
+                an object using the &lt;create&gt; command, however the client may
+                wish to obtain more comprehensive details regarding the availability
+                of a domain name.
+            </t>
+            <t>
+                This document describes extensions to the Extensible Provisioning Protocol (EPP)
+                for clients to obtain extended details regarding the availability of domain names.
+            </t>
+            <t>
+                This extension can be used when more detailed information is required
+                about the availability of a domain name.
+            </t>
+            <section title="Conventions Used in This Document">
+                <t>
+                    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+                    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in
+                    this document are to be interpreted as described in
+                    <xref target="RFC2119">RFC 2119</xref><![CDATA[.]]>
+                </t>
+                <t>
+                    "exAvail-1.0" is used as an abbreviation for
+                    "urn:ar:params:xml:ns:exAvail-1.0". The XML namespace prefix
+                    "exAvail" is used, but implementations MUST NOT depend on it and
+                    instead employ a proper namespace-aware XML parser and serializer
+                    to interpret and output the XML documents.
+                </t>
+                <t>In this document english words with letters of different cases are
+                    used to indicate variants, even though these don't indicate variants
+                    in a real registry.
+                </t>
+            </section>
+        </section>
+        <section title="Extended Availability Details">
+            <t>
+                To provide more details about the availability of a domain object,
+                this extension adds additional elements to the
+                <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                Only those new elements are described here.
+            </t>
+            <section title="State">
+                <t>
+                    The extended availability details of a domain name are
+                    provided using the state element.
+                    A MANDATORY "s" attribute describes the extended availability
+                    state of the queried domain name.
+                    The list of extended availability states with a description
+                    of any child elements of this state element are provided below:
+                    <list style="symbols">
+                        <t>
+                            available - The queried domain name is available to be
+                            registered as a domain object. If the registry is not
+                            currently accepting registrations, the date and time
+                            from which the domain name can be registered as a domain
+                            object MAY be provided as a child element of this state.
+                        </t>
+                        <t>
+                            application - The queried domain name is available to
+                            be registered only as a domain application object.
+                            The identifier of the phase in which a domain application
+                            can be submitted for this domain name will be provided
+                            in a child element.
+                            If the registry is not currently accepting applications,
+                            the date and time from which an application can be
+                            submitted MAY be provided as a child element of this state.
+                        </t>
+                        <t>
+                            unavailable - The queried domain name is not available to
+                            be registered as either a domain object or a domain
+                            application object.
+                            The reason of unavailability for this domain name MAY be
+                            provided as a child element of this state.
+                        </t>
+                        <t>
+                            reserved - The queried domain name is not available to be
+                            registered as it is a reserved label as per server policy.
+                            The server specific reason for the reservation of this label
+                            MAY be provided as a child element of this state.
+                        </t>
+                        <t>
+                            invalid - The queried domain name is not available for
+                            registration as either a domain object or a domain
+                            application object.
+                        </t>
+                        <t>
+                            activatedVariant - The queried domain name is not available
+                            for registration as it is an activated variant of a domain
+                            object in the repository.
+                            The domain registration that created this activated variant
+                            will be provided as a child primaryDomainName element of this
+                            state.
+                        </t>
+                        <t>
+                            blockedVariant - The queried domain name is a blocked
+                            variant of an existing domain object in the repository.
+                            The domain registration that resulted in this variant
+                            getting blocked will be provided as a child primaryDomainName
+                            element.
+                        </t>
+                        <t>
+                            withheldVariant - The queried domain name is a withheld
+                            variant of an existing domain object in the repository.
+                            The domain registration that created this withheld variant
+                            will be provided as a child primaryDomainName element.
+                        </t>
+                        <t>
+                            pendingCreate - The queried domain name's application for
+                            registration requires offline process.
+                        </t>
+                    </list>
+                </t>
+            </section>
+            <section title="Phase Identifier">
+                <t>
+                    The identifier of the phase in which an application
+                    for the queried domain name can be submitted.
+                    The phase identifier is as described in
+                    <xref target="RBP-APP-1.0">EPP Domain Application Mapping</xref>
+                </t>
+            </section>
+            <section title="Reason">
+                <t>
+                    The reason explaining the unavailability of the queried domain name.
+                    This is provided when the extended availability of a domain name
+                    is "unavailable" or "invalid" or "reserved"
+                </t>
+            </section>
+            <section title="Primary Domain Name">
+                <t>
+                    The queried domain name will be unavailable if it is
+                    an active, withheld or blocked variant of a domain object
+                    that exists in the repository.
+                    In such a case, the primary domain name of the variant is provided.
+                </t>
+            </section>
+        </section>
+        <section title="EPP Command Mapping">
+            <t>
+                A detailed description of the EPP syntax and semantics can be found
+                in the
+                <xref target="RFC5731">EPP core protocol specification</xref><![CDATA[.]]>
+                The command mappings described here are specifically for use in the
+                Domain Name Extended Availability Check Extension.
+            </t>
+            <section title="EPP Query Commands">
+                <t>
+                    EPP provides three commands to retrieve object information:
+                    &lt;check&gt; to determine if an object is known to the server,
+                    &lt;info&gt; to retrieve detailed information associated with an
+                    object, and &lt;transfer&gt; to retrieve object transfer status
+                    information.
+                </t>
+                <section title="EPP &lt;check&gt; Command">
+                    <t>
+                        This extension defines additional elements to extend the EPP
+                        &lt;check&gt; command and response to be used in conjunction with
+                        the
+                        <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                    </t>
+                    <t>
+                        To enable clients to obtain additional information about a domain names availability,
+                        the &lt;domain:check&gt; command is extended
+                        with a &lt;exAvail:check&gt; element, which signals a client's
+                        intention to retrieve extended availability information.
+                    </t>
+                    <figure align="left">
+                        <preamble>
+                            Example &lt;check&gt; command requesting extended availability
+                            details
+                        </preamble>
+                        <artwork>
+                            <![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <check>
+      <check xmlns="urn:ietf:params:xml:ns:domain-1.0">
+        <name>domain-avail.tld</name>
+        <name>domain-application.tld</name>
+        <name>domain-inuse.tld</name>
+        <name>domain-blocked-by-application.tld</name>
+        <name>domain-reserved.tld</name>
+        <name>domain-inval!d.tld</name>
+        <name>domain-variant.tld</name>
+        <name>domain-VaRiAnT.tld</name>
+        <name>DOMAIN-variant</name>
+        <name>domain-pendingCreate.tld</name>
+      </check>
+    </check>
+    <extension>
+      <check xmlns="urn:ar:params:xml:ns:exAvail-1.0" />
+    </extension>
+    <clTRID>ABC-12345</clTRID>
+  </command>
+</epp>]]>
+                        </artwork>
+                    </figure>
+                    <t>
+                        When a &lt;check&gt; command containing the &lt;exAvail:check&gt;
+                        element has been processed successfully, the server MUST NOT
+                        respond with the &lt;domain:chkData&gt; element described in the
+                        <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                        Instead, servers must respond with a &lt;exAvail:chkData&gt; element
+                        that contains one &lt;exAvail:cd&gt; element for each domain name
+                        present in the command. The &lt;exAvail:cd&gt; element contains the
+                        following child elements:
+                        <list style="symbols">
+                            <t>
+                                A &lt;exAvail:name&gt; element containing a domain name from the
+                                corresponding command. The order and composition of domain names
+                                in the response MUST be the same as the order and composition of
+                                domain names provided in the command, with exception to
+                                transformations required of validating XML parsers.
+                            </t>
+                            <t>
+                                A &lt;exAvail:state&gt; element containing the extended
+                                availability details of the domain name.
+                                A MANDATORY "s" attribute describes the extended
+                                availability state of the queried domain name.
+                                To describe the availability in more detail the
+                                &lt;exAvail:state&gt; element MAY also contain one
+                                of the following child elements depending on the state:
+                                <list style="symbols">
+                                    <t>
+                                        An OPTIONAL &lt;exAvail:phase&gt; element containing the
+                                        phase identifier of the phase in which an application
+                                        can be submitted for the domain name.
+                                        This information is only supplied when the domain name
+                                        is available as an application.
+                                    </t>
+                                    <t>
+                                        An OPTIONAL &lt;exAvail:date&gt; element containing
+                                        the date time from which the domain name can be provisioned
+                                        as a domain object or an application object.
+                                        The type that the object can be provisioned as can
+                                        be determined by the value of the &lt;exAvail:state&gt;
+                                        element's "s" attribute.
+                                        If this element exists, it is an indication that the
+                                        domain name is not available at the time of the
+                                        extended availability check query, but in the future
+                                        from the date time of this element.
+                                    </t>
+                                    <t>
+                                        An OPTIONAL &lt;exAvail:reason&gt; element containing
+                                        the reason of unavailability.
+                                        This element is provided when the domain is unavailable
+                                        as it is blocked by another object in the repository or
+                                        due to server policy i.e., when the domain extended
+                                        availability state is "unavailable", "invalid" or "reserved".
+                                    </t>
+                                    <t>
+                                        An OPTIONAL &lt;exAvail:primaryDomainName&gt; element
+                                        containing the primary domain name of the variant
+                                        that is blocking the provisioning of the domain name.
+                                        This is provided when the domain name queried for
+                                        is an active, withheld or blocked variant of a domain
+                                        object that exists in the repository.
+                                    </t>
+                                </list>
+                            </t>
+                        </list>
+                    </t>
+                    <figure>
+                        <preamble>
+                            Example &lt;check&gt; response containing the extended availability
+                            details
+                        </preamble>
+                        <artwork><![CDATA[
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+<response>
+ <result code="1000">
+   <msg lang="en">Command completed successfully</msg>
+ </result>
+ <extension>
+  <chkData xmlns:exAvail="urn:ar:params:xml:ns:exAvail-1.0">
+  <cd>
+   <name>domain-avail.tld</name>
+   <state s="available">
+    <date>2012-10-20T00:00:00Z</date>
+   </state>
+  </cd>
+  <cd>
+   <name>domain-application.tld</name>
+   <state s="application">
+    <phase>sunrise</exAvil:phase>
+    <date>2012-10-20T00:00:00Z</date>
+   </state>
+  </cd>
+  <cd>
+   <name>domain-inuse.tld</name>
+   <state s="unavailable">
+    <reason>In use</reason>
+   </state>
+  </cd>
+  <cd>
+   <name>domain-blocked-by-application.tld</name>
+   <state s="unavailable">
+    <reason>Blocked by application</reason>
+   </state>
+  </cd>
+  <cd>
+   <name>domain-reserved.tld</name>
+   <state s="reserved">
+    <reason>ICANN Reserved</reason>
+   </state>
+  </cd>
+  <cd>
+   <name>domain-inval!d.tld</name>
+   <state s="inValid">
+    <reason>Invalid domain name</reason>
+   </state>
+  </cd>
+  <cd>
+   <name>domain-variant.tld</name>
+   <state s="activatedVariant">
+    <primaryDomainName>domain-VARIANT.tld</primaryDomainName>
+   </state>
+  </cd>
+  <cd>
+   <name>domain-VaRiAnT.tld</name>
+   <state s="withheldVariant">
+    <primaryDomainName>domain-VARIANT.tld</primaryDomainName>
+   </state>
+  </cd>
+  <cd>
+   <name>DOMAIN-variant.tld</name>
+   <state s="blockedVariant">
+    <primaryDomainName>domain-VARIANT.tld</primaryDomainName>
+   </state>
+  </cd>
+  <cd>
+   <name>domain-pendingCreate.tld</name>
+   <state s="pendingCreate" />
+  </cd>
+ </chkData>
+ </extension>
+ <trID>
+  <clTRID>ABC-12345</clTRID>
+  <svTRID>57f39ac6-abd2-4fea-9a80-e791d1af86f7</svTRID>
+ </trID>
+</response>
+</epp>]]>
+                        </artwork>
+                    </figure>
+                </section>
+                <section title="EPP &lt;info&gt; Command">
+                    <t>
+                        This extension does not define any extension to the EPP
+                        &lt;info&gt; command or response described in the
+                        <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                    </t>
+                </section>
+                <section title="EPP &lt;transfer&gt; Command">
+                    <t>
+                        This extension does not define any extension to the EPP
+                        &lt;transfer&gt; command or response described in the
+                        <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                    </t>
+                </section>
+            </section>
+            <section title="EPP Transform Commands">
+                <t>
+                    EPP provides five commands to transform objects: &lt;create&gt;
+                    to create an instance of an object, &lt;delete&gt; to delete an
+                    instance of an object, &lt;renew&gt; to extend the validity period
+                    of an object, &lt;transfer&gt; to manage object sponsorship
+                    changes, and &lt;update&gt; to change information associated with
+                    an object.
+                </t>
+                <section title="EPP &lt;create&gt; Command">
+                    <t>
+                        This extension does not define any extension to the EPP
+                        &lt;create&gt; command or response described in the
+                        <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                    </t>
+                </section>
+                <section title="EPP &lt;delete&gt; Command">
+                    <t>
+                        This extension does not define any extension to the EPP
+                        &lt;delete&gt; command or response described in the
+                        <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                    </t>
+                </section>
+                <section title="EPP &lt;renew&gt; Command">
+                    <t>
+                        This extension does not define any extension to the EPP
+                        &lt;renew&gt; command or response described in the
+                        <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                    </t>
+                </section>
+                <section title="EPP &lt;transfer&gt; Command">
+                    <t>
+                        This extension does not define any extension to the EPP
+                        &lt;transfer&gt; command or response described in the
+                        <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                    </t>
+                </section>
+
+                <section title="EPP &lt;update&gt; Command">
+                    <t>
+                        This extension does not define any extension to the EPP
+                        &lt;update&gt; command or response described in the
+                        <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                    </t>
+                </section>
+            </section>
+            <section title="Formal Syntax">
+                <t>
+                    An EPP object mapping is specified in XML Schema notation. The
+                    formal syntax presented here is a complete schema representation of
+                    the object mapping, suitable for automated validation of EPP XML
+                    instances.
+                </t>
+                <figure align="left">
+                <artwork> <![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="urn:ar:params:xml:ns:exAvail-1.0"
+        xmlns:exAvail="urn:ar:params:xml:ns:exAvail-1.0"
+        xmlns:eppcom="urn:ietf:params:xml:ns:eppcom-1.0"
+        xmlns="http://www.w3.org/2001/XMLSchema"
+        elementFormDefault="qualified">
+
+ <import namespace="urn:ietf:params:xml:ns:eppcom-1.0"/>
+
+ <!-- Custom Extensions found in EPP commands. -->
+ <element name="check"/>
+
+ <!-- Child response elements.-->
+ <element name="chkData" type="exAvail:chkDataType"/>
+
+ <complexType name="chkDataType">
+        <sequence>
+            <element name="cd" type="exAvail:checkType"
+                     maxOccurs="unbounded"/>
+        </sequence>
+ </complexType>
+
+ <complexType name="checkType">
+    <sequence>
+        <element name="name" type="eppcom:labelType"/>
+        <element name="state" type="exAvail:checkStateType"/>
+    </sequence>
+ </complexType>
+
+ <complexType name="checkStateType">
+    <choice>
+        <sequence>
+            <element name="reason" type="eppcom:reasonType"
+                     minOccurs="0"/>
+        </sequence>
+        <sequence>
+            <element name="phase" type="eppcom:labelType"
+                     minOccurs="0"/>
+            <element name="date" type="dateTime"
+                     minOccurs="0"/>
+        </sequence>
+        <sequence>
+            <element name="primaryDomainName"
+                     type="eppcom:labelType"/>
+        </sequence>
+        </choice>
+        <attribute name="s" type="exAvail:stateValueType"
+                   use="required"/>
+ </complexType>
+
+ <simpleType name="stateValueType">
+    <restriction base="token">
+        <enumeration value="available"/>
+        <enumeration value="application"/>
+        <enumeration value="unavailable"/>
+        <enumeration value="reserved"/>
+        <enumeration value="invalid"/>
+        <enumeration value="activatedVariant"/>
+        <enumeration value="withheldVariant"/>
+        <enumeration value="blockedVariant"/>
+        <enumeration value="pendingCreate"/>
+    </restriction>
+ </simpleType>
+</schema>]]>
+                    </artwork>
+                </figure>
+            </section>
+            <section title="IANA Considerations">
+                <t>This memo includes no request to IANA.</t>
+            </section>
+            <section title="Security Considerations">
+                <t>
+                    The mapping extensions described in this document do not provide any
+                    security services beyond those described by
+                    <xref target="RFC5730">EPP</xref><![CDATA[,]]>
+                    the
+                    <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[,]]>
+                    and protocol layers used by EPP. The security considerations
+                    described in these other specifications also apply to this
+                    specification.
+                </t>
+            </section>
+        </section>
+    </middle>
+    <back>
+        <references title="Normative References">
+            &RFC2119;
+            &RFC5731;
+            &RFC5730;
+        </references>
+        <references title="Informative References">
+            &RBP-APP-1.0;
+        </references>
+    </back>
+</rfc>
