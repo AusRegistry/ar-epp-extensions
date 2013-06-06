@@ -1,9 +1,9 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
-<!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
-<!ENTITY RFC5730 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5730.xml">
-<!ENTITY RFC5731 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5731.xml">
-]>
+        <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+        <!ENTITY RFC5730 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5730.xml">
+        <!ENTITY RFC5731 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5731.xml">
+        ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <!-- used by XSLT processors -->
 <?rfc strict="yes" ?>
@@ -25,422 +25,382 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <rfc category="info" docName="draft-ar-application-epp-mapping-02"
-	ipr="none">
-	<front>
-		<!-- The abbreviated title is used in the page header - it is only necessary 
-			if the full title is longer than 39 characters -->
+     ipr="none">
+    <front>
+        <!-- The abbreviated title is used in the page header - it is only necessary
+            if the full title is longer than 39 characters -->
 
-		<title abbrev="EPP Domain Application Mapping">
-			Domain Name Application Extension Mapping for the
-			Extensible Provisioning
-			Protocol (EPP)
-		</title>
+        <title abbrev="EPP Domain Application Mapping">
+            Domain Name Application Extension Mapping for the
+            Extensible Provisioning
+            Protocol (EPP)
+        </title>
 
-		<author fullname="James Mitchell" initials="J." surname="Mitchell">
-			<organization>AusRegistry</organization>
-			<address>
-				<postal>
-					<street>8/10 Queens Road</street>
-					<city>Melbourne</city>
-					<region>Victoria</region>
-					<code>3004</code>
-					<country>AU</country>
-				</postal>
-				<email>james.mitchell@ausregistry.com</email>
-				<uri>www.ausregistry.com</uri>
-			</address>
-		</author>
-		<author fullname="Chris Wright" initials="C." surname="Wright">
-			<organization>AusRegistry</organization>
-			<address>
-				<postal>
-					<street>8/10 Queens Road</street>
-					<city>Melbourne</city>
-					<region>Victoria</region>
-					<code>3004</code>
-					<country>AU</country>
-				</postal>
-				<email>chris@ausregistry.com</email>
-				<uri>www.ausregistry.com</uri>
-			</address>
-		</author>
+        <author fullname="James Mitchell" initials="J." surname="Mitchell">
+            <organization>AusRegistry</organization>
+            <address>
+                <postal>
+                    <street>8/10 Queens Road</street>
+                    <city>Melbourne</city>
+                    <region>Victoria</region>
+                    <code>3004</code>
+                    <country>AU</country>
+                </postal>
+                <email>james.mitchell@ausregistry.com</email>
+                <uri>www.ausregistry.com</uri>
+            </address>
+        </author>
+        <author fullname="Chris Wright" initials="C." surname="Wright">
+            <organization>AusRegistry</organization>
+            <address>
+                <postal>
+                    <street>8/10 Queens Road</street>
+                    <city>Melbourne</city>
+                    <region>Victoria</region>
+                    <code>3004</code>
+                    <country>AU</country>
+                </postal>
+                <email>chris@ausregistry.com</email>
+                <uri>www.ausregistry.com</uri>
+            </address>
+        </author>
 
-		<date month="December" year="2012" />
+        <date month="December" year="2012" />
 
-		<!-- Meta-data Declarations -->
-		<area>General</area>
-		<workgroup>Internet Engineering Task Force</workgroup>
-		<keyword>EPP</keyword>
-		<abstract>
-			<t>
-				This document describes an Extensible Provisioning Protocol (EPP)
-				extension mapping for the provisioning and management of
-				applications for domain names, suitable for periods such as a
-				sunrise or landrush during which servers do not offer first-come
-				first-served registrations.
-			</t>
-		</abstract>
-	</front>
-	<middle>
-		<section title="Introduction">
-			<t>
-				The
-				<xref target="RFC5731">EPP Domain Name Mapping</xref>
-				describes mechanisms for the provisioning and management of
-				domain
-				names. This works well for domain name registries that use a
-				first-come first-served allocation method, however registries may
-				define periods during which multiple applications for a domain name
-				are accepted.
-			</t>
-			<t>
-				This extension describes the commands and responses used for the
-				manipulation of domain name application objects. The authors
-				recognise that additional information is often required to support
-				applications for domain names, including but not limited to
-				trademark information or proof of eligibility. This extension does
-				not provide mechanisms for the collection of this information,
-				instead other documents should be published that describe the
-				mechanisms for transport and validation of supporting information.
-			</t>
-			<t>
-				Extension to the domain name mapping was preferred over
-				re-defining the domain object fields in a domain name application
-				object mapping. Implementers should be aware that this document
-				places restrictions on the use of certain domain object attributes
-				for the period during which the application is relevant.
-			</t>
-			<section title="Conventions Used in This Document">
-				<t>
-					The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-					"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in
-					this document are to be interpreted as described in
-					<xref target="RFC2119">RFC 2119</xref><![CDATA[.]]>
-				</t>
-				<t>
-					"application-1.0" is used as an abbreviation for
-					"urn:ar:params:xml:ns:application-1.0". The XML namespace prefix
-					"app" is used, but implementations MUST NOT depend on it and
-					instead employ a proper namespace-aware XML parser and serializer
-					to interpret and output the XML documents.
-				</t>
-			</section>
-		</section>
-		<section title="Object Attributes">
-			<t>
-				An application for a domain name results in an object that is
-				similar to the domain object as described in the
-				<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
-				Those new elements, belonging exclusively to the application, are
-				described here, as well as the restrictions placed on the
-				information available in the domain object.
-			</t>
-			<section title="Application Identifier">
-				<t>
-					Servers may allow multiple applications of a given domain name
-					during relevant registry-specific phases. On receiving a request
-					to
-					create a domain name, the server creates an application object
-					corresponding to the request, and assigns a unique application
-					identifier. In order to facilitate correlation, all subsequent
-					operations on the application object MUST be qualified by the
-					previously assigned application identifier.
-				</t>
-				<t>
-					Servers MAY use both the application identifier and domain name
-					to uniquely identify an application. Clients MUST ensure that
-					commands to query or transform an application, include the domain
-					name and application identifier associated with the original
-					&lt;create&gt; command and response.
-				</t>
-				<t>
-					Application identifiers SHOULD NOT be composed of characters that
-					cannot be represented in US-ASCII, and SHOULD NOT exceed the length
-					of a ROID. Servers SHOULD NOT allocate application identifiers that
-					differ only in the casing of the letters.
-				</t>
-				<t>
-					Clients MUST NOT assume any particular identifier syntax, and
-					should be able to handle identifiers consisting of numbers, letters
-					and punctuation.
-				</t>
-			</section>
-			<section title="Phase Identifier">
-				<t>
-					The server may support multiple rounds of applications, either
-					sequentially or simultaneously, each with their own participation
-					requirements.
-				</t>
-				<t>
-					Clients are expected to know the relevant phase identifier in use
-					for a particular server. Out of band mechanisms should be used to
-					determine the available phases and the requirements for submission
-					of an application during those phases.
-				</t>
-				<t>
-					This document reserves the following two names for their specific
-					uses. Registries SHOULD accept these values during the relevant
-					phase to promote interoperability.
-					<list style="symbols">
-						<t>
-							sunrise - the phase where sunrise codes authorized by the
-							trademark clearinghouse are used to prove eligibility. This
-							refers to the least restrictive phase should two or more phases
-							use sunrise codes from the trademark clearinghouse.
-						</t>
-						<t>
-							landrush - the phase immediately prior to first-come
-							first-served having no restrictions in addition to normal
-							registration policies.
-						</t>
-					</list>
-				</t>
-				<t>
-					Phase identifiers SHOULD NOT be composed of characters that
-					cannot be represented in US-ASCII, and SHOULD NOT exceed the length
-					of a ROID. Servers SHOULD NOT allocate phase identifiers that
-					differ only in the casing of the letters.
-				</t>
-				<t>
-					Clients MUST NOT assume any particular identifier syntax, and
-					should be able to handle identifiers consisting of numbers, letters
-					and punctuation.
-				</t>
-			</section>
-			<section title="Status">
-				<t>
-					All applications follow a predefined lifecycle as defined by the
-					server. This extension does not attempt to define or restrict the
-					application lifecycle, however servers are expected to use the
-					status values described below when appropriate. In addtion to
-					application status descriptors, servers should use the server
-					prohibition statuses in the domain object mapping to describe
-					operations unavailable to the client, for example combining
-					"serverUpdateProhibited" with "valid" to indicate that updates to
-					the application will be rejected. Example server lifecycles are
-					defined in
-					<xref target="lifecycle-examples">Appendix A</xref><![CDATA[,]]>
-					however these are provided for illustration only.
-					<list style="symbols">
-						<t>
-							pending - The default initial state of the application.
-						</t>
-						<t>
-							pendingValidation - The application is pending non-mechanical
-							validation. Requests to update or delete the application should
-							be rejected.
-						</t>
-						<t>
-							pendingContentionResolution - The application is pending
-							contention resloution. Requests to update or delete the
-							application should be rejected.
-						</t>
-						<t>
-							pendingAllocation - The application has been awarded to an
-							applicant as is now pending allocation of the corresponding
-							domain object. Requests to update or delete the application
-							should be rejected.
-						</t>
-						<t>
-							valid - The application meets validation requirements for the
-							relevant phase. Updates to the application may be allowed by the
-							server, however may attract further validation.
-						</t>
-						<t>
-							invalid - The application does not met validation requirements
-							for the relevant phase. Updates to the application may be allowed
-							to provide clients the opportunity to correct invalid
-							information.
-						</t>
-						<t>
-							allocated - A terminal state indicating allocation of the
-							application to the applicant.
-						</t>
-						<t>
-							rejected - A terminal state indicating the application did not
-							result in the registration of a domain object.
-						</t>
-					</list>
-				</t>
-			</section>
-			<section anchor="domain-attributes" title="Domain Attributes">
-				<t>
-					This document describes an extension to the
-					<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[,]]>
-					however overloads the domain attributes in commands and responses
-					to represent information applicable to application objects. The
-					list of attributes available in the core domain mapping is
-					described below, with descriptions relevant to their role in
-					applications.
-					<list style="symbols">
-						<t>
-							The &lt;domain:name&gt; element contains the fully qualified
-							name of the domain applied for by this application object.
-						</t>
-						<t>
-							The &lt;domain:roid&gt; element contains the Repository Object
-							IDentifier assigned to the application object when the object was
-							created.
-						</t>
-						<t>
-							The &lt;domain:status&gt; element contains the current status
-							descriptors associated with the application, to be used in
-							conjunction with the &lt;app:status&gt; elements defined in this
-							extension. Servers MAY additionally limit the statuses that can
-							be set by the client, for example to prevent updates that would
-							add the clientHold or clientTransferProhibited statuses.
-						</t>
-						<t>
-							The &lt;domain:registrant&gt; element and
-							&lt;domain:contact&gt; elements contain identifiers for the human
-							or organizational social information objects associated with the
-							application object.
-						</t>
-						<t>
-							The &lt;domain:ns&gt; element contains the fully qualified
-							names of the delegated host objects or host attributes (name
-							servers) that should be associated with the domain object
-							allocated from this application.
-						</t>
-						<t>
-							The &lt;domain:host&gt; does not map to application objects and
-							SHOULD NOT be used. Servers SHOULD deny the creation of host
-							objects whose names are subordinate to application objects.
-						</t>
+        <!-- Meta-data Declarations -->
+        <area>General</area>
+        <workgroup>Internet Engineering Task Force</workgroup>
+        <keyword>EPP</keyword>
+        <abstract>
+            <t>
+                This document describes an Extensible Provisioning Protocol (EPP)
+                extension mapping for the provisioning and management of
+                applications for domain names, suitable for periods such as a
+                sunrise or landrush during which servers do not offer first-come
+                first-served registrations.
+            </t>
+        </abstract>
+    </front>
+    <middle>
+        <section title="Introduction">
+            <t>
+                The
+                <xref target="RFC5731">EPP Domain Name Mapping</xref>
+                describes mechanisms for the provisioning and management of
+                domain
+                names. This works well for domain name registries that use a
+                first-come first-served allocation method, however registries may
+                define periods during which multiple applications for a domain name
+                are accepted.
+            </t>
+            <t>
+                This extension describes the commands and responses used for the
+                manipulation of domain name application objects. The authors
+                recognise that additional information is often required to support
+                applications for domain names, including but not limited to
+                trademark information or proof of eligibility. This extension does
+                not provide mechanisms for the collection of this information,
+                instead other documents should be published that describe the
+                mechanisms for transport and validation of supporting information.
+            </t>
+            <t>
+                Extension to the domain name mapping was preferred over
+                re-defining the domain object fields in a domain name application
+                object mapping. Implementers should be aware that this document
+                places restrictions on the use of certain domain object attributes
+                for the period during which the application is relevant.
+            </t>
+            <section title="Conventions Used in This Document">
+                <t>
+                    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+                    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in
+                    this document are to be interpreted as described in
+                    <xref target="RFC2119">RFC 2119</xref><![CDATA[.]]>
+                </t>
+                <t>
+                    "application-1.0" is used as an abbreviation for
+                    "urn:ar:params:xml:ns:application-1.0". The XML namespace prefix
+                    "app" is used, but implementations MUST NOT depend on it and
+                    instead employ a proper namespace-aware XML parser and serializer
+                    to interpret and output the XML documents.
+                </t>
+            </section>
+        </section>
+        <section title="Object Attributes">
+            <t>
+                An application for a domain name results in an object that is
+                similar to the domain object as described in the
+                <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                Those new elements, belonging exclusively to the application, are
+                described here, as well as the restrictions placed on the
+                information available in the domain object.
+            </t>
+            <section title="Application Identifier">
+                <t>
+                    Servers may allow multiple applications of a given domain name
+                    during relevant registry-specific phases. On receiving a request
+                    to
+                    create a domain name, the server creates an application object
+                    corresponding to the request, and assigns a unique application
+                    identifier. In order to facilitate correlation, all subsequent
+                    operations on the application object MUST be qualified by the
+                    previously assigned application identifier.
+                </t>
+                <t>
+                    Servers MAY use both the application identifier and domain name
+                    to uniquely identify an application. Clients MUST ensure that
+                    commands to query or transform an application, include the domain
+                    name and application identifier associated with the original
+                    &lt;create&gt; command and response.
+                </t>
+                <t>
+                    Application identifiers SHOULD NOT be composed of characters that
+                    cannot be represented in US-ASCII, and SHOULD NOT exceed the length
+                    of a ROID. Servers SHOULD NOT allocate application identifiers that
+                    differ only in the casing of the letters.
+                </t>
+                <t>
+                    Clients MUST NOT assume any particular identifier syntax, and
+                    should be able to handle identifiers consisting of numbers, letters
+                    and punctuation.
+                </t>
+            </section>
+            <section title="Phase Identifier">
+                <t>
+                    The server may support multiple rounds of applications, either
+                    sequentially or simultaneously, each with their own participation
+                    requirements.
+                </t>
+                <t>
+                    Clients are expected to know the relevant phase identifier in use
+                    for a particular server. Out of band mechanisms should be used to
+                    determine the available phases and the requirements for submission
+                    of an application during those phases.
+                </t>
+                <t>
+                    This document reserves the following two names for their specific
+                    uses. Registries SHOULD accept these values during the relevant
+                    phase to promote interoperability.
+                    <list style="symbols">
+                        <t>
+                            sunrise - the phase where sunrise codes authorized by the
+                            trademark clearinghouse are used to prove eligibility. This
+                            refers to the least restrictive phase should two or more phases
+                            use sunrise codes from the trademark clearinghouse.
+                        </t>
+                        <t>
+                            landrush - the phase immediately prior to first-come
+                            first-served having no restrictions in addition to normal
+                            registration policies.
+                        </t>
+                    </list>
+                </t>
+                <t>
+                    Phase identifiers SHOULD NOT be composed of characters that
+                    cannot be represented in US-ASCII, and SHOULD NOT exceed the length
+                    of a ROID. Servers SHOULD NOT allocate phase identifiers that
+                    differ only in the casing of the letters.
+                </t>
+                <t>
+                    Clients MUST NOT assume any particular identifier syntax, and
+                    should be able to handle identifiers consisting of numbers, letters
+                    and punctuation.
+                </t>
+            </section>
+            <section title="Status">
+                <t>
+                    All applications follow a predefined lifecycle as defined by the
+                    server. This extension does not attempt to define or restrict the
+                    application lifecycle, however servers are expected to use the
+                    status values described below when appropriate. In addition to
+                    application status descriptors, servers should use the server
+                    prohibition statuses in the domain object mapping to describe
+                    operations unavailable to the client, for example combining
+                    "serverUpdateProhibited" with "valid" to indicate that updates to
+                    the application will be rejected. Example server lifecycles are
+                    defined in
+                    <xref target="lifecycle-examples">Appendix A</xref><![CDATA[,]]>
+                    however these are provided for illustration only.
+                    <list style="symbols">
+                        <t>
+                            applied - The default initial state of the application.
+                        </t>
+                        <t>
+                            pending - The phase in which the application was submitted
+                            is closed.
+                            The application might be awaiting non-mechanical
+                            validation or any other further action to move the application to
+                            the next state.
+                            Requests to update or delete the application
+                            should be rejected.
+                        </t>
+                        <t>
+                            contestedPendingResolution - The application is pending
+                            contention resolution. Requests to update or delete the
+                            application should be rejected.
+                        </t>
+                        <t>
+                            pendingAllocation - The application has been awarded to an
+                            applicant as is now pending allocation of the corresponding
+                            domain object. Requests to update or delete the application
+                            should be rejected.
+                        </t>
+                        <t>
+                            valid - The application meets validation requirements for the
+                            relevant phase. Updates to the application may be allowed by the
+                            server, however may attract further validation.
+                        </t>
+                        <t>
+                            invalid - The application does not met validation requirements
+                            for the relevant phase. Updates to the application may be allowed
+                            to provide clients the opportunity to correct invalid
+                            information.
+                        </t>
+                        <t>
+                            allocated - A terminal state indicating allocation of the
+                            application to the applicant.
+                        </t>
+                        <t>
+                            contestUnsuccessful – A terminal state indicating that the
+                            application did not pass contention resolution mechanism.
+                        </t>
+                    </list>
+                </t>
+            </section>
+            <section anchor="domain-attributes" title="Domain Attributes">
+                <t>
+                    This document describes an extension to the
+                    <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[,]]>
+                    however overloads the domain attributes in commands and responses
+                    to represent information applicable to application objects. The
+                    list of attributes available in the core domain mapping is
+                    described below, with descriptions relevant to their role in
+                    applications.
+                    <list style="symbols">
+                        <t>
+                            The &lt;domain:name&gt; element contains the fully qualified
+                            name of the domain applied for by this application object.
+                        </t>
+                        <t>
+                            The &lt;domain:roid&gt; element contains the Repository Object
+                            IDentifier assigned to the application object when the object was
+                            created.
+                        </t>
+                        <t>
+                            The &lt;domain:status&gt; element contains the current status
+                            descriptors associated with the application, to be used in
+                            conjunction with the &lt;app:status&gt; elements defined in this
+                            extension. Servers MAY additionally limit the statuses that can
+                            be set by the client, for example to prevent updates that would
+                            add the clientHold or clientTransferProhibited statuses.
+                        </t>
+                        <t>
+                            The &lt;domain:registrant&gt; element and
+                            &lt;domain:contact&gt; elements contain identifiers for the human
+                            or organizational social information objects associated with the
+                            application object.
+                        </t>
+                        <t>
+                            The &lt;domain:ns&gt; element contains the fully qualified
+                            names of the delegated host objects or host attributes (name
+                            servers) that should be associated with the domain object
+                            allocated from this application.
+                        </t>
+                        <t>
+                            The &lt;domain:host&gt; does not map to application objects and
+                            SHOULD NOT be used. Servers SHOULD deny the creation of host
+                            objects whose names are subordinate to application objects.
+                        </t>
 
-						<t>
-							The &lt;domain:clID&gt; element contains the identifier of the
-							sponsoring client for the application.
-						</t>
-						<t>
-							The &lt;domain:crID&gt; element contains the identifier of the
-							client that created the application object.
-						</t>
-						<t>
-							The &lt;domain:crDate&gt; element contains the date and time of
-							application object creation.
-						</t>
-						<t>
-							The &lt;domain:exDate&gt; element does not map to application
-							objects and SHOULD NOT be used.
-						</t>
-						<t>
-							The &lt;domain:upID&gt; element contains the identifier of the
-							client that last updated the domain object.
-						</t>
-						<t>
-							The &lt;domain:upDate&gt; element contains the date and time of
-							the most recent domain-object modification.
-						</t>
-						<t>
-							The &lt;domain:trDate&gt; element does not map to application
-							objects and SHOULD NOT be used.
-						</t>
-					</list>
-				</t>
-				<t>
-					Servers may place restrictions on the domain attributes that can
-					be used with applications. Clients should consult the server
-					operator regarding the list of domain attributes available on the
-					server.
-				</t>
-			</section>
-		</section>
-		<section title="EPP Command Mapping">
-			<t>
-				A detailed description of the EPP syntax and semantics can be found
-				in the
-				<xref target="RFC5731">EPP core protocol specification</xref><![CDATA[.]]>
-				The command mappings described here are specifically for use in the
-				Domain Name Application Extension.
-			</t>
-			<section title="EPP Query Commands">
-				<t>
-					EPP provides three commands to retrieve object information:
-					&lt;check&gt; to determine if an object is known to the server,
-					&lt;info&gt; to retrieve detailed information associated with an
-					object, and &lt;transfer&gt; to retrieve object transfer status
-					information.
-				</t>
-				<section title="EPP &lt;check&gt; Command">
-					<t>
-						This extension defines additional elements to extend the EPP
-						&lt;check&gt; command to be used in conjunction with the
-						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
-						No additional elements are defined for the EPP &lt;check&gt;
-						response.
-					</t>
-					<t>
-						The EPP &lt;check&gt; command is used to determine if an object
-						can be provisioned within a repository. Domain names may be made
-						available only in unique application phases, whilst remaining
-						unavailable for registration in concurrent application or
-						registration phases. In addition to the elements expressed in the
-						&lt;domain:check&gt;, the command is extended with an
-						&lt;app:check&gt; element that contains the following child
-						elements:
-						<list style="symbols">
-							<t>
-								phase: the identifier of the phase to which domain name
-								availability should be determined.
-							</t>
-						</list>
-					</t>
-					<figure align="left">
-						<preamble>
-							Example &lt;check&gt; command to determine availability
-							of names in a particular phase.
-						</preamble>
-						<artwork><![CDATA[
-<?xml version="1.0" standalone="no"?>
-<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
-  <command>
-    <check>
-      <check xmlns="urn:ietf:params:xml:ns:domain-1.0">
-        <name>xn--somename.tld</name>
-        <name>xn--anothername.tld</name>
-        <name>abc.tld</name>
-      </check>
-    </check>
-    <extension>
-      <check xmlns="urn:ar:params:xml:ns:application-1.0">
-        <phase>new-IDN-table-release</phase>
-      </check>
-    </extension>
-    <clTRID>ABC-12345</clTRID>
-  </command>
-</epp>
-            ]]></artwork>
-					</figure>
-				</section>
+                        <t>
+                            The &lt;domain:clID&gt; element contains the identifier of the
+                            sponsoring client for the application.
+                        </t>
+                        <t>
+                            The &lt;domain:crID&gt; element contains the identifier of the
+                            client that created the application object.
+                        </t>
+                        <t>
+                            The &lt;domain:crDate&gt; element contains the date and time of
+                            application object creation.
+                        </t>
+                        <t>
+                            The &lt;domain:exDate&gt; element does not map to application
+                            objects and SHOULD NOT be used.
+                        </t>
+                        <t>
+                            The &lt;domain:upID&gt; element contains the identifier of the
+                            client that last updated the application object.
+                        </t>
+                        <t>
+                            The &lt;domain:upDate&gt; element contains the date and time of
+                            the most recent application-object modification.
+                        </t>
+                        <t>
+                            The &lt;domain:trDate&gt; element does not map to application
+                            objects and SHOULD NOT be used.
+                        </t>
+                    </list>
+                </t>
+                <t>
+                    Servers may place restrictions on the domain attributes that can
+                    be used with applications. Clients should consult the server
+                    operator regarding the list of domain attributes available on the
+                    server.
+                </t>
+            </section>
+        </section>
+        <section title="EPP Command Mapping">
+            <t>
+                A detailed description of the EPP syntax and semantics can be found
+                in the
+                <xref target="RFC5731">EPP core protocol specification</xref><![CDATA[.]]>
+                The command mappings described here are specifically for use in the
+                Domain Name Application Extension.
+            </t>
+            <section title="EPP Query Commands">
+                <t>
+                    EPP provides three commands to retrieve object information:
+                    &lt;check&gt; to determine if an object is known to the server,
+                    &lt;info&gt; to retrieve detailed information associated with an
+                    object, and &lt;transfer&gt; to retrieve object transfer status
+                    information.
+                </t>
+                <section title="EPP &lt;check&gt; Command">
+                    <t>
+                        This extension does not define any extension to the
+                        EPP &lt;check&gt; command or response described in the
+                        EPP <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                    </t>
+                </section>
 
-				<section anchor="info_command" title="EPP &lt;info> Command">
-					<t>
-						This extension defines additional elements to extend the EPP
-						&lt;info&gt; command and response to be used in conjunction with
-						the
-						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
-					</t>
-					<t>
-						The EPP &lt;info&gt; command is used to retrieve information on an
-						application for a domain name. The application identifier returned
-						in the
-						<xref target="create_command">create response</xref>
-						is used for retrieving information for a launch application. In
-						addition to the elements expressed in the &lt;domain:info&gt;, the
-						command is extended with an &lt;app:info&gt; element that
-						contains
-						the following child elements:
-						<list style="symbols">
-							<t>id - the identifier of the application</t>
-						</list>
-					</t>
-					<figure align="left">
-						<preamble>
-							Example &lt;info&gt; command for an application object
-							Application
-						</preamble>
-						<artwork><![CDATA[
+                <section anchor="info_command" title="EPP &lt;info> Command">
+                    <t>
+                        This extension defines additional elements to extend the EPP
+                        &lt;info&gt; command and response to be used in conjunction with
+                        the
+                        <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                    </t>
+                    <t>
+                        The EPP &lt;info&gt; command is used to retrieve information on an
+                        application for a domain name. The application identifier returned
+                        in the
+                        <xref target="create_command">create response</xref>
+                        is used for retrieving information for a launch application. In
+                        addition to the elements expressed in the &lt;domain:info&gt;, the
+                        command is extended with an &lt;app:info&gt; element that
+                        contains
+                        the following child elements:
+                        <list style="symbols">
+                            <t>id - the identifier of the application</t>
+                        </list>
+                    </t>
+                    <figure align="left">
+                        <preamble>
+                            Example &lt;info&gt; command for an application object
+                            Application
+                        </preamble>
+                        <artwork><![CDATA[
 <?xml version="1.0" standalone="no"?>
 <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
   <command>
@@ -457,35 +417,35 @@
     <clTRID>ABC-12345</clTRID>
   </command>
 </epp>]]>
-						</artwork>
-					</figure>
-					<t>
-						When an &lt;info&gt; command has been successfully processed, the
-						&lt;resData&gt; element contains a &lt;domain:infData&gt; element,
-						however with attribute values described in the
-						<xref target="domain-attributes">Domain Attributes</xref>
-						section. In addition, the response is extended with an
-						&lt;app:infData&gt; element containing the following child
-						elements:
-						<list style="symbols">
-							<t>
-								One &lt;id&gt; element containing the application identifier.
-							</t>
-							<t>
-								One &lt;phase&gt; element containing the phase in which the
-								application is submitted.
-							</t>
-							<t>
-								One or more &lt;status&gt; elements describing the status of
-								the application.
-							</t>
-						</list>
-					</t>
-					<figure align="left">
-						<preamble>
-							Example &lt;info&gt; Response for an Application.
-						</preamble>
-						<artwork><![CDATA[
+                        </artwork>
+                    </figure>
+                    <t>
+                        When an &lt;info&gt; command has been successfully processed, the
+                        &lt;resData&gt; element contains a &lt;domain:infData&gt; element,
+                        however with attribute values described in the
+                        <xref target="domain-attributes">Domain Attributes</xref>
+                        section. In addition, the response is extended with an
+                        &lt;app:infData&gt; element containing the following child
+                        elements:
+                        <list style="symbols">
+                            <t>
+                                One &lt;id&gt; element containing the application identifier.
+                            </t>
+                            <t>
+                                One &lt;phase&gt; element containing the phase in which the
+                                application is submitted.
+                            </t>
+                            <t>
+                                One or more &lt;status&gt; elements describing the status of
+                                the application.
+                            </t>
+                        </list>
+                    </t>
+                    <figure align="left">
+                        <preamble>
+                            Example &lt;info&gt; Response for an Application.
+                        </preamble>
+                        <artwork><![CDATA[
 <?xml version="1.0" standalone="no"?>
 <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
   <response>
@@ -513,7 +473,6 @@
       <infData xmlns="urn:ar:params:xml:ns:application-1.0">
         <id>3F2504E0-4F89-11D3-9A0C-0305E82C3301</id>
         <phase>landrush</phase>
-        <status s="valid" />
         <status s="pendingAllocation" />
       </infData>
     </extension>
@@ -523,69 +482,62 @@
     </trID>
   </response>
 </epp>]]>
-						</artwork>
-					</figure>
-					<t>
-						Servers MAY include the &lt;app:infData&gt; in response to a
-						standard &lt;domain:info&gt; command on a domain object allocated
-						from an application.
-					</t>
-				</section>
-				<section title="EPP &lt;transfer&gt; Command">
-					<t>
-						This extension does not define any extension to the EPP
-						&lt;transfer&gt; command or response described in the
-						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
-					</t>
-				</section>
-			</section>
-			<section title="EPP Transform Commands">
-				<t>
-					EPP provides five commands to transform objects: &lt;create&gt;
-					to create an instance of an object, &lt;delete&gt; to delete an
-					instance of an object, &lt;renew&gt; to extend the validity period
-					of an object, &lt;transfer&gt; to manage object sponsorship
-					changes, and &lt;update&gt; to change information associated with
-					an object.
-				</t>
-				<section anchor="create_command" title="EPP &lt;create&gt; Command">
-					<t>
-						There are two forms of the extension to the EPP &lt;create&gt;
-						command that are used to either create a domain application or
-						allocate an application (Register a domain based on domain 
-						applicaton information). Both forms are described below.
-					</t>
-					<section title="Domain Application Create">
-						<t>
-							This extension defines additional elements to extend the EPP
-							&lt;create&gt; command and response to be used in conjunction with
-							the
-							<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
-						</t>
-						<t>
-							The EPP &lt;create&gt; command is used to provision an object
-							within a repository. A domain name application may be provisioned
-							by specifying the phase in which the application is to be
-							processed.
-						</t>
-						<t>
-							In addition to the elements expressed in the
-							&lt;domain:create&gt;, the command is extended with an
-							&lt;app:create&gt; element containing the following child
-							elements:
-							<list style="symbols">
-								<t>
-									phase: the identifier of the phase to which the domain name
-									application is being submitted.
-								</t>
-							</list>
-						</t>
-						<figure align="left">
-							<preamble>
-								Example &lt;create&gt; command for an application for a
-								domain name
-							</preamble>
-							<artwork><![CDATA[
+                        </artwork>
+                    </figure>
+                    <t>
+                        Servers MAY include the &lt;app:infData&gt; in response to a
+                        standard &lt;domain:info&gt; command on a domain object allocated
+                        from an application.
+                    </t>
+                </section>
+                <section title="EPP &lt;transfer&gt; Command">
+                    <t>
+                        This extension does not define any extension to the EPP
+                        &lt;transfer&gt; command or response described in the
+                        <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                    </t>
+                </section>
+            </section>
+            <section title="EPP Transform Commands">
+                <t>
+                    EPP provides five commands to transform objects: &lt;create&gt;
+                    to create an instance of an object, &lt;delete&gt; to delete an
+                    instance of an object, &lt;renew&gt; to extend the validity period
+                    of an object, &lt;transfer&gt; to manage object sponsorship
+                    changes, and &lt;update&gt; to change information associated with
+                    an object.
+                </t>
+                <section anchor="create_command" title="EPP &lt;create&gt; Command">
+                    <t>
+                        There are two forms of the extension to the EPP &lt;create&gt;
+                        command that are used to either create a domain application or
+                        allocate an application. Both forms are described below.
+                    </t>
+                    <section title="Domain Application Create">
+                        <t>
+                            The Domain Application Create is used to provision
+                            an application object within a repository. A domain
+                            name application may be provisioned by specifying
+                            the phase in which the application is to be processed.
+                        </t>
+                        <t>
+                            In addition to the elements expressed in the
+                            &lt;domain:create&gt;, the command is extended with an
+                            &lt;app:create&gt; element containing the following child
+                            elements:
+                            <list style="symbols">
+                                <t>
+                                    phase: the identifier of the phase to which the domain name
+                                    application is being submitted.
+                                </t>
+                            </list>
+                        </t>
+                        <figure align="left">
+                            <preamble>
+                                Example &lt;create&gt; command for an application for a
+                                domain name
+                            </preamble>
+                            <artwork><![CDATA[
 <?xml version="1.0" standalone="no"?>
 <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
   <command>
@@ -612,36 +564,31 @@
     <clTRID>ABC-12345</clTRID>
   </command>
 </epp>]]>
-							</artwork>
-						</figure>
-						<t>
-							When an application create command has been processed
-							successfully, the EPP &lt;resData&gt; element MUST NOT include the
-							&lt;domain:creData&gt; response described in the
-							<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
-							Instead the EPP &lt;resData&gt; element MUST contain an
-							&lt;app:creData&gt; element that contains the following child
-							elements:
-							<list style="symbols">
-								<t>
-									An &lt;id&gt; element that contains the server-assigned
-									identifier for this application.
-								</t>
-								<t>
-									A &lt;name&gt; element that contains the fully qualified name
-									of the application object.
-								</t>
-								<t>
-									A &lt;crDate&gt; element that contains the date and time of
-									application object creation.
-								</t>
-							</list>
-						</t>
-						<figure align="left">
-							<preamble>
-								Example &lt;create&gt; response
-							</preamble>
-							<artwork><![CDATA[
+                            </artwork>
+                        </figure>
+                        <t>
+                            When an application create command has been processed
+                            successfully, the response is extended with an
+                            &lt;app:creData&gt; element in addition to the
+                            &lt;domain:creData&gt; response described in
+                            the <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                            The &lt;app:creData&gt; element contains the following child elements:
+                            <list style="symbols">
+                                <t>
+                                    An &lt;id&gt; element that contains the server-assigned
+                                    identifier for this application.
+                                </t>
+                                <t>
+                                    A &lt;phase&gt; element that contains the phase in which
+                                    the application was submitted.
+                                </t>
+                            </list>
+                        </t>
+                        <figure align="left">
+                            <preamble>
+                                Example &lt;create&gt; response
+                            </preamble>
+                            <artwork><![CDATA[
 <?xml version="1.0" standalone="no"?>
 <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
   <response>
@@ -649,50 +596,49 @@
       <msg>Command completed successfully</msg>
     </result>
     <resData>
-      <creData xmlns="urn:ar:params:xml:ns:application-1.0">
-        <id>3F2504E0-4F89-11D3-9A0C-0305E82C3301</id>
+      <creData xmlns="urn:ietf:params:xml:ns:domain-1.0">
         <name>example.tld</name>
         <crDate>1999-04-03T22:00:00.0Z</crDate>
       </creData>
     </resData>
+    <extension>
+      <creData xmlns="urn:ar:params:xml:ns:application-1.0">
+        <id>3F2504E0-4F89-11D3-9A0C-0305E82C3301</id>
+        <phase>landrush</phase>
+      </creData>
+    </extension>
     <trID>
       <clTRID>ABC-12345</clTRID>
       <svTRID>54321-XYZ</svTRID>
     </trID>
   </response>
 </epp>]]>
-							</artwork>
-						</figure>
-					</section>
-					<section title="Domain Application Allocate">
-						<t>
-							This extension defines additional elements to extend the EPP
-							&lt;create&gt; command and response to be used in conjunction with
-							the
-							<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
-						</t>
-						<t>
-							The EPP &lt;create&gt; command is used to registered based on an 
-							existing domain name application by specifying the application identifier.
-						</t>
-						<t>
-							In addition to domain name and authInfo expressed in the
-							&lt;domain:create&gt;, the command is extended with an
-							&lt;app:create&gt; element containing the following child
-							element:
-							<list style="symbols">
-								<t>
-									id: the identifier of the domain name application which is 
-										being allocated.
-								</t>
-							</list>
-						</t>
-						<figure align="left">
-							<preamble>
-								Example &lt;create&gt; command for allocation of a domain name 
-								application
-							</preamble>
-							<artwork><![CDATA[
+                            </artwork>
+                        </figure>
+                    </section>
+                    <section title="Domain Application Allocate">
+                        <t>
+                            The Domain Application Allocate is used to register
+                            the domain object resulting from a successful domain application.
+                        </t>
+                        <t>
+                            In addition to domain name and authInfo expressed in the
+                            &lt;domain:create&gt;, the command is extended with an
+                            &lt;app:create&gt; element containing the following child
+                            element:
+                            <list style="symbols">
+                                <t>
+                                    An %lt;id&gt; element that contains the identifier
+                                    of the application to allocate.
+                                </t>
+                            </list>
+                        </t>
+                        <figure align="left">
+                            <preamble>
+                                Example &lt;create&gt; command for allocation of an
+                                application
+                            </preamble>
+                            <artwork><![CDATA[
 <?xml version="1.0" standalone="no"?>
 <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
   <command>
@@ -712,40 +658,40 @@
     <clTRID>ABC-12345</clTRID>
   </command>
 </epp>]]>
-							</artwork>
-						</figure>
-						<t>
-							When an application allocate command has been processed
-							successfully, a domain create response will be returned.
-						</t>
-					</section>
-				</section>
+                            </artwork>
+                        </figure>
+                        <t>
+                            When an application allocate command has been processed
+                            successfully, a domain create response will be returned.
+                        </t>
+                    </section>
+                </section>
 
-				<section anchor="delete_command" title="EPP &lt;delete&gt; Command">
-					<t>
-						This extension defines additional elements for the EPP
-						&lt;delete&gt; command described in the
-						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
-						No additional elements are defined for the EPP &lt;delete&gt;
-						response.
-					</t>
-					<t>
-						The delete command is extended to allow for the deletion of an
-						application. In addition to the elements expressed in the
-						&lt;domain:delete&gt;, the command is extended with a
-						&lt;app:delete&gt; element that contains the following child
-						elements:
-						<list style="symbols">
-							<t>
-								id: the identifier of application to be deleted.
-							</t>
-						</list>
-					</t>
-					<figure align="left">
-						<preamble>
-							Example &lt;delete&gt; Command to Delete an Application
-						</preamble>
-						<artwork><![CDATA[
+                <section anchor="delete_command" title="EPP &lt;delete&gt; Command">
+                    <t>
+                        This extension defines additional elements for the EPP
+                        &lt;delete&gt; command described in the
+                        <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                        No additional elements are defined for the EPP &lt;delete&gt;
+                        response.
+                    </t>
+                    <t>
+                        The delete command is extended to allow for the deletion of an
+                        application. In addition to the elements expressed in the
+                        &lt;domain:delete&gt;, the command is extended with a
+                        &lt;app:delete&gt; element that contains the following child
+                        elements:
+                        <list style="symbols">
+                            <t>
+                                id: the identifier of application to be deleted.
+                            </t>
+                        </list>
+                    </t>
+                    <figure align="left">
+                        <preamble>
+                            Example &lt;delete&gt; command to delete an application
+                        </preamble>
+                        <artwork><![CDATA[
 <?xml version="1.0" standalone="no"?>
 <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
   <command>
@@ -762,52 +708,52 @@
     <clTRID>ABC-12345</clTRID>
   </command>
 </epp>]]>
-						</artwork>
-					</figure>
-				</section>
+                        </artwork>
+                    </figure>
+                </section>
 
-				<section anchor="renew_command" title="EPP &lt;renew&gt; Command">
-					<t>
-						This extension does not define any extension to the EPP
-						&lt;renew&gt; command or response described in the
-						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
-					</t>
-				</section>
-				<section anchor="transfer_command" title="EPP &lt;transfer&gt; Command">
-					<t>
-						This extension does not define any extension to the EPP
-						&lt;transfer&gt; command or response described in the
-						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
-					</t>
-				</section>
+                <section anchor="renew_command" title="EPP &lt;renew&gt; Command">
+                    <t>
+                        This extension does not define any extension to the EPP
+                        &lt;renew&gt; command or response described in the
+                        <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                    </t>
+                </section>
+                <section anchor="transfer_command" title="EPP &lt;transfer&gt; Command">
+                    <t>
+                        This extension does not define any extension to the EPP
+                        &lt;transfer&gt; command or response described in the
+                        <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                    </t>
+                </section>
 
-				<section anchor="update_command" title="EPP &lt;update&gt; Command">
-					<t>
-						This extension defines additional elements for the EPP
-						&lt;update&gt; command described in the
-						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
-						No additional elements are defined for the EPP &lt;update&gt;
-						response.
-					</t>
-					<t>
-						The update command is extended to allow for the modification of
-						an
-						application. In addition to the elements expressed in the
-						&lt;domain:update&gt;, the command is extended with an
-						&lt;app:update&gt; element that contains the following child
-						elements:
-						<list style="symbols">
-							<t>
-								id: the identifier of application to be updated.
-							</t>
-						</list>
-					</t>
-					<figure align="left">
-						<preamble>
-							Example &lt;update&gt; command to change the registrant
-							of the applied for domain object
-						</preamble>
-						<artwork><![CDATA[
+                <section anchor="update_command" title="EPP &lt;update&gt; Command">
+                    <t>
+                        This extension defines additional elements for the EPP
+                        &lt;update&gt; command described in the
+                        <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                        No additional elements are defined for the EPP &lt;update&gt;
+                        response.
+                    </t>
+                    <t>
+                        The update command is extended to allow for the modification of
+                        an
+                        application. In addition to the elements expressed in the
+                        &lt;domain:update&gt;, the command is extended with an
+                        &lt;app:update&gt; element that contains the following child
+                        elements:
+                        <list style="symbols">
+                            <t>
+                                id: the identifier of application to be updated.
+                            </t>
+                        </list>
+                    </t>
+                    <figure align="left">
+                        <preamble>
+                            Example &lt;update&gt; command to change the registrant
+                            of the applied for domain object
+                        </preamble>
+                        <artwork><![CDATA[
 <?xml version="1.0" standalone="no"?>
 <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
   <command>
@@ -827,21 +773,21 @@
     <clTRID>ABC-12345</clTRID>
   </command>
 </epp>]]>
-						</artwork>
-					</figure>
-				</section>
-			</section>
-		</section>
+                        </artwork>
+                    </figure>
+                </section>
+            </section>
+        </section>
 
-		<section title="Formal Syntax">
-			<t>
-				An EPP object mapping is specified in XML Schema notation. The
-				formal syntax presented here is a complete schema representation of
-				the object mapping, suitable for automated validation of EPP XML
-				instances.
-			</t>
-			<figure align="left">
-				<artwork><![CDATA[
+        <section title="Formal Syntax">
+            <t>
+                An EPP object mapping is specified in XML Schema notation. The
+                formal syntax presented here is a complete schema representation of
+                the object mapping, suitable for automated validation of EPP XML
+                instances.
+            </t>
+            <figure align="left">
+                <artwork><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <schema targetNamespace="urn:ar:params:xml:ns:application-1.0"
   xmlns:app="urn:ar:params:xml:ns:application-1.0"
@@ -852,26 +798,19 @@
   <import namespace="urn:ietf:params:xml:ns:eppcom-1.0" />
 
   <!-- Child elements found in EPP commands. -->
-    <element name="check" type="app:phaseType" />
     <element name="create" type="app:phaseOrIdType" />
     <element name="delete" type="app:idType" />
     <element name="info" type="app:idType" />
     <element name="update" type="app:idType" />
 
-    <complexType name="phaseOrIdType">
-        <choice>
-            <element name="phase" type="app:phaseValueType" />
-            <element name="id" type="app:idValueType" />
-        </choice>
-    </complexType>
+  <complexType name="phaseOrIdType">
+    <choice>
+      <element name="phase" type="app:phaseValueType" />
+      <element name="id" type="app:idValueType" />
+    </choice>
+  </complexType>
 
-    <complexType name="phaseType">
-        <sequence>
-            <element name="phase" type="app:phaseValueType" />
-        </sequence>
-    </complexType>
-
-    <simpleType name="phaseValueType">
+  <simpleType name="phaseValueType">
     <restriction base="token">
       <minLength value="1" />
     </restriction>
@@ -918,133 +857,102 @@
   </complexType>
 
 </schema>]]>
-				</artwork>
-			</figure>
-		</section>
+                </artwork>
+            </figure>
+        </section>
 
-		<section title="IANA Considerations">
-			<t>This memo includes no request to IANA.</t>
-		</section>
+        <section title="Security Considerations">
+            <t>
+                The mapping extensions described in this document do not provide any
+                security services beyond those described by
+                <xref target="RFC5730">EPP</xref><![CDATA[,]]>
+                the
+                <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[,]]>
+                and protocol layers used by EPP. The security considerations
+                described in these other specifications also apply to this
+                specification.
+            </t>
+            <t>
+                Updates to and deletion of an application object, must be
+                restricted to clients authorized to perform the said operation on
+                the object.
+            </t>
+            <t>
+                Because information contained within an application, or even the
+                mere
+                fact that an application exists may be confidential; any attempt
+                to
+                operate on an application object by an unauthorized client MUST be
+                rejected with an EPP 2303 (object does not exist) or an appropriate
+                auhorization error. Server policy may allow &lt;info&gt; operation
+                with filtered output by clients other than the sponsoring client, in
+                which case the &lt;domain:infData&gt; and
+                &lt;application:infData&gt; response SHOULD be filtered to include
+                only fields that are publicly accessible.
+            </t>
+        </section>
+    </middle>
 
-		<section title="Security Considerations">
-			<t>
-				The mapping extensions described in this document do not provide any
-				security services beyond those described by
-				<xref target="RFC5730">EPP</xref><![CDATA[,]]>
-				the
-				<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[,]]>
-				and protocol layers used by EPP. The security considerations
-				described in these other specifications also apply to this
-				specification.
-			</t>
-			<t>
-				Updates to and deletion of an application object, must be
-				restricted to clients authorized to perform the said operation on
-				the object.
-			</t>
-			<t>
-				Because information contained within an application, or even the
-				mere
-				fact that an application exists may be confidential; any attempt
-				to
-				operate on an application object by an unauthorized client MUST be
-				rejected with an EPP 2303 (object does not exist) or an appropriate
-				auhorization error. Server policy may allow &lt;info&gt; operation
-				with filtered output by clients other than the sponsoring client, in
-				which case the &lt;domain:infData&gt; and
-				&lt;application:infData&gt; response SHOULD be filtered to include
-				only fields that are publicly accessible.
-			</t>
-		</section>
-		<section title="Change History">
-			<section title="Changes from -01 to -02">
-				<t>
-					<list style="numbers">
-						<t>
-							Clarified the use of domain attributes for applications.
-						</t>
-						<t>
-							Removed status values from the XML schema to facilitate
-							customization by servers as required.
-						</t>
-						<t>
-							Updated the list of status descriptors.
-						</t>
-						<t>
-							Added two example application lifecycles in an appendix.
-						</t>
-						<t>
-							Miscellaneous text and editorial changes.
-						</t>
-					</list>
-				</t>
-			</section>
-		</section>
-	</middle>
-
-	<back>
-		<references title="Normative References">
-			&RFC2119;
-			&RFC5730;
-			&RFC5731;
-		</references>
-		<section title="Example Application Lifecycle" anchor="lifecycle-examples">
-			<t>
-				Two example application lifecycles are illustrated below. Servers
-				are free to determine the lifecycle that best suits their
-				requirements, however may derive inspiration from the following
-				examples.
-			</t>
-			<section title="Simple Lifecycle">
-				<t>
-					The following diagram illustrates a simple application phase where
-					multiple applications are accepted and allocation is performed by
-					the server.
-					<figure align="left">
-						<artwork><![CDATA[
+    <back>
+        <references title="Normative References">
+            &RFC2119;
+            &RFC5730;
+            &RFC5731;
+        </references>
+        <section title="Example Application Lifecycle" anchor="lifecycle-examples">
+            <t>
+                Two example application lifecycles are illustrated below. Servers
+                are free to determine the lifecycle that best suits their
+                requirements, however may derive inspiration from the following
+                examples.
+            </t>
+            <section title="Simple Lifecycle">
+                <t>
+                    The following diagram illustrates a simple application phase where
+                    multiple applications are accepted and allocation is performed by
+                    the server.
+                    <figure align="left">
+                        <artwork><![CDATA[
                 +---------+
-                | pending |
+                | applied |
                 +---------+
                      |
       +--------------+---------------+
       |                              |
       |                              V
-      |                +-----------------------------+
-      +----------------| pendingContentionResolution |
-      |                +-----------------------------+
+      |                +----------------------------+
+      +----------------| contestedPendingResolution |
+      |                +----------------------------+
       |                              |
       V                              V
-+-----------+                   +----------+
-| allocated |                   | rejected |
-+-----------+                   +----------+			
++-----------+              +---------------------+
+| allocated |              | contestUnsuccessful |
++-----------+              +---------------------+
 ]]>
-						</artwork>
-					</figure>
-				</t>
-			</section>
-			<section title="Complex Lifecycle">
-				<t>
-					The following diagram illustrates all status elements defined in
-					this document. In this example, the server periodically validates
-					all applications during the application phase, allowing
-					modification of invalid applications to enable clients to correct
-					mistakes. At the end of the phase the server resolves contention
-					for domain names with more than one valid application. Applications
-					that are successful in contention resolution are ready for
-					allocation, as well as those applications for which there was only
-					one valid application. Applications pending allocation are released
-					for allocation either by the client or by the server, with
-					applications rejected if unallocated within a server-defined time
-					period.
-					<figure align="left">
-						<artwork><![CDATA[
+                        </artwork>
+                    </figure>
+                </t>
+            </section>
+            <section title="Complex Lifecycle">
+                <t>
+                    The following diagram illustrates most status elements defined in
+                    this document. In this example, the server periodically validates
+                    all applications during the application phase, allowing
+                    modification of invalid applications to enable clients to correct
+                    mistakes. At the end of the phase the server resolves contention
+                    for domain names with more than one valid application. Applications
+                    that are successful in contention resolution are ready for
+                    allocation, as well as those applications for which there was only
+                    one valid application.
+                    <figure align="left">
+                        <artwork><![CDATA[
                               +---------+
-                +------------>| pending |
+                +------------>| applied |
                 |             +---------+
                 |                  |
                 |                  V
                 |        +-------------------+
-                |        | pendingValidation |
+                |        |      pending      |
                 |        +-------------------+
                 |                  |
                 |        +---------+---------+
@@ -1057,23 +965,23 @@
            +-------------)-------------------+
            |             |                   |
            V             |                   V
-+-------------------+    |    +-----------------------------+
-| pendingAllocation |<---)----| pendingContentionResolution |---+
-+-------------------+    |    +-----------------------------+   |
-           |             |                                      |
-           +-------------)-------------------+                  |
-           |             |                   |                  |
-           V             |                   V                  |
-     +-----------+       |              +----------+            |
-     | allocated |       +------------->| rejected |<-----------+
-     +-----------+                      +----------+
++-------------------+    |    +----------------------------+
+| pendingAllocation |<---)----| contestedPendingResolution |---+
++-------------------+    |    +----------------------------+   |
+           |             |                                     |
+           |             |                                     |
+           |             |                                     |
+           V             |                                     |
+     +-----------+       |        +---------------------+      |
+     | allocated |       +------->| contestUnsuccessful |<-----+
+     +-----------+                +---------------------+
 ]]>
-						</artwork>
-					</figure>
-				</t>
-			</section>
-		</section>
-		<!-- <references title="Informative References"> -->
-		<!-- </references> -->
-	</back>
+                        </artwork>
+                    </figure>
+                </t>
+            </section>
+        </section>
+        <!-- <references title="Informative References"> -->
+        <!-- </references> -->
+    </back>
 </rfc>
