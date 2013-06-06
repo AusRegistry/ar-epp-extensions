@@ -6,7 +6,7 @@
 <!ENTITY RFC4648 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4648.xml">
 <!ENTITY RFC5730 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5730.xml">
 <!ENTITY RFC5731 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5731.xml">
-<!ENTITY RBP-APP-1.0 SYSTEM "../application-1.0/application-1.0-ref.xml">
+<!ENTITY AR-APP-1.0 SYSTEM "../application-1.0/application-1.0-ref.xml">
 ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <!-- used by XSLT processors -->
@@ -87,7 +87,7 @@
 			<t>
 				This document decouples the sunrise and trademark claims processes
 				from the domain name allocation processes used by the registry. The
-				<xref target="RBP-APP-1.0">EPP Domain Application Mapping</xref>
+				<xref target="AR-APP-1.0">EPP Domain Application Mapping</xref>
 				should be considered by registries that require
 				a process allowing
 				multiple applications for one domain name.
@@ -879,7 +879,7 @@ Z25hdHVyZT4KPC9zbWQ6c2lnbmVkTWFyaz4K
 			&RFC5731;
 		</references>
 		<references title="Informative References">
-			&RBP-APP-1.0;
+			&AR-APP-1.0;
 		</references>
 		<section title="TMCH Sunrise Domain Application Example"
 			anchor="appendixA">

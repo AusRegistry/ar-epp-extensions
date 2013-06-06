@@ -3,7 +3,7 @@
         <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
         <!ENTITY RFC5731 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5731.xml">
         <!ENTITY RFC5730 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5730.xml">
-        <!ENTITY RBP-APP-1.0 SYSTEM "../application-1.0/application-1.0-ref.xml">
+        <!ENTITY AR-APP-1.0 SYSTEM "../application-1.0/application-1.0-ref.xml">
         ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <!-- used by XSLT processors -->
@@ -209,7 +209,7 @@
                     The identifier of the phase in which an application
                     for the queried domain name can be submitted.
                     The phase identifier is as described in
-                    <xref target="RBP-APP-1.0">EPP Domain Application Mapping</xref>
+                    <xref target="AR-APP-1.0">EPP Domain Application Mapping</xref>
                 </t>
             </section>
             <section title="Reason">
@@ -599,7 +599,7 @@
             &RFC5730;
         </references>
         <references title="Informative References">
-            &RBP-APP-1.0;
+            &AR-APP-1.0;
         </references>
     </back>
 </rfc>
