@@ -628,7 +628,7 @@
                             element:
                             <list style="symbols">
                                 <t>
-                                    An %lt;id&gt; element that contains the identifier
+                                    An &lt;id&gt; element that contains the identifier
                                     of the application to allocate.
                                 </t>
                             </list>
@@ -791,11 +791,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema targetNamespace="urn:ar:params:xml:ns:application-1.0"
   xmlns:app="urn:ar:params:xml:ns:application-1.0"
-  xmlns:eppcom="urn:ietf:params:xml:ns:eppcom-1.0"
   xmlns="http://www.w3.org/2001/XMLSchema"
   elementFormDefault="qualified">
-
-  <import namespace="urn:ietf:params:xml:ns:eppcom-1.0" />
 
   <!-- Child elements found in EPP commands. -->
     <element name="create" type="app:phaseOrIdType" />
@@ -884,7 +881,7 @@
                 to
                 operate on an application object by an unauthorized client MUST be
                 rejected with an EPP 2303 (object does not exist) or an appropriate
-                auhorization error. Server policy may allow &lt;info&gt; operation
+                authorization error. Server policy may allow &lt;info&gt; operation
                 with filtered output by clients other than the sponsoring client, in
                 which case the &lt;domain:infData&gt; and
                 &lt;application:infData&gt; response SHOULD be filtered to include

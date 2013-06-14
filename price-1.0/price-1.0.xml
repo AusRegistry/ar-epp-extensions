@@ -67,9 +67,9 @@
 		<keyword>EPP</keyword>
 		<abstract>
 			<t>
-				This document describes an Extensible Provisioning Protocol (EPP)
-				extension mapping for the provisioning and management of premium
-				domain names.
+                This document describes an Extensible Provisioning Protocol (EPP)
+                extension mapping for the provisioning and management of premium
+                domain names.
 			</t>
 		</abstract>
 	</front>
@@ -84,10 +84,9 @@
 			</t>
 			<t>
 				This extension provides mechanism for clients to obtain the price
-                of a domain name, not limited to premium domain names.
-                This extension also provides a mechanism to
-				acknowledge the price charged for the registration and renewal of
-				domain names. Acknowledgement takes place at time of
+                of a domain name, not limited to premium domain names, and a mechanism
+                to acknowledge the price charged for the registration and renewal of
+                domain names.  Acknowledgement takes place at time of
                 registration, transfer and renewal.
 				Updates to pricing information that affects existing registrations
 				must be provided to clients using an out of band mechanism.
@@ -124,7 +123,7 @@
 					This extension defines price elements for the registration of and
 					renewal of domain names. Prices are expressed for the period requested
                     by the client, or the minimum registration period available for
-                    the premium domain name. The minimum available period is defined by
+                    the domain name. The minimum available period is defined by
                     the server and may change based on the specific registration phases
                     available.
 				</t>

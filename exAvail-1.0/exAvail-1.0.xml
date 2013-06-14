@@ -277,7 +277,7 @@
         <name>domain-inval!d.tld</name>
         <name>domain-variant.tld</name>
         <name>domain-VaRiAnT.tld</name>
-        <name>DOMAIN-variant</name>
+        <name>DOMAIN-variant.tld</name>
         <name>domain-pendingCreate.tld</name>
       </check>
     </check>
@@ -499,6 +499,7 @@
                     </t>
                 </section>
             </section>
+            </section>
             <section title="Formal Syntax">
                 <t>
                     An EPP object mapping is specified in XML Schema notation. The
@@ -575,9 +576,6 @@
                     </artwork>
                 </figure>
             </section>
-            <section title="IANA Considerations">
-                <t>This memo includes no request to IANA.</t>
-            </section>
             <section title="Security Considerations">
                 <t>
                     The mapping extensions described in this document do not provide any
@@ -590,7 +588,6 @@
                     specification.
                 </t>
             </section>
-        </section>
     </middle>
     <back>
         <references title="Normative References">

@@ -6,6 +6,9 @@
 <!ENTITY RFC4648 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4648.xml">
 <!ENTITY RFC5730 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5730.xml">
 <!ENTITY RFC5731 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5731.xml">
+<!ENTITY I-D.lozano-tmch-func-spec SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-lozano-tmch-func-spec-06.xml">
+<!ENTITY I-D.lozano-tmch-smd SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-lozano-tmch-smd-02.xml">
+<!ENTITY W3C.REC-xmlschema-2-20041028 SYSTEM "http://xml.resource.org/public/rfc/bibxml4/reference.W3C.REC-xmlschema-2-20041028.xml">
 <!ENTITY AR-APP-1.0 SYSTEM "../application-1.0/application-1.0-ref.xml">
 ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
@@ -97,9 +100,8 @@
 			<t>
 				Readers should be familiar with trademark clearinghouse processes
 				and their implications on registries and the registration process.
-				Access to detailed information on the trademark clearinghouse can be
-				found at
-				[http://newgtlds.icann.org/en/about/trademark-clearinghouse].
+				Refer to ICANN's page on <xref target="Trademark Clearinghouse" />
+                for detailed information
 			</t>
 			<section title="Conventions Used in This Document">
 				<t>
@@ -187,8 +189,10 @@
 					authenticity.
 				</t>
 				<t>
-                    The SMD is defined in [draft-lozano-smd], and is represented
-                    in a file as described in [draft-func-spec].
+                    The SMD is defined in
+                    <xref target="I-D.lozano-tmch-smd"> Mark and Signed Mark Objects Mapping</xref><![CDATA[,]]>
+                    and is represented in a file as described in
+                    <xref target="I-D.lozano-tmch-func-spec"> TMCH functional specifications</xref><![CDATA[.]]>
                     This extension requires the SMD be transmitted to
 					the server encoded using Base64 for two reasons:
 					<list style="symbols">
@@ -211,7 +215,8 @@
 					The claims lookup key is an identifier returned by the server in
 					response to a &lt;tmch:check&gt; command and used for the lookup of
 					claims notice information in the trademark clearinghouse.
-                    The lookup key is defined in [draft-func-spec].
+                    The lookup key is defined in
+                    <xref target="I-D.lozano-tmch-func-spec"> TMCH functional specifications</xref><![CDATA[.]]>
 				</t>
 			</section>
 			<section title="Notice Identifier">
@@ -220,7 +225,8 @@
 					claims notice from the trademark clearinghouse using the
 					aforementioned claims key. The notice identifier is a unique
 					identifier assigned by the TMCH to each trademark claims notice.
-                    The notice identifier is described in [draft-func-spec].
+                    The notice identifier is described in
+                    <xref target="I-D.lozano-tmch-func-spec"> TMCH functional specifications</xref><![CDATA[.]]>
 				</t>
 			</section>
 			<section title="Dates and Times">
@@ -228,7 +234,8 @@
 					Date and time attribute values MUST be represented in Universal
 					Coordinated Time (UTC) using the Gregorian calendar. The extended
 					date-time form using upper case "T" and "Z" characters defined in
-					[W3C.REC-xmlschema-2-20041028] MUST be used to represent date-time
+					<xref target="W3C.REC-xmlschema-2-20041028">XML Schema Part 2: Datatypes</xref>
+                    MUST be used to represent date-time
 					values, as XML Schema does not support truncated date-time forms or
 					lower case "T" and "Z" characters.
 				</t>
@@ -877,9 +884,18 @@ Z25hdHVyZT4KPC9zbWQ6c2lnbmVkTWFyaz4K
 			&RFC2119;
 			&RFC5730;
 			&RFC5731;
+            &I-D.lozano-tmch-smd;
+            &W3C.REC-xmlschema-2-20041028;
 		</references>
 		<references title="Informative References">
-			&AR-APP-1.0;
+            <reference anchor="Trademark Clearinghouse" target="http://newgtlds.icann.org/en/about/trademark-clearinghouse">
+                <front>
+                    <title abbrev='Trademark Clearinghouse'>Trademark Clearinghouse Information</title>
+                    <author />
+                </front>
+            </reference>
+            &AR-APP-1.0;
+            &I-D.lozano-tmch-func-spec;
 		</references>
 		<section title="TMCH Sunrise Domain Application Example"
 			anchor="appendixA">
