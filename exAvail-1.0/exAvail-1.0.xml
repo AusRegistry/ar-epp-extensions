@@ -360,14 +360,14 @@
                             details
                         </preamble>
                         <artwork><![CDATA[
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" standalone="no"?>
 <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
 <response>
  <result code="1000">
    <msg lang="en">Command completed successfully</msg>
  </result>
  <extension>
-  <chkData xmlns:exAvail="urn:ar:params:xml:ns:exAvail-1.0">
+  <chkData xmlns="urn:ar:params:xml:ns:exAvail-1.0">
   <cd>
    <name>domain-avail.tld</name>
    <state s="available">
@@ -377,7 +377,7 @@
   <cd>
    <name>domain-application.tld</name>
    <state s="application">
-    <phase>sunrise</exAvil:phase>
+    <phase>sunrise</phase>
     <date>2012-10-20T00:00:00Z</date>
    </state>
   </cd>
@@ -401,7 +401,7 @@
   </cd>
   <cd>
    <name>domain-inval!d.tld</name>
-   <state s="inValid">
+   <state s="invalid">
     <reason>Invalid domain name</reason>
    </state>
   </cd>
@@ -509,7 +509,7 @@
                 </t>
                 <figure align="left">
                 <artwork> <![CDATA[
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" standalone="no"?>
 <schema targetNamespace="urn:ar:params:xml:ns:exAvail-1.0"
         xmlns:exAvail="urn:ar:params:xml:ns:exAvail-1.0"
         xmlns:eppcom="urn:ietf:params:xml:ns:eppcom-1.0"

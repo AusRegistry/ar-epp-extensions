@@ -797,7 +797,7 @@ Z25hdHVyZT4KPC9zbWQ6c2lnbmVkTWFyaz4K
 		<section title="Formal Syntax">
 			<figure align="left">
 				<artwork><![CDATA[
-<?xml version="1.0"?>
+<?xml version="1.0" standalone="no"?>
 <schema targetNamespace="urn:ar:params:xml:ns:tmch-1.0"
   xmlns:tmch="urn:ar:params:xml:ns:tmch-1.0"
   xmlns:eppcom="urn:ietf:params:xml:ns:eppcom-1.0"
@@ -813,8 +813,7 @@ Z25hdHVyZT4KPC9zbWQ6c2lnbmVkTWFyaz4K
 
   <complexType name="createType">
     <choice>
-      <element name="smd" type="tmch:smdType">
-      </element>
+      <element name="smd" type="tmch:smdType" />
       <sequence>
         <element name="noticeID" type="token" />
         <element name="notAfter" type="dateTime" />
@@ -829,7 +828,9 @@ Z25hdHVyZT4KPC9zbWQ6c2lnbmVkTWFyaz4K
     </restriction>
   </simpleType>
 
-  <!-- Custom response extensions for checkbis extension -->
+  <!--
+     Custom response extensions
+  -->
   <element name="chkData" type="tmch:chkDataType" />
   <element name="infData" type="tmch:infDataType" />
 

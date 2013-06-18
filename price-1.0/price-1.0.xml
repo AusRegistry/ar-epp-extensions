@@ -196,7 +196,7 @@
     </check>
     <extension>
       <check xmlns="urn:ar:params:xml:ns:price-1.0">
-        <period>5</period>
+        <period unit="y">5</period>
       </check>
     </extension>
     <clTRID>ABC-12345</clTRID>
@@ -259,20 +259,20 @@
       <chkData xmlns="urn:ar:params:xml:ns:price-1.0">
         <cd>
           <name premium="1">premium.example</name>
-          <period>5</period>
+          <period unit="y">5</period>
           <price>100.00</price>
           <renewalPrice>100.00</renewalPrice>
         </cd>
         <cd>
           <name premium="0">non-premium.example</name>
-          <period>5</period>
+          <period unit="y">5</period>
           <price>10.00</price>
           <renewalPrice>10.00</renewalPrice>
         </cd>
         <cd>
           <name premium="0">invalid-price.example</name>
-          <period>5</period>
-          <reason>A valid price could not be determined<reason>
+          <period unit="y">5</period>
+          <reason>No price information available</reason>
         </cd>
       </chkData>
     </extension>
@@ -455,7 +455,7 @@
 <epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
   <command>
     <renew>
-        <renew xmlns:domain="urn:ietf:params:xml:ns:domain-1.0">
+        <renew xmlns="urn:ietf:params:xml:ns:domain-1.0">
             <name>domain-name.tld</name>
             <curExpDate>2010-09-01</curExpDate>
             <period unit="y">5</period>

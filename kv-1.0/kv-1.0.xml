@@ -399,7 +399,7 @@
 		<section title="Formal Syntax">
 			<figure>
 				<artwork><![CDATA[
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" standalone="no"?>
 <schema targetNamespace="urn:X-ar:params:xml:ns:kv-1.0"
    xmlns="http://www.w3.org/2001/XMLSchema"
    xmlns:kv="urn:X-ar:params:xml:ns:kv-1.0"

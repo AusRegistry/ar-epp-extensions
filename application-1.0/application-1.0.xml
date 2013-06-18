@@ -788,7 +788,7 @@
             </t>
             <figure align="left">
                 <artwork><![CDATA[
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" standalone="no"?>
 <schema targetNamespace="urn:ar:params:xml:ns:application-1.0"
   xmlns:app="urn:ar:params:xml:ns:application-1.0"
   xmlns="http://www.w3.org/2001/XMLSchema"

@@ -429,7 +429,7 @@
 			</t>
 			<figure align="left">
 				<artwork><![CDATA[
-<?xml version="1.0"?>
+<?xml version="1.0" standalone="no"?>
 <schema targetNamespace="urn:ar:params:xml:ns:variant-1.1"
   xmlns:variant="urn:ar:params:xml:ns:variant-1.1"
   xmlns:eppcom="urn:ietf:params:xml:ns:eppcom-1.0"
