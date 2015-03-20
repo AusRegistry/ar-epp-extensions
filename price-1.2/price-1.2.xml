@@ -1,0 +1,811 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY RFC2119 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC3915 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3915.xml">
+<!ENTITY RFC5730 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5730.xml">
+<!ENTITY RFC5731 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5731.xml">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space (using these PIs as follows is recommended 
+	by the RFC Editor) -->
+<?rfc compact="yes" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<rfc category="info" docName="draft-ar-price-domain-epp-mapping-03"
+	ipr="none">
+	<front>
+		<title abbrev="EPP Domain Name Price Information Mapping">
+			Domain Name Price Extension Mapping for the
+			Extensible Provisioning Protocol (EPP)
+		</title>
+		<author fullname="Chris Wright" initials="C." surname="Wright">
+			<organization>AusRegistry</organization>
+			<address>
+				<postal>
+					<street>8/10 Queens Road</street>
+					<city>Melbourne</city>
+					<region>Victoria</region>
+					<code>3004</code>
+					<country>AU</country>
+				</postal>
+				<email>chris@ausregistry.com</email>
+				<uri>www.ausregistry.com</uri>
+			</address>
+		</author>
+		<author fullname="Quoc Pham" initials="Q." surname="Pham">
+			<organization>AusRegistry</organization>
+			<address>
+				<postal>
+					<street>8/10 Queens Road</street>
+					<city>Melbourne</city>
+					<region>Victoria</region>
+					<code>3004</code>
+					<country>AU</country>
+				</postal>
+				<email>quoc.pham@ausregistry.com</email>
+				<uri>www.ausregistry.com</uri>
+			</address>
+		</author>		
+		<date month="March" year="2015" />
+		<area>General</area>
+		<workgroup>Internet Engineering Task Force</workgroup>
+		<keyword>EPP</keyword>
+		<abstract>
+			<t>
+                This document describes an Extensible Provisioning Protocol (EPP)
+                extension mapping for the provisioning and management of non-standard
+				priced domain names.
+			</t>
+		</abstract>
+	</front>
+	<middle>
+		<section title="Introduction">
+			<t>
+				Registry operators may consider several subsets of domain names to attract a 
+				non-standard price which MAY be either higher or lower than the standard price for 
+				registration, renewal, transfer and restoration. Lack of controls in the 
+				registration, renewal, transfer and restoration process introduces risk 
+				to clients of on-selling domain names to registrants at a price below their cost
+				or to high a price, impacting their competitiveness amongst other clients.
+			</t>
+			<t>
+				This extension provides a mechanism for clients to obtain the price
+                of a domain name and a mechanism to acknowledge the price charged for 
+				the registration, renewal, transfer or restoration of domain names.  
+				Acknowledgement takes place at time of registration, transfer, renewal and 
+				restoration. Updates to pricing information that affects existing registrations 
+				must be provided to clients using an out of band mechanism. It is RECOMMENDED 
+				that acknowledgement by clients is MANDATORY for non-standard priced domain 
+				names to ensure that clients are aware of a higher or lower cost. 
+			</t>
+			<t>
+				This specification does not preclude the publication of a price
+                list. Clients may prefer an externally accessible list
+				to performing a check before every registration.
+			</t>
+			<section title="Conventions Used in This Document">
+				<t>
+					The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+					"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in
+					this document are to be interpreted as described in
+					<xref target="RFC2119">RFC 2119</xref><![CDATA[.]]>
+				</t>
+				<t>
+					"price-1.2" is used as an abbreviation for
+					"urn:ar:params:xml:ns:price-1.2". The XML namespace prefix
+					"price" is used, but implementations MUST NOT depend on it and
+					instead employ a proper namespace-aware XML parser and serializer
+					to interpret and output the XML documents.
+				</t>
+			</section>
+		</section>
+		<section title="Object Attributes">
+			<t>
+				This extension adds additional elements to the
+				<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+				Only those new elements are described here.
+			</t>
+			<section title="Price">
+				<t>
+					This extension defines price elements for the registration, renewal, 
+					transfer and restoration domain names. Prices are expressed for the 
+					period requested by the client. In some cases the price MAY not 
+					reflect the period requested by the client depending on the server's
+					business rules where a period does apply to a specific operation such as
+					domain restoration.
+				</t>
+				<t>
+					The prices returned by the server are indicative only and MAY not
+					take into consideration discounts or other factors that would
+					otherwise adjust the price. Clients SHOULD confirm with server
+					operators any terms that may adjust the price before assuming the
+					actual price charged for the transaction.
+				</t>
+				<t>
+					Price elements SHOULD be expressed in the currency that the client 
+					normally transacts in, or otherwise negotiated, using an out of band
+					mechanism.
+				</t>
+			</section>
+		</section>
+
+		<section title="EPP Command Mapping">
+			<t>
+				A detailed description of the EPP syntax and semantics can be found
+				in the
+				<xref target="RFC5730">EPP core protocol specification</xref><![CDATA[.]]>
+				The command mappings described here are specifically for use in
+				provisioning non-standard priced domain names.
+			</t>
+			<section title="EPP Query Commands">
+				<t>
+					EPP provides three commands to retrieve object information:
+					&lt;check&gt; to determine if an object is known to the server,
+					&lt;info&gt; to retrieve detailed information associated with an
+					object, and &lt;transfer&gt; to retrieve object transfer status
+					information.
+				</t>
+				<section title="EPP &lt;check&gt; Command">
+					<t>
+						This extension defines additional elements to extend the EPP
+						&lt;check&gt; command and response to be used in conjunction with
+						the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+					<t>
+						To enable clients to identify the registration, renewal, transfer 
+						and restoration price, the &lt;domain:check&gt; command is extended 
+						with a &lt;price:check&gt; element, which signals a registrar’s intention
+                        to retrieve a domain name's price information. The &lt;price:check&gt; 
+						extension element MAY contain the following child element:
+                        <list style="symbols">
+                            <t>
+                                An OPTIONAL &lt;period&gt; element may be provided
+                                to obtain the price information of the domain names
+                                for the provided period. If a period is not provided
+								the server SHOULD determine the price based on a 
+								pre-determined business rule. For example, provide
+								the price information based on a 1 year period if no
+								period is provided.
+                            </t>
+                        </list>
+					</t>
+					<figure align="left">
+						<preamble>Example &lt;check&gt; command requesting domain name
+							price information</preamble>
+						<artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <check>
+      <check xmlns="urn:ietf:params:xml:ns:domain-1.0">
+        <name>standard.example</name>
+        <name>lower.example</name>
+        <name>higher.example</name>
+        <name>invalid</name>
+      </check>
+    </check>
+    <extension>
+      <check xmlns="urn:ar:params:xml:ns:price-1.2">
+        <period unit="y">5</period>
+      </check>
+    </extension>
+    <clTRID>ABC-12345</clTRID>
+  </command>
+</epp>]]>
+						</artwork>
+					</figure>
+					<t>
+						When a &lt;check&gt; command containing the &lt;price:check&gt;
+						element has been processed successfully, the server MUST NOT
+						respond with the &lt;domain:chkData&gt; element described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+						Instead, servers MUST respond with a &lt;price:chkData&gt;
+						element that contains one &lt;price:cd&gt; element for each
+						domain name present in the command. The &lt;price:cd&gt; element
+						contains the following child elements:
+						<list style="symbols">
+							<t>
+								A &lt;name&gt; element containing a domain name from
+								the corresponding command. The order and composition of names in
+								the response MUST be the same as the order and composition
+								provided in the command, with exception to transformations
+								required for validating XML parsers.
+							</t>
+							<t>
+                                A &lt;category&gt; element containing the category to which the price
+                                information corresponds to. This element MAY be omitted if it can not be determined. 
+                            </t>
+                            <t>
+                                A &lt;period&gt; element containing the period to which the price
+                                information corresponds to. This element MAY be omitted if it can not be determined. 
+                            </t>							
+							<t>
+								A &lt;creatPrice&gt; element containing the price
+								charged for the registration of the domain name based on the period 
+								returned. This element MAY be omitted if create price can not be 
+								determined.
+							</t>
+							<t>
+								A &lt;renewPrice&gt; element containing the price
+								charged for the renewal of the domain name based on the period returned.
+								This element MAY be omitted if the renewal price can not be determined.
+							</t>
+							<t>
+								A &lt;transferPrice&gt; element containing the price
+								charged for the transfer of the domain name based on the period returned.								
+								This element MAY be omitted if the transfer price can not be determined.
+							</t>
+							<t>
+								A &lt;restorePrice&gt; element containing the price
+								charged for the restoration of the domain name based on the period returned.
+								This element MAY be omitted if the restore price can not be determined.
+							</t>
+                            <t>
+                                A &lt;reason&gt; element containing the server-specific explanation
+                                for price information. The server SHOULD provide a reason if no price is
+								determined.	This element MAY be omitted if no reason exists.
+							</t>
+						</list>
+						The server SHOULD provide the &lt;createPrice&gt;, &lt;renewPrice&gt;, &lt;transferPrice&gt;
+						and &lt;restorePrice&gt; based on the &lt;period&gt; returned in the response, however there
+						MAY be situations where the period does not apply to specific transactions as pricing MAY not
+						be period based.
+					</t>
+					<figure align="left">
+						<preamble>Example &lt;check&gt; response providing domain name
+							price information</preamble>
+						<artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <response>
+    <result code="1000">
+      <msg>Command completed successfully</msg>
+    </result>
+    <extension>
+      <chkData xmlns="urn:ar:params:xml:ns:price-1.2">
+        <cd>
+          <name>standard.example</name>
+          <category>STANDARD</category>
+          <period unit="y">5</period>
+          <createPrice>50</createPrice>
+          <renewalPrice>50</renewalPrice>
+          <transferPrice>5</transferPrice>
+          <restorePrice>40</restorePrice>
+        </cd>
+        <cd>
+          <name>lower.example</name>
+          <category>DISCOUNT CAT 1</category>
+          <period unit="y">5</period>
+          <createPrice>5</createPrice>
+          <renewalPrice>5</renewalPrice>
+          <transferPrice>1</transferPrice>
+          <restorePrice>40</restorePrice>
+        </cd>
+        <cd>
+          <name>higher.example</name>
+          <category>PREMIUM CAT 2</category>
+          <period unit="y">5</period>
+          <createPrice>500</createPrice>
+          <renewalPrice>500</renewalPrice>
+          <transferPrice>50</transferPrice>
+          <restorePrice>40</restorePrice>
+        </cd>
+        <cd>
+          <name>invalid</name>
+          <reason>Invalid domain name</reason>
+        </cd>
+      </chkData>
+    </extension>
+    <trID>
+      <clTRID>ABC-12345</clTRID>
+      <svTRID>54321-XYZ</svTRID>
+    </trID>
+  </response>
+</epp>]]>
+						</artwork>
+					</figure>
+				</section>
+
+				<section title="EPP &lt;info&gt; Command">
+					<t>
+						This extension does not define any extension to the EPP
+						&lt;info&gt; command or response described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+				</section>
+
+				<section title="EPP &lt;transfer&gt; Command">
+					<t>
+						This extension does not define any extension to the EPP
+						&lt;transfer&gt; command or response described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+				</section>
+			</section>
+			<section title="EPP Transform Commands">
+				<t>
+					EPP provides five commands to transform objects: &lt;create&gt;
+					to create an instance of an object, &lt;delete&gt; to delete an
+					instance of an object, &lt;renew&gt; to extend the validity period
+					of an object, &lt;transfer&gt; to manage object sponsorship
+					changes, and &lt;update&gt; to change information associated with
+					an object.
+				</t>
+
+				<section title="EPP &lt;create&gt; Command">
+					<t>
+						This extension defines additional elements for the EPP
+						&lt;create&gt; command described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+						No additional elements are defined for the EPP &lt;create&gt;
+						response.
+					</t>
+					<t>
+						To facilitate the registration of domain names that attract a
+						non-standard registration price, the &lt;domain:create&gt; command is
+						extended with a &lt;price:create&gt; element, which signals a
+						registrar’s acknowledgement of the non-standard prices associated with the
+						transaction. The &lt;price:create&gt; element contains the following 
+						child elements:
+						<list style="symbols">
+							<t>
+								A &lt;ack&gt; element that signals the client is aware
+								of a non-standard price. Clients MAY include a child &lt;price&gt; element
+								that contains the current non-standard price for the period requested. 
+								If provided, servers SHOULD confirm the information matches the 
+								current pricing	information for the corresponding domain name.
+							</t>
+						</list>
+					</t>
+					<figure align="left">
+						<preamble>Example &lt;create&gt; command with simple
+							acknowledgement</preamble>
+						<artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <create>
+      <create xmlns="urn:ietf:params:xml:ns:domain-1.0">
+        <name>premium.example</name>
+        <ns>
+          <hostObj>ns1.example.net</hostObj>
+          <hostObj>ns2.example.net</hostObj>
+        </ns>
+        <registrant>jd1234</registrant>
+        <contact type="admin">sh8013</contact>
+        <contact type="tech">sh8013</contact>
+        <authInfo>
+          <pw>2fooBAR</pw>
+        </authInfo>
+      </create>
+    </create>
+    <extension>
+      <create xmlns="urn:ar:params:xml:ns:price-1.2">
+        <ack />
+      </create>
+    </extension>
+    <clTRID>ABC-12345</clTRID>
+  </command>
+</epp>]]>
+						</artwork>
+					</figure>
+					<figure align="left">
+						<preamble>Example &lt;create&gt; command including pricing
+							information in the acknowledgement</preamble>
+						<artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <create>
+      <create xmlns="urn:ietf:params:xml:ns:domain-1.0">
+        <name>premium.example</name>
+        <ns>
+          <hostObj>ns1.example.net</hostObj>
+          <hostObj>ns2.example.net</hostObj>
+        </ns>
+        <registrant>jd1234</registrant>
+        <contact type="admin">sh8013</contact>
+        <contact type="tech">sh8013</contact>
+        <authInfo>
+          <pw>2fooBAR</pw>
+        </authInfo>
+      </create>
+    </create>
+    <extension>
+      <create xmlns="urn:ar:params:xml:ns:price-1.2">
+        <ack>
+          <price>100</price>
+        </ack>
+      </create>
+    </extension>
+    <clTRID>ABC-12345</clTRID>
+  </command>
+</epp>]]>
+						</artwork>
+					</figure>
+					<t>
+						Servers that require the use of this extension for the
+						registration of non-standard names SHOULD return a 2003 "Required
+						parameter missing" error in response to requests for registration
+						of non-standard names that do not include this extension.
+					</t>
+				</section>
+
+				<section title="EPP &lt;delete&gt; Command">
+					<t>
+						This extension does not define any extension to the EPP
+						&lt;delete&gt; command or response described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+					</t>
+				</section>
+
+				<section title="EPP &lt;renew&gt; Command">
+                    <t>
+                        This extension defines additional elements for the EPP
+                        &lt;transfer&gt; command described in the
+                        <xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+                        No additional elements are defined for the EPP &lt;transfer&gt;
+                        response.
+                    </t>
+					<t>
+						To facilitate the renewal of domain names that attract a
+						non-standard renewal price, the &lt;domain:renew&gt; command is
+						extended with a &lt;price:renew&gt; element, which signals a
+						registrar’s acknowledgement of the non-standard prices associated with the
+						transaction. The &lt;price:renew&gt; element contains the following 
+						child elements:
+						<list style="symbols">
+							<t>
+								A &lt;ack&gt; element that signals the client is aware
+								of a non-standard price. Clients MAY include a child &lt;price&gt; element
+								that contains the current non-standard price for the period requested. 
+								If provided, servers SHOULD confirm the information matches the 
+								current pricing	information for the corresponding domain name.
+							</t>
+						</list>
+					</t>
+                    <figure align="left">
+                        <preamble>Example &lt;renew&gt; command with simple 
+                            acknowledgement</preamble>
+                        <artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <renew>
+        <renew xmlns="urn:ietf:params:xml:ns:domain-1.0">
+            <name>domain-name.tld</name>
+            <curExpDate>2010-09-01</curExpDate>
+            <period unit="y">5</period>
+        </renew>
+    </renew>
+    <extension>
+      <renew xmlns="urn:ar:params:xml:ns:price-1.2">
+        <ack />
+      </renew>
+    </extension>
+    <clTRID>ABC-12345</clTRID>
+  </command>
+</epp>]]>
+                        </artwork>
+                    </figure>					
+                    <figure align="left">
+                        <preamble>Example &lt;renew&gt; command including pricing
+						information in the acknowledgement </preamble>
+                        <artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <renew>
+        <renew xmlns="urn:ietf:params:xml:ns:domain-1.0">
+            <name>domain-name.tld</name>
+            <curExpDate>2010-09-01</curExpDate>
+            <period unit="y">5</period>
+        </renew>
+    </renew>
+    <extension>
+      <renew xmlns="urn:ar:params:xml:ns:price-1.2">
+        <ack>
+          <price>100</price>
+        </ack>
+      </renew>
+    </extension>
+    <clTRID>ABC-12345</clTRID>
+  </command>
+</epp>]]>
+                        </artwork>
+                    </figure>
+                    <t>
+                        Servers that require the use of this extension for the renewal
+                        of non-standard names SHOULD return a 2003 "Required parameter missing"
+                        error in response to requests for renewal of non-standard names that do
+                        not include this extension.
+                    </t>
+				</section>
+				<section title="EPP &lt;transfer&gt; Command">
+					<t>
+						This extension defines additional elements for the EPP
+						&lt;transfer&gt; command described in the
+						<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[.]]>
+						No additional elements are defined for the EPP &lt;transfer&gt;
+						response.
+					</t>
+					<t>
+						To enable clients to transfer domain names that attract a non-standard
+						price, the &lt;domain:transfer&gt; command is extended
+						with a &lt;price:transfer&gt; element, that signal a registrar’s
+						acknowledgement of the non-standard prices associated with the
+						transaction. The &lt;price:transfer&gt; element contains the
+						following child elements:
+						<list style="symbols">
+							<t>
+								A &lt;ack&gt; element that signals the client is aware
+								of a non-standard price. Clients MAY include a child &lt;price&gt; element 
+								that contains the current transfer non-standard price. If provided, 
+								servers SHOULD confirm the information matches the current 
+								pricing information for the	corresponding domain name.
+							</t>
+						</list>
+					</t>
+					<figure align="left">
+						<preamble>Example &lt;transfer&gt; command with
+							simple acknowledgement</preamble>
+						<artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <transfer op="request">
+      <transfer xmlns="urn:ietf:params:xml:ns:domain-1.0">
+        <name>premium.example</name>
+        <authInfo>
+          <pw>2fooBAR</pw>
+        </authInfo>
+      </transfer>
+    </transfer>
+    <extension>
+      <transfer xmlns="urn:ar:params:xml:ns:price-1.2">
+        <ack />
+      </transfer>
+    </extension>
+    <clTRID>ABC-12345</clTRID>
+  </command>
+</epp>]]>
+						</artwork>
+					</figure>			
+					<figure align="left">
+						<preamble>Example &lt;transfer&gt; command including pricing 
+							information in the acknowledgement</preamble>
+						<artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <transfer op="request">
+      <transfer xmlns="urn:ietf:params:xml:ns:domain-1.0">
+        <name>premium.example</name>
+        <authInfo>
+          <pw>2fooBAR</pw>
+        </authInfo>
+      </transfer>
+    </transfer>
+    <extension>
+      <transfer xmlns="urn:ar:params:xml:ns:price-1.2">
+        <ack>
+          <price>20</price>
+        </ack>
+      </transfer>
+    </extension>
+    <clTRID>ABC-12345</clTRID>
+  </command>
+</epp>]]>
+						</artwork>
+					</figure>
+                    <t>
+                        Servers that require the use of this extension for the transfer
+                        of non-standard names SHOULD return a 2003 "Required parameter missing"
+                        error in response to requests for transfer of non-standard names that do
+                        not include this extension.
+                    </t>
+				</section>
+
+				<section title="EPP &lt;update&gt; Command">
+					<t>
+						This extension defines additional elements for the EPP
+						&lt;update&gt; command described in the
+						<xref target="RFC3915">Domain Registry Grace Period Mapping for the
+						Extensible Provisioning Protocol (EPP)</xref><![CDATA[.]]> for the restore
+						request (op=request) for a domain name that in in redemption. No additional elements are 
+						defined for the EPP &lt;update&gt; response.
+					</t>
+					<t>
+						To enable clients to restore domain names that attract a non-standard
+						price, the &lt;domain:update&gt; command is extended
+						with a &lt;price:update&gt; element, that signal a registrar’s
+						acknowledgement of the non-standard prices associated with the
+						transaction. The &lt;price:update&gt; element contains the following child elements:
+						<list style="symbols">
+							<t>
+								A &lt;ack&gt; element that signals the client is aware
+								that a domain name is non-standard. Clients MAY include a 
+								child &lt;price&gt; element that contains the current restore price. 
+								If provided, servers SHOULD confirm the information matches the current 
+								pricing information for the	corresponding domain name.
+							</t>
+						</list>
+					</t>
+					<figure align="left">
+						<preamble>Example &lt;update&gt; command with
+							simple acknowledgement</preamble>
+						<artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <update op="request">
+      <update xmlns="urn:ietf:params:xml:ns:domain-1.0">
+        <name>premium.example</name>
+     </update>
+    </update>
+    <extension>
+      <update xmlns="urn:ar:params:xml:ns:rgp-1.0">
+        <restore op="request" />
+      </udpate>
+    </extension>
+    <extension>
+      <update xmlns="urn:ar:params:xml:ns:price-1.2">
+        <ack />
+      </udpate>
+    </extension>
+    <clTRID>ABC-12345</clTRID>
+  </command>
+</epp>]]>
+						</artwork>
+					</figure>			
+					<figure align="left">
+						<preamble>Example &lt;update&gt; command including pricing 
+							information in the acknowledgement</preamble>
+						<artwork><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0">
+  <command>
+    <update op="request">
+      <update xmlns="urn:ietf:params:xml:ns:domain-1.0">
+        <name>premium.example</name>
+     </update>
+    </update>
+    <extension>
+      <update xmlns="urn:ar:params:xml:ns:rgp-1.0">
+        <restore op="request" />
+      </udpate>
+    </extension>
+    <extension>
+      <update xmlns="urn:ar:params:xml:ns:price-1.2">
+        <ack>
+            <price>40</price>
+        </ack>
+      </udpate>
+    </extension>
+    <clTRID>ABC-12345</clTRID>
+  </command>
+</epp>]]>
+						</artwork>
+					</figure>
+                    <t>
+                        Servers that require the use of this extension for the restoration
+                        of non-standard names SHOULD return a 2003 "Required parameter missing"
+                        error in response to requests for restoration of non-standard names that do
+                        not include this extension.
+                    </t>
+				</section>
+			</section>
+		</section>
+
+		<section title="Formal Syntax">
+			<figure align="left">
+				<artwork><![CDATA[
+<?xml version="1.0" standalone="no" ?>
+<schema targetNamespace="urn:ar:params:xml:ns:price-1.2"
+  xmlns:price="urn:ar:params:xml:ns:price-1.2"
+  xmlns:eppcom="urn:ietf:params:xml:ns:eppcom-1.0"
+  xmlns:domain="urn:ietf:params:xml:ns:domain-1.0"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified">
+
+  <import namespace="urn:ietf:params:xml:ns:eppcom-1.0" />
+  <import namespace="urn:ietf:params:xml:ns:domain-1.0" />
+
+  <!-- command-response extension elements -->
+  <element name="check" type="price:chkType" />
+  <element name="create" type="price:ackType" />
+  <element name="renew" type="price:ackType" />
+  <element name="transfer" type="price:ackType" />
+
+  <complexType name="chkType">
+  <sequence>
+    <element name="period" type="domain:periodType" minOccurs="0" />
+  </sequence>
+  </complexType>
+
+  <complexType name="ackType">
+    <sequence>
+      <element name="ack" type="price:priceAckType" />
+    </sequence>
+  </complexType>
+
+  <complexType name="priceAckType">
+    <sequence>
+      <element name="price" type="decimal" minOccurs="0" />
+    </sequence>
+  </complexType>
+
+  <!-- response elements -->
+  <element name="chkData" type="price:chkDataType" />
+
+  <complexType name="chkDataType">
+    <sequence>
+      <element name="cd" type="price:checkType"
+               maxOccurs="unbounded" />
+    </sequence>
+  </complexType>
+
+  <complexType name="checkType">
+    <sequence>
+      <element name="name" type="price:checkNameType" />
+      <element name="category" type="token" minOccurs="0"/>
+      <element name="period" type="domain:periodType"
+               minOccurs="0" />
+      <element name="createPrice" type="decimal" minOccurs="0" />
+      <element name="renewPrice" type="decimal" minOccurs="0" />
+      <element name="transferPrice" type="decimal" minOccurs="0" />
+      <element name="restorePrice" type="decimal" minOccurs="0" />	  
+      <element name="reason" type="eppcom:reasonType"
+               minOccurs="0" />
+    </sequence>
+  </complexType>
+</schema>]]>
+				</artwork>
+			</figure>
+		</section>
+		<section title="acknowledgements">
+			<t>
+				This document was inspired by Verisign's Premium Domain extension
+				and draws many similarities to increase familiarity and reduce
+				development time.
+			</t>
+		</section>
+		<section title="Security Considerations">
+			<t>
+				The mapping extensions described in this document do not provide any
+				security services beyond those described by
+				<xref target="RFC5730">EPP</xref><![CDATA[,]]>
+				the
+				<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[,]]>
+				and protocol layers used by EPP. The security considerations
+				described in these other specifications apply to this specification
+				as well.
+			</t>
+		</section>
+	</middle>
+	<back>
+		<references title="Normative References">
+			&RFC2119;
+			&RFC3915;
+			&RFC5730;
+			&RFC5731;
+		</references>
+		<!-- <references title="Informative References"> -->
+		<!-- </references> -->
+	</back>
+</rfc>
