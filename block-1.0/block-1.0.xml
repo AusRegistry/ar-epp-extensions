@@ -285,8 +285,9 @@
     <create>
       <create xmlns="urn:ietf:params:xml:ns:domain-1.0">
         <name>block.tld</name>
+        <period unit="y">2</period>
         <registrant>jd1234</registrant>
-        <period unit="y">2<period>
+        <authInfo></authInfo>
       </create>
     </create>
     <extension>
