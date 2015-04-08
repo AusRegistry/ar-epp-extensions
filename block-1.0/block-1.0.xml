@@ -288,7 +288,7 @@
         <name>block.tld</name>
         <period unit="y">2</period>
         <registrant>jd1234</registrant>
-        <authInfo></authInfo>
+        <authInfo><pw></pw></authInfo>
       </create>
     </create>
     <extension>
