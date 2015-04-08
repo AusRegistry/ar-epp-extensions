@@ -178,6 +178,7 @@
     <info>
       <info xmlns="urn:ietf:params:xml:ns:domain-1.0">
         <name>block.tld</name>
+      </info>
     </info>
     <extension>
       <info xmlns="urn:ar:params:xml:ns:block-1.0">
@@ -372,7 +373,7 @@
   <command>
     <delete>
         <delete xmlns="urn:ietf:params:xml:ns:domain-1.0">
-            <delete>block.tld</name>
+            <name>block.tld</name>
         </delete>
     </delete>
     <extension>
