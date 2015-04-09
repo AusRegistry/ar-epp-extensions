@@ -283,7 +283,7 @@
           <category>STANDARD</category>
           <period unit="y">5</period>
           <createPrice>50</createPrice>
-          <renewalPrice>50</renewalPrice>
+          <renewPrice>50</renewPrice>
           <transferPrice>5</transferPrice>
           <restorePrice>40</restorePrice>
         </cd>
@@ -292,7 +292,7 @@
           <category>DISCOUNT CAT 1</category>
           <period unit="y">5</period>
           <createPrice>5</createPrice>
-          <renewalPrice>5</renewalPrice>
+          <renewPrice>5</renewPrice>
           <transferPrice>1</transferPrice>
           <restorePrice>40</restorePrice>
         </cd>
@@ -301,7 +301,7 @@
           <category>PREMIUM CAT 2</category>
           <period unit="y">5</period>
           <createPrice>500</createPrice>
-          <renewalPrice>500</renewalPrice>
+          <renewPrice>500</renewPrice>
           <transferPrice>50</transferPrice>
           <restorePrice>40</restorePrice>
         </cd>
