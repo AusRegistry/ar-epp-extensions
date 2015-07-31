@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="urn:ietf:params:xml:ns:epp-1.0 epp-1.0.xsd">
+  <command>
+    <login>
+      <clID>REGISTRAR</clID>
+      <pw>p4ssw0rd!</pw>
+      <options>
+        <version>1.0</version>
+        <lang>en</lang>
+      </options>
+      <svcs>
+        <objURI>urn:ietf:params:xml:ns:contact-1.0</objURI>
+        <objURI>urn:ietf:params:xml:ns:domain-1.0</objURI>
+        <objURI>urn:ietf:params:xml:ns:host-1.0</objURI>
+        <svcExtension>
+          <extURI>urn:X-au:params:xml:ns:auext-1.2</extURI>
+          <extURI>urn:X-au:params:xml:ns:audomain-1.1</extURI>
+        </svcExtension>
+      </svcs>
+    </login>
+  </command>
+</epp>

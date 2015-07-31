@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone='no'?>
+<epp xmlns="urn:ietf:paramxml:nepp-1.0"
+ xmlnxsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="urn:ietf:paramxml:nepp-1.0 epp-1.0.xsd">
+ <response>
+   <result code="1000">
+     <msg>Command completed successfully</msg>
+   </result>
+   <resData>
+     <domain:infData
+       xmlndomain="urn:ietf:paramxml:ndomain-1.0"
+       xsi:schemaLocation="urn:ietf:paramxml:ndomain-1.0
+       domain-1.0.xsd">
+       <domain:name>example.com.au</domain:name>
+       <domain:roid>D0000003-AR</domain:roid>
+       <domain:clID>Registrar</domain:clID>
+     </domain:infData>
+   </resData>
+   <trID>
+     <clTRID>ABC-12345</clTRID>
+     <svTRID>805</svTRID>
+   </trID>
+ </response>
+</epp>

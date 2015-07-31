@@ -1,0 +1,605 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY RFC5730 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5730.xml">
+<!ENTITY RFC5731 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5731.xml">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space (using these PIs as follows is recommended
+	by the RFC Editor) -->
+<?rfc compact="yes" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<rfc category="info" docName="au-extensions-1.2" ipr="none">
+	<front>
+		<title abbrev=".au Extensions to EPP">
+			.au Extensions to the Extensible Provisioning Protocol
+		</title>
+
+		<author fullname="Quoc Pham" initials="Q." surname="Pham">
+			<organization>AusRegistry</organization>
+			<address>
+				<postal>
+					<street>8/10 Queens Road</street>
+					<city>Melbourne</city>
+					<region>Victoria</region>
+					<code>3004</code>
+					<country>AU</country>
+				</postal>
+				<email>quoc.pham@ausregistry.com.au</email>
+				<uri>www.ausregistry.com</uri>
+			</address>
+		</author>
+		<author fullname="Chris Wright" initials="C." surname="Wright">
+			<organization>AusRegistry</organization>
+			<address>
+				<postal>
+					<street>8/10 Queens Road</street>
+					<city>Melbourne</city>
+					<region>Victoria</region>
+					<code>3004</code>
+					<country>AU</country>
+				</postal>
+				<email>chris@ausregistry.com</email>
+				<uri>www.ausregistry.com</uri>
+			</address>
+		</author>
+		<date month="July" year="2015" />
+		<area>General</area>
+		<workgroup>.au Registry</workgroup>
+		<keyword>EPP</keyword>
+		<abstract>
+			<t>
+				This document describes application layer client-server protocol
+				extensions for the Extensible Provisioning Protocol as needed for the
+				management of domain objects stored in the .au  Registry. Specified
+				in XML, the protocol defines specific object management operations
+				and an extensible framework that maps the protocol extensions to the
+				relevant objects. This document includes a protocol specification,
+				an object mapping template, and an XML media type registration. This
+				document obsoletes the .au Extensions version 1.1.
+			</t>
+		</abstract>
+	</front>
+	<middle>
+		<section title="Introduction">
+			<t>
+				This document contains explanations of the relevant commands from the
+				EPP RFCs that are affected by the inclusion of the au extensions.
+			</t>
+			<t>
+				The use of these extensions by the client/server will be identified
+				in the following commands as explained in the relevant sections
+				below:
+				<list style="symbols">
+					<t>&lt;login&gt;</t>
+					<t>&lt;greeting&gt;</t>
+				</list>
+			</t>
+			<t>
+				EPP's command response extension framework [EPP RFC4930 2.7.3] is
+				used to extend the following commands:
+				<list style="symbols">
+					<t>&lt;domain:create&gt;</t>
+					<t>&lt;domain:update&gt;</t>
+				</list>
+			</t>
+			<t>
+				And the following responses:
+				<list style="symbols">
+					<t>&lt;domain:info&gt;</t>
+				</list>
+			</t>
+			<t>
+				The following additional Protocol Extensions (object/operation
+				extension) [EPP RFC4930 2.7.1] are defined:
+				<list style="symbols">
+					<t>&lt;auext:registrantTransfer&gt;</t>
+				</list>
+			</t>
+		</section>
+		<section title="EPP &lt;greeting&gt;">
+			<t>All standard EPP elements apply plus:
+				<list style="symbols">
+					<t> A &lt;svcExtension&gt; element that contains a &lt;extURI&gt; element that
+						includes the namespace URI representing the .au EPP extensions.</t>
+				</list>
+			</t>
+			<figure align="left">
+				<preamble>Example &lt;greeting&gt; with .au extensions specified:</preamble>
+				<artwork><![CDATA[
+ari:includeFile=greeting.xml
+]]>
+				</artwork>
+			</figure>
+		</section>
+		<section title="EPP &lt;login&gt;">
+			<t>
+				The login command is not "extended" however the au extensions uri
+				must be specified at time of login.
+			</t>
+			<section title="EPP &lt;login&gt; Command">
+				<t>
+					In addition to the standard EPP elements, an EPP &lt;login&gt; command must
+					also include:
+					<list style="symbols">
+						<t>
+							A &lt;svcExtension&gt; element that contains a &lt;extURI&gt; element that
+							includes the namespace URI representing the .au EPP extensions
+						</t>
+					</list>
+				</t>
+				<figure align="left">
+					<preamble>Example EPP Login command with .au extensions specified:</preamble>
+					<artwork><![CDATA[
+ari:includeFile=login.xml
+]]>
+					</artwork>
+				</figure>
+			</section>
+			<section title="EPP &lt;login&gt; Response">
+				<t>No modifications are required.</t>
+			</section>
+		</section>
+		<section title="EPP &lt;domain:info&gt;">
+			<t>
+				Extensions are provided to support the ability to view the current
+				.au information associated with a particular domain stored within
+				the registry system.
+			</t>
+			<section title="EPP &lt;domain:info&gt; Command">
+				<t>
+					No modifications required.
+				</t>
+			</section>
+			<section title="EPP &lt;domain:info&gt; Response">
+				<t>
+					In addition to the standard EPP elements found in a &lt;domain:info&gt;
+					response a &lt;domain:info&gt;response should also conform to the
+					following using an &lt;extension&gt; element that contains the extensions
+					information specific to the domain.
+				</t>
+				<t>
+					<list style="symbols">
+						<t>
+							An &lt;auext:infData&gt; element which contains the .au extension
+							information.
+						</t>
+						<t>
+							An &lt;auext:auProperties&gt; element which contains the following
+							elements:
+							<list style="symbols">
+								<t>
+									An &lt;auext:registrantName&gt; element that contains the name of the
+									Registrant of the registered domain object.
+								</t>
+								<t>
+									An OPTIONAL &lt;auext:registrantID&gt; element that contains the
+									identifier for the Registrant's eligibility type.
+									<list>
+										<t>
+											Every &lt;auext:registrantID&gt; element contains a "type" which
+											identifies the type of the Registrant ID specified for the
+											&lt;registrantID&gt; element.
+										</t>
+									</list>
+								</t>
+								<t>
+									An &lt;auext:eligibilityType&gt; element that contains the
+									Registrant's eligibility type.
+								</t>
+								<t>
+									An OPTIONAL &lt;auext:eligibilityName&gt; element that contains
+									the name of the individual or organisation that represents
+									the Registrant which the eligibility is based on.
+								</t>
+								<t>
+									An OPTIONAL &lt;auext:eligibilityID&gt; element that contains the
+									identifier for the eligibility name.
+									<list>
+										<t>
+											Every &lt;auext:eligibilityID&gt; element that contains a "type"
+											which identifies the type of the eligibility ID specified for
+											the &lt;eligibilityName&gt; element.
+										</t>
+									</list>
+								</t>
+								<t>
+									A &lt;auext:policyReason&gt; element that contains the policy reason
+									for which the domain object is registered under.
+								</t>
+							</list>
+						</t>
+					</list>
+				</t>
+				<figure align="left">
+					<preamble>Example &lt;domain:info&gt; response for an authorized client:</preamble>
+					<artwork><![CDATA[
+ari:includeFile=info-response-auth.xml
+]]>
+					</artwork>
+				</figure>
+				<t>
+					This .au Extension information is only returned to the sponsoring
+					Registrar, all others will receive the response as below:
+				</t>
+				<figure align="left">
+					<preamble>Example &lt;info&gt; response for an unauthorized client:</preamble>
+					<artwork><![CDATA[
+ari:includeFile=info-response-non-auth.xml
+]]>
+					</artwork>
+				</figure>
+			</section>
+		</section>
+		<section title="EPP &lt;domain:create&gt;">
+			<t>
+				The EPP domain create command is extended to enable the client to
+				supply the required .au information at time of registration.
+			</t>
+			<section title="EPP &lt;domain:create&gt; Command">
+				<t>
+					In addition to the standard EPP elements found in a &lt;domain:create&gt;
+					command a &lt;domain:create&gt; command should also conform to the
+					following using the &lt;extension&gt; element that contains the extension
+					information specific to the domain being created.
+				</t>
+				<t>
+					<list style="symbols">
+						<t>
+							A &lt;auext:create&gt; element which contains a number of elements that
+							hold the information which is specific to the .au name space.
+						</t>
+						<t>
+							A &lt;auext:auProperties&gt; element which contains the following child
+							elements:
+							<list style="symbols">
+								<t>
+									A &lt;auext:registrantName&gt; element that contains the name of the
+									Registrant of the requested domain object.
+								</t>
+								<t>
+									An OPTIONAL &lt;auext:registrantID&gt; element that contains the
+									identifier for the Registrant.
+									<list>
+										<t>
+											Every &lt;auext:registrantID&gt; element MUST contain a "type"
+											attribute that identifies the type of the Registrant ID
+											specified by the &lt;registrantID&gt; element.
+										</t>
+									</list>
+								</t>
+								<t>
+									An &lt;auext:eligibilityType&gt; element that contains the
+									Registrant's eligibility type.
+								</t>
+								<t>
+									An OPTIONAL &lt;auext:eligibilityName&gt; element that contains
+									the name of the individual or organisation that represents
+									the Registrant which the eligibility is based on.
+								</t>
+								<t>
+									An OPTIONAL &lt;auext:eligibilityID&gt; element that that contains
+									the identifier for the eligibility name.
+									<list>
+										<t>
+											Every &lt;auext:eligibilityID&gt; element MUST have a "type"
+											attribute that identifies the type of the eligibility ID
+											specified for the &lt;eligibilityName&gt; element.
+										</t>
+									</list>
+								</t>
+								<t>
+									A &lt;auext:policyReason&gt; element that contains the policy
+									reason for which the domain object registered under.
+								</t>
+							</list>
+						</t>
+					</list>
+				</t>
+				<figure align="left">
+					<preamble>Example &lt;domain:create&gt; command:</preamble>
+					<artwork><![CDATA[
+ari:includeFile=domain-create-command.xml
+]]>
+					</artwork>
+				</figure>
+			</section>
+			<section title="EPP &lt;domain:create&gt; Response">
+				<t>
+					No modifications neccessary
+				</t>
+			</section>
+		</section>
+		<section title="EPP &lt;domain:update&gt;">
+			<t>
+				Extensions are provided to enable a client to make "corrections" to
+				domain name .au information as required.
+			</t>
+			<section title="EPP &lt;domain:update&gt; Command">
+				<t>
+					In addition to the standard EPP elements found in a &lt;domain:update&gt;
+					command a &lt;domain:update&gt; command can also conform to the following
+					using the &lt;extension&gt; element that contains the extension information
+					to be updated specific to the domain being updated.
+				</t>
+				<t>
+					Note: these elements are equivilent to an EPP "chg" element, meaning
+					that all information will be replaced with the new .au extension
+					information supplied I.E. the entire .au extension unit is one
+					atomic unit.
+				</t>
+				<t>
+					<list style="symbols">
+						<t>
+							A &lt;auext:update&gt; element which contains a number of elements that
+							hold the information which is specific to the .au name space:
+							<list style="symbols">
+								<t>
+									A &lt;auext:auProperties&gt; element which contains the following
+									child elements:
+									<list style="symbols">
+										<t>
+											A &lt;auext:registrantName&gt; element that contains the name of the
+											Registrant of the requested domain object.
+										</t>
+										<t>
+											An OPTIONAL &lt;auext:registrantID&gt; element that contains the
+											identifier for the Registrant.
+											<list style="symbols">
+												<t>
+													Every &lt;auext:registrantID&gt; element MUST contain a "type"
+													attribute that identifies the type of the Registrant ID
+													specified by the &lt;registrantID&gt; element.
+												</t>
+											</list>
+										</t>
+										<t>
+											An &lt;auext:eligibilityType&gt; element that contains the
+											Registrant's eligibility type.
+										</t>
+										<t>
+											An OPTIONAL &lt;auext:eligibilityName&gt; element that contains
+											the name of the individual or organisation that represents
+											the Registrant which the eligibility is based on.
+										</t>
+										<t>
+											An OPTIONAL &lt;auext:eligibilityID&gt; element that that contains
+											the identifier for the eligibility name.
+											<list style="symbols">
+												<t>
+													Every &lt;auext:eligibilityID&gt; element MUST have a "type"
+													attribute that identifies the type of the eligibility ID
+													specified for the &lt;eligibilityName&gt; element.
+												</t>
+											</list>
+										</t>
+										<t>
+											A &lt;auext:policyReason&gt; element that contains the policy
+											reason for which the domain object registered under.
+										</t>
+									</list>
+								</t>
+								<t>
+									A &lt;auext:explanation&gt; element MUST be provided.  This
+									element must contain an explanation as to the purpose of the
+									update.  For example a correction of a spelling mistake.  It
+									should be noted that these explanations are reviewed by the
+									regulator and this update mechanism is NOT provided to
+									facilitate transfer of Registrant.
+								</t>
+							</list>
+						</t>
+					</list>
+				</t>
+				<figure align="left">
+					<preamble>Example &lt;domain:update&gt; command:</preamble>
+					<artwork><![CDATA[
+ari:includeFile=domain-update-command.xml
+]]>
+					</artwork>
+				</figure>
+			</section>
+			<section title="EPP &lt;domain:update&gt; Response">
+				<t>
+					No modifications necessary
+				</t>
+			</section>
+		</section>
+		<section title="au Extensions &lt;auext:registrantTransfer&gt;">
+			<t>
+				With this version of the .au extensions an additional command  is
+				added to allow a client to request a "transfer of domain registrant".
+			</t>
+			<section title="au Extensions &lt;auext:registrantTransfer&gt; Command">
+				<t>
+					This command is used to initiate a transfer of registrant of a domain
+					name.  A transfer of domain name from one registrant to another also
+					results in a new license period for the domain name.  An
+					&lt;auext:registrantTransfer&gt; command is defined as follows:
+					<list style="symbols">
+						<t>
+							An &lt;auext:command&gt; element which contains the following child
+							elements:
+							<list style="symbols">
+								<t>
+									An &lt;auext:registrantTransfer&gt; element which contains the
+									following child elements:
+									<list style="symbols">
+										<t>
+											An &lt;auDomain:name&gt; element MUST be provided which
+											specifies the fully qualifed name of the domain of which
+											the registrant should be transfered.
+										</t>
+										<t>
+											An &lt;auDomain:curExpDate&gt; element MUST be provided which
+											specifies the current expiry date of the domain.
+										</t>
+										<t>
+											An &lt;auDomain:period&gt; element that specifies the period for
+											which the new registrant wants the name to be registered
+										</t>
+										<t>
+											A &lt;auDomain:auProperties&gt; element that contains the
+											following child elements:
+											<list style="symbols">
+												<t>
+													A &lt;auDomain:registrantName&gt; element MUST be provided.
+													This element MUST contain an english readable string
+													for the Registrant's name.
+												</t>
+												<t>
+													An OPTIONAL &lt;auDomain:registrantID&gt; element that
+													represents the identifier for the Registrant.
+													<list>
+														<t>
+															Every &lt;auext:registrantID&gt; element MUST contain a "type"
+															attribute that identifies the type of the Registrant ID
+															specified by the &lt;registrantID&gt; element.
+														</t>
+													</list>
+												</t>
+												<t>
+													An &lt;auext:eligibilityType&gt; element that contains the
+													Registrant's eligibility type.
+												</t>
+												<t>
+													An OPTIONAL &lt;auext:eligibilityName&gt; element that contains
+													the name of the individual or organisation that represents
+													the Registrant which the eligibility is based on.
+												</t>
+												<t>
+													An OPTIONAL &lt;auext:eligibilityID&gt; element that that contains
+													the identifier for the eligibility name.
+													<list>
+														<t>
+															Every &lt;auext:eligibilityID&gt; element MUST have a "type"
+															attribute that identifies the type of the eligibility ID
+															specified for the &lt;eligibilityName&gt; element.
+														</t>
+													</list>
+												</t>
+												<t>
+													A &lt;auext:policyReason&gt; element that contains the policy
+													reason for which the domain object registered under.
+												</t>
+											</list>
+										</t>
+										<t>
+											A &lt;auDomain:explanation&gt; element MUST be provided.
+											This element must contain an explanation as to the
+											purpose of the update For example a correction of a
+											spelling mistake.  It should be noted that these
+											explanations are reviewed by the regulator and this
+											update mechanism is NOT provided to facilitate transfer
+											of registrant.
+										</t>
+										<t>
+											An OPTIONAL &lt;auext:clTRID&gt; element which contains the
+											client supplied identifier for the transaction.
+										</t>
+									</list>
+								</t>
+							</list>
+						</t>
+					</list>
+				</t>
+				<figure align="left">
+					<preamble>Example &lt;auext:registrantTransfer&gt; command:</preamble>
+					<artwork><![CDATA[
+ari:includeFile=registrant-transfer-command.xml
+]]>
+					</artwork>
+				</figure>
+			</section>
+			<section title="au Extensions &lt;auext:registrantTransfer&gt; Response">
+				<t>
+					The following response will be returned from the au extensions
+					&lt;registrantTransfer&gt; command:
+					<list style="symbols">
+						<t>
+							An &lt;auext:response&gt; element that contains the same child elements
+							as the epp:response type does (see EPP RFC).
+						</t>
+					</list>
+				</t>
+				<t>
+					The resData section of this response contains the following:
+					<list style="symbols">
+						<t>
+							An &lt;auDomain:rtrnData&gt; element that contains the following child
+							elements:
+							<list style="symbols">
+								<t>
+									A &lt;auDomain:name&gt; element that contains the fully qualified
+									name of the domain which the registrant transfer was applied.
+								</t>
+								<t>
+
+									A &lt;auDomain:exDate&gt; element that contains the new expiry date
+									of the domain after the registrant transfer.
+								</t>
+							</list>
+						</t>
+					</list>
+				</t>
+				<figure align="left">
+					<preamble>Example &lt;auext:registrantTransfer&gt; response:</preamble>
+					<artwork><![CDATA[
+ari:includeFile=registrant-transfer-response.xml
+]]>
+					</artwork>
+				</figure>
+			</section>
+		</section>
+		<section title="Formal Syntax">
+			<section title="XML Schema [urn:X-au:params:xml:ns:auext-1.2]">
+				<figure align="left">
+					<artwork><![CDATA[
+ari:includeFile=auext-1.2.xsd
+]]>
+					</artwork>
+				</figure>
+			</section>
+			<section title="XML Schema [urn:X-au:params:xml:ns:audomain-1.1]">
+				<figure align="left">
+					<artwork><![CDATA[
+ari:includeFile=audomain-1.1.xsd
+]]>
+					</artwork>
+				</figure>
+			</section>
+		</section>
+		<section title="Security Considerations">
+			<t>
+				The mapping extensions described in this document do not provide any
+				security services beyond those described by
+				<xref target="RFC5730">EPP</xref><![CDATA[,]]>
+				the
+				<xref target="RFC5731">EPP Domain Name Mapping</xref><![CDATA[,]]>
+				and protocol layers used by EPP. The security considerations
+				described in these other specifications apply to this specification
+				as well.
+			</t>
+		</section>
+	</middle>
+	<back>
+		<references title="Normative References">
+			&RFC5730;
+			&RFC5731;
+		</references>
+	</back>
+</rfc>

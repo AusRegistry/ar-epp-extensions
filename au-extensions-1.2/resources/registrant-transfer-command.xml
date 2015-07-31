@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="urn:ietf:params:xml:ns:epp-1.0 epp-1.0.xsd">
+  <extension>
+    <auext:command
+      xmlns:auext="urn:X-au:params:xml:ns:auext-1.2"
+      xsi:schemaLocation="urn:X-au:params:xml:ns:auext-1.2
+      auext-1.2.xsd">
+      <auext:registrantTransfer>
+        <auDomain:registrantTransfer
+          xmlns:auDomain="urn:X-au:params:xml:ns:audomain-1.1"
+          xsi:schemaLocation="urn:X-au:params:xml:ns:audomain-1.1
+          audomain-1.1.xsd">
+          <auDomain:name>domain.com.au</auDomain:name>
+          <auDomain:curExpDate>2000-04-03</auDomain:curExpDate>
+          <auDomain:period unit="y">2</auDomain:period>
+          <auDomain:auProperties>
+            <auDomain:registrantName>
+              New Name
+            </auDomain:registrantName>
+            <auDomain:registrantID type="ACN">
+              123456789
+            </auDomain:registrantID>
+            <auDomain:eligibilityType>
+              Other
+            </auDomain:eligibilityType>
+            <auDomain:eligibilityName>
+              Registrant Eligibility
+            </auDomain:eligibilityName>
+            <auDomain:eligibilityID type="ABN">
+              987654321
+            </auDomain:eligibilityID>
+            <auDomain:policyReason>2</auDomain:policyReason>
+          </auDomain:auProperties>
+          <auDomain:explanation>
+            Previous registrant has sold the business
+          </auDomain:explanation>
+        </auDomain:registrantTransfer>
+      </auext:registrantTransfer>
+      <auext:clTRID>ABC-12345</auext:clTRID>
+    </auext:command>
+  </extension>
+</epp>

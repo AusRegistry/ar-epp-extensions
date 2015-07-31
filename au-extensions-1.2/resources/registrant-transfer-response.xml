@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="urn:ietf:params:xml:ns:epp-1.0 epp-1.0.xsd">
+ <extension>
+  <auext:response
+    xmlns:auext="urn:X-au:params:xml:ns:auext-1.2"
+    xsi:schemaLocation="urn:X-au:params:xml:ns:auext-1.2
+   auext-1.2.xsd">
+   <auext:result code="1000">
+    <auext:msg>Command completed successfully</auext:msg>
+   </auext:result>
+   <auext:resData>
+    <auDomain:rtrnData
+          xmlns:auDomain="urn:X-au:params:xml:ns:audomain-1.1"
+          xsi:schemaLocation="urn:X-au:params:xml:ns:audomain-1.1
+                            audomain-1.1.xsd">
+     <auDomain:name>domain.com.au</auDomain:name>
+     <auDomain:exDate>2005-04-03T22:00:00.0Z</auDomain:exDate>
+    </auDomain:rtrnData>
+   </auext:resData>
+   <auext:trID>
+    <auext:clTRID>ABC-12345</auext:clTRID>
+    <auext:svTRID>2389742981742</auext:svTRID>
+   </auext:trID>
+  </auext:response>
+ </extension>
+</epp>
