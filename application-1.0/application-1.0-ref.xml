@@ -57,4 +57,7 @@
 			</t>
 		</abstract>
 	</front>
+
+	<!-- The target is a path relative to the position of the documents that is referencing the target document-->
+	<format type='TXT' octets='64,646' target='../application-1.0/application-1.0.html' />
 </reference>
