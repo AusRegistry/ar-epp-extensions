@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<reference anchor='AR.KV-1.0'>
+
+  <front>
+    <title>Key-Value Mapping for the Extensible Provisioning Protocol(EPP)</title>
+    <author fullname='James Mitchell' initials='J.' surname='Mitchell'>
+      <organization />
+    </author>
+    <author fullname="Chris Wright" initials="C." surname="Wright">
+      <organization />
+    </author>
+    <date month='December' year='2012' />
+
+    <abstract>
+      <t>This document describes an Extensible Provisioning Protocol
+        (EPP) extension mapping for the transport of arbitrary data
+        associated with domain names stored in a shared central
+        repository.
+      </t>
+    </abstract>
+  </front>
+
+  <!-- The target is a path relative to the position of the document that is referencing target document-->
+  <format type='TXT' octets='34470' target='../kv-1.0/kv-1.0.html' />
+</reference>
