@@ -97,7 +97,7 @@
                      minOccurs="0"/>
             <element name="eligibilityID"
                      type="auext:eligibilityIDType" minOccurs="0"/>
-            <element name="policyReason" type="auext:policyNumType"
+            <element name="policyReason" type="integer"
                      minOccurs="1"/>
         </sequence>
     </complexType>
@@ -132,15 +132,6 @@
             </extension>
         </simpleContent>
     </complexType>
-
-    <!--
-    policyNumType is used for policy reason
-    -->
-    <simpleType name="policyNumType">
-        <restriction base="integer">
-            <minInclusive value="1"/>
-        </restriction>
-    </simpleType>
 
     <!--
     End of schema.
